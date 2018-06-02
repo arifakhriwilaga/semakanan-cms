@@ -60,7 +60,7 @@
         this.isClosed = !this.isClosed
       },
       logout() {
-        this.$store.dispatch("logout").then(() => this.$router.push('/login'))
+        this.$store.dispatch("logout", this.$store.getters.user.login_id).then(() => this.$router.push('/login')).catch(() => alert('asd'))
       }
     }
   }
