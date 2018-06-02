@@ -276,7 +276,10 @@ const routes = [
       {
         path: 'overview',
         name: 'Overview',
-        component: Overview
+        component: Overview,
+        meta: {
+          requireAuth: true
+        }
       },
       {
         path: 'stats',
