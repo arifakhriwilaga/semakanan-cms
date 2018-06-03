@@ -186,13 +186,19 @@ let pagesMenu = {
 let loginPage = {
   path: '/login',
   name: 'Login',
-  component: Login
+  component: Login,
+  meta: {
+    notLogged: true
+  }
 }
 
 let registerPage = {
   path: '/register',
   name: 'Register',
-  component: Register
+  component: Register,
+  meta: {
+    notLogged: true
+  }
 }
 
 let lockPage = {
@@ -278,7 +284,7 @@ const routes = [
         name: 'Overview',
         component: Overview,
         meta: {
-          requireAuth: true
+          auth: true
         }
       },
       {

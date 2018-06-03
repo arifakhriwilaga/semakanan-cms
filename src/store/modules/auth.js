@@ -1,4 +1,7 @@
-import axios from 'axios'
+import Vue from 'vue';
+import Resource from 'vue-resource';
+
+Vue.use(Resource)
 
 const state = {
 	isLoggedIn: !!localStorage.getItem('token'),
@@ -29,23 +32,14 @@ const mutations = {
 const actions = {
 	login ({ commit }, creds) {
 		return new Promise((resolve, reject) => {
-			axios({
-				method: 'post',
-				url: 'http://127.0.0.1:8000/api/login',
-				headers:{
-					'Content-Type':'applictaion/json'
-				},
-				data: {
-					email: creds.email,
-					password: creds.password
-				}
-			}).then((response) => {
+			Vue.http.post('http://127.0.0.1:8000/api/login',{ email: creds.email, password: creds.password }).then((response) => {
 				commit('login_success', {
 					id: response.data.result.user.id,
 					name: response.data.result.user.name,
 					email: response.data.result.user.email,
 					login_id: response.data.result.login_id
 				});
+				localStorage.setItem('login_id', response.data.result.login_id);
 				localStorage.setItem('token', response.data.result.access_token);
 				resolve();
 			}).catch((er) => reject());
@@ -53,20 +47,12 @@ const actions = {
 	},
 	logout ({commit}, login_id) {
 		return new Promise((resolve, reject) => {
-			axios({
-				method: 'post',
-				url: 'http://127.0.0.1:8000/api/logout',
-				headers:{
-					'Content-Type':'applictaion/json'
-				},
-				data: {
-					login_id: login_id
-				}
-			}).then((response) => {
+			Vue.http.post('http://127.0.0.1:8000/api/logout', { login_id: login_id }).then((response) => {
 				commit('logout')
+				localStorage.removeItem('login_id')
 				localStorage.removeItem('token')
-				resolve();
-			}).catch((er) => reject());
+				resolve()
+			}).catch(() => reject());
 		})
 	}
 }

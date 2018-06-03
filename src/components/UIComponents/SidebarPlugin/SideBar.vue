@@ -68,7 +68,7 @@
       },
       logo: {
         type: String,
-        default: 'static/img/vue-logo.png'
+        default: '/static/img/vue-logo.png'
       },
       sidebarLinks: {
         type: Array,
