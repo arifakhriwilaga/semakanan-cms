@@ -147,19 +147,14 @@
         propsToSearch: ['title', 'price', 'inventory'],
         tableColumns: [
           {
-            prop: 'title',
-            label: 'Title',
+            prop: 'task',
+            label: 'Task',
             minWidth: 200
           },
           {
-            prop: 'price',
-            label: 'Price',
+            prop: 'done',
+            label: 'Done',
             minWidth: 250
-          },
-          {
-            prop: 'inventory',
-            label: 'inventory',
-            minWidth: 100
           }
         ],
         tableData: []

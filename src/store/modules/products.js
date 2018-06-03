@@ -1,4 +1,8 @@
-import shop from '../../api/shop'
+import Vue from 'vue';
+import Resource from 'vue-resource';
+
+Vue.use(Resource)
+
 
 // initial state
 const state = {
@@ -13,8 +17,12 @@ const getters = {
 // actions
 const actions = {
   getAllProducts ({ commit }) {
-    shop.getProducts(products => {
-      commit('setProducts', products)
+    new Promise((resolve, reject) => {
+      Vue.http.get('http://127.0.0.1:8000/api/todos', {headers: {Authorization: 'Bearer '+ localStorage.getItem("token")}}).then((response) => {
+        commit('setProducts', response.data)
+        console.log(response)
+        resolve()
+      }).catch(() => reject())
     })
   }
 }
