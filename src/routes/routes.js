@@ -8,7 +8,7 @@ import Stats from 'src/components/Dashboard/Views/Dashboard/Stats.vue'
 // Pages
 import User from 'src/components/Dashboard/Views/Pages/UserProfile.vue'
 import TimeLine from 'src/components/Dashboard/Views/Pages/TimeLinePage.vue'
-import Login from 'src/components/Dashboard/Views/Pages/Login.vue'
+// import Login from 'src/components/Dashboard/Views/Pages/Login.vue'
 import Register from 'src/components/Dashboard/Views/Pages/Register.vue'
 import Lock from 'src/components/Dashboard/Views/Pages/Lock.vue'
 
@@ -47,6 +47,8 @@ import UserCreate from 'src/components/Users/UserCreate.vue'
 
 import CategoryUkmList from 'src/components/Settings/CategoryUkmList.vue'
 
+// seKomunitas
+import Login from 'src/components/Auth/Login.vue'
 import Products from 'src/components/Products/Products.vue'
 
 let componentsMenu = {

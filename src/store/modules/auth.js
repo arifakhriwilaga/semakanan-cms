@@ -1,16 +1,11 @@
 import Vue from 'vue';
-import Resource from 'vue-resource';
+import axios from 'axios';
 
-Vue.use(Resource)
+Vue.use(axios)
 
 const state = {
 	isLoggedIn: !!localStorage.getItem('token'),
-	user: {
-		id: '',
-		name: '',
-		email: '',
-		login_id: ''
-	}
+	user: null
 }
 
 const mutations = {
@@ -18,41 +13,42 @@ const mutations = {
 		state.pending = true
 	},
 	login_success (state, payload) {
-		state.user.id = payload.id;
-		state.user.name = payload.name;
-		state.user.email = payload.email;
-		state.user.login_id = payload.login_id;
-		state.isLoggedIn = true
+		state.user = payload;
+		state.isLoggedIn = true;
 	},
 	logout (state) {
-		state.isLoggedIn = false
+		state.isLoggedIn = false;
+		state.user = null
 	}
 }
 
 const actions = {
 	login ({ commit }, creds) {
 		return new Promise((resolve, reject) => {
-			Vue.http.post('http://127.0.0.1:8000/api/login',{ email: creds.email, password: creds.password }).then((response) => {
-				commit('login_success', {
-					id: response.data.result.user.id,
-					name: response.data.result.user.name,
-					email: response.data.result.user.email,
-					login_id: response.data.result.login_id
-				});
-				localStorage.setItem('login_id', response.data.result.login_id);
-				localStorage.setItem('token', response.data.result.access_token);
-				resolve();
-			}).catch((er) => reject());
+
+			var data = new FormData();
+			data.append("email", creds.email);
+			data.append("password", creds.password);
+			axios.post('http://apiadmin.portalsekampus.id/public/api/auth/login', data).then((res) => {
+				if (res.data.error) {
+					reject();
+				} else {
+					commit('login');
+					commit('login_success', res.data.data);
+					localStorage.setItem('token', 'Bearer '+res.data.meta.token);
+					resolve();
+				}
+			}).catch((er) => reject())
 		})
 	},
 	logout ({commit}, login_id) {
 		return new Promise((resolve, reject) => {
-			Vue.http.post('http://127.0.0.1:8000/api/logout', { login_id: login_id }).then((response) => {
-				commit('logout')
-				localStorage.removeItem('login_id')
-				localStorage.removeItem('token')
+			commit('logout')
+			localStorage.removeItem('token')
+			if (!localStorage.getItem('token')) {
 				resolve()
-			}).catch(() => reject());
+			}
+			reject();
 		})
 	}
 }
