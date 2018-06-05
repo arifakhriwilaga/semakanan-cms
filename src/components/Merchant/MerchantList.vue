@@ -77,6 +77,7 @@
   import {Table, TableColumn, Select, Option} from 'element-ui'
   import PPagination from 'src/components/UIComponents/Pagination.vue'
   import users from 'src/api/users'
+  import swal from 'sweetalert2'
   Vue.use(Table)
   Vue.use(TableColumn)
   Vue.use(Select)
@@ -86,7 +87,7 @@
       PPagination
     },
     created() {
-      this.$store.dispatch('merchantList');
+      this.$store.dispatch('merchantList').then();
     },
     computed: {
       pagedData () {
@@ -99,8 +100,7 @@
        * @returns {computed.pagedData}
        */
       queriedData () {
-         this.tableData = this.$store.getters.allMerchants;
-
+        this.tableData = this.$store.getters.allMerchants
         if (this.tableData) {
           var pagination = this.$store.getters.metaMerchants.pagination;
           this.pagination.currentPage = pagination.current_page;
@@ -153,7 +153,7 @@
           total: 0
         },
         searchQuery: '',
-        propsToSearch: ['Nama', 'Pemilik', 'Alamat', 'No. Telepon', 'Waktu Buka', 'Waktu Tutup'],
+        propsToSearch: ['name', 'owner', 'open_time'],
         tableColumns: [
           {
             prop: 'name',
@@ -197,11 +197,47 @@
         alert(`Your want to edit ${row.title}`)
       },
       handleDelete (index, row) {
+        swal({
+          title: 'Apakah anda yakin?',
+          text: 'Data tidak akan dapat dikembalikan lagi.',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, hapus!',
+          cancelButtonText: 'Tidak, simpan!',
+          confirmButtonClass: 'btn btn-success btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          buttonsStyling: false
+        }).then(() => {
+          swal({
+            title: 'Terhapus!',
+            text: 'Data berhasil terhapus.',
+            type: 'success',
+            confirmButtonClass: 'btn btn-success btn-fill',
+            buttonsStyling: false
+          }).then(() => {
+            this.doDelete(index, row)
+          })
+        }, function (dismiss) {
+          // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
+          if (dismiss === 'cancel') {
+            swal({
+              title: 'Dibatalkan',
+              text: 'Menghapus data dibatalkan',
+              type: 'error',
+              confirmButtonClass: 'btn btn-info btn-fill',
+              buttonsStyling: false
+            })
+          }
+        })
 
         // let indexToDelete = this.tableData.findIndex((tableRow) => tableRow.id === row.id)
         // if (indexToDelete >= 0) {
         //   this.tableData.splice(indexToDelete, 1)
         // }
+      },
+      doDelete (index, row) {
+        this.$store.dispatch('merchantDrop', row);
+        this.queriedData;
       }
     }
   }

@@ -17,6 +17,7 @@ export default function RedirectIfAuthenticated (router) {
 
         if ((!token) && to.path !== '/login') {
             // alert(token)
+            this.$store.dispatch('emptyMerchant')
             next({path: '/login'})
             // return router.go({name: 'Login'})
         }

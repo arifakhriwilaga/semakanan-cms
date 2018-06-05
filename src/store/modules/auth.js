@@ -18,7 +18,7 @@ const mutations = {
 	},
 	logout (state) {
 		state.isLoggedIn = false;
-		state.user = null
+		state.user = null;
 	}
 }
 
