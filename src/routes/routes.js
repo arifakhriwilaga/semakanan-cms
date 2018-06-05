@@ -49,7 +49,7 @@ import CategoryUkmList from 'src/components/Settings/CategoryUkmList.vue'
 
 // seKomunitas
 import Login from 'src/components/Auth/Login.vue'
-import Products from 'src/components/Products/Products.vue'
+import MerchantList from 'src/components/Merchant/MerchantList.vue'
 
 let componentsMenu = {
   path: '/components',
@@ -236,14 +236,19 @@ let settingsMenu = {
   }]
 }
 
-let productsMenu = {
-  path: '/products',
-  name: 'products',
+/**
+ *
+ * seKomunitas
+ *
+ */
+const merchantsMenu = {
+  path: '/merchants',
+  name: 'merchants',
   component: DashboardLayout,
   children: [{
-    path: '',
-    name: 'products',
-    component: Products
+    path: 'list',
+    name: 'merchant-list',
+    component: MerchantList
   }]
 }
 
@@ -275,7 +280,7 @@ const routes = [
   loginPage,
   registerPage,
   lockPage,
-  productsMenu,
+  merchantsMenu,
   {
     path: '/admin',
     component: DashboardLayout,

@@ -7,6 +7,7 @@ import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
 import App from './App.vue'
 import middleware from './middleware'
+import axios from 'axios'
 
 
 // Plugins
@@ -34,6 +35,7 @@ Vue.use(GlobalComponents)
 Vue.use(VueNotify)
 Vue.use(SideBar, {sidebarLinks: sidebarLinks})
 Vue.use(VeeValidate)
+Vue.use(axios)
 locale.use(lang)
 
 // configure router
@@ -44,6 +46,19 @@ const router = new VueRouter({
 })
 
 middleware(router)
+
+// interceptors
+axios.interceptors.request.use(function (config) {
+	let token = localStorage.getItem('token');
+	if (token) {
+		config.headers.Authorization = token;
+	}
+
+	return config;
+}, function (error) {
+	// Do something with request error
+	return Promise.reject(error);
+});
 
 /* eslint-disable no-new */
 new Vue({

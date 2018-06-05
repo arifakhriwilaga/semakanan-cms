@@ -1,8 +1,11 @@
 export default [
   {
-    name: 'Products',
-    icon: 'ti-rocket',
-    path: '/products'
+    name: 'Merchants',
+    icon: 'ti-star',
+    children: [{
+      name: 'Daftar Merchants',
+      path: '/merchants/list'
+    }]
   },
   {
     name: 'Settings',
