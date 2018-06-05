@@ -1,13 +1,8 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title">Custom table with pagination</h4>
-      <p class="category">
-        We combine <a href="http://element.eleme.io/#/en-US/component/quickstart" target="_blank">Element-UI</a>
-        table functionalities together with a custom pagination component
-        which should provide a very good starting point to integrate tables in your application.
-        Check out more functionalities at <a href="http://element.eleme.io/#/en-US/component/table" target="_blank">Element-UI table documentation</a>.
-       </p>
+      <h4 class="title">Merchant</h4>
+      <!-- <p class="category"></p> -->
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
@@ -208,15 +203,9 @@
           cancelButtonClass: 'btn btn-danger btn-fill',
           buttonsStyling: false
         }).then(() => {
-          swal({
-            title: 'Terhapus!',
-            text: 'Data berhasil terhapus.',
-            type: 'success',
-            confirmButtonClass: 'btn btn-success btn-fill',
-            buttonsStyling: false
-          }).then(() => {
-            this.doDelete(index, row)
-          })
+          this.$store.dispatch('merchantDrop', row).then((res) => {
+            this.queriedData;
+          }).catch(er => console.log(er))
         }, function (dismiss) {
           // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
           if (dismiss === 'cancel') {
@@ -235,10 +224,6 @@
         //   this.tableData.splice(indexToDelete, 1)
         // }
       },
-      doDelete (index, row) {
-        this.$store.dispatch('merchantDrop', row);
-        this.queriedData;
-      }
     }
   }
 </script>
