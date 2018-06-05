@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+
 import auth from './modules/auth';
-import products from './modules/products';
+import merchants from './modules/merchants';
 
 Vue.use(Vuex)
 
@@ -9,8 +10,8 @@ const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
 	modules: {
-		auth: auth,
-		products: products
+		auth,
+		merchants
 	},
 	strict: debug
 })

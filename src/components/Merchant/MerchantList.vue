@@ -86,13 +86,10 @@
       PPagination
     },
     created() {
-      this.$store.dispatch('getAllProducts');
-      // this.tableData = this.$store.getters.allProducts;
-      // console.log(this.$store.getters.allProducts)
+      this.$store.dispatch('merchantList');
     },
     computed: {
       pagedData () {
-        this.tableData = this.$store.getters.allProducts;
         return this.tableData.slice(this.from, this.to)
       },
       /***
@@ -102,23 +99,31 @@
        * @returns {computed.pagedData}
        */
       queriedData () {
-        if (!this.searchQuery) {
-          this.pagination.total = this.tableData.length
-          return this.pagedData
-        }
-        let result = this.tableData
-          .filter((row) => {
-            let isIncluded = false
-            for (let key of this.propsToSearch) {
-              let rowValue = row[key].toString()
-              if (rowValue.includes && rowValue.includes(this.searchQuery)) {
-                isIncluded = true
+         this.tableData = this.$store.getters.allMerchants;
+
+        if (this.tableData) {
+          var pagination = this.$store.getters.metaMerchants.pagination;
+          this.pagination.currentPage = pagination.current_page;
+          this.pagination.perPage = pagination.per_page;
+          this.pagination.total = pagination.total;
+          if (!this.searchQuery) {
+            this.pagination.total = this.tableData.length
+            return this.pagedData
+          }
+          let result = this.tableData
+            .filter((row) => {
+              let isIncluded = false
+              for (let key of this.propsToSearch) {
+                let rowValue = row[key].toString()
+                if (rowValue.includes && rowValue.includes(this.searchQuery)) {
+                  isIncluded = true
+                }
               }
-            }
-            return isIncluded
-          })
-        this.pagination.total = result.length
-        return result.slice(this.from, this.to)
+              return isIncluded
+            })
+          this.pagination.total = result.length
+          return result.slice(this.from, this.to)
+        }
       },
       to () {
         let highBound = this.from + this.pagination.perPage
@@ -131,30 +136,54 @@
         return this.pagination.perPage * (this.pagination.currentPage - 1)
       },
       total () {
-        this.pagination.total = this.tableData.length
-        return this.tableData.length
+        if (this.tableData) {
+          this.pagination.total = this.tableData.length
+          return this.tableData.length
+        } else {
+          return 0
+        }
       }
     },
     data () {
       return {
         pagination: {
-          perPage: 1,
-          currentPage: 1,
+          perPage: 0,
+          currentPage: 0,
           perPageOptions: [5, 10, 25, 50],
           total: 0
         },
         searchQuery: '',
-        propsToSearch: ['title', 'price', 'inventory'],
+        propsToSearch: ['Nama', 'Pemilik', 'Alamat', 'No. Telepon', 'Waktu Buka', 'Waktu Tutup'],
         tableColumns: [
           {
-            prop: 'task',
-            label: 'Task',
+            prop: 'name',
+            label: 'Nama',
             minWidth: 200
           },
           {
-            prop: 'done',
-            label: 'Done',
-            minWidth: 250
+            prop: 'owner',
+            label: 'Pemilik',
+            minWidth: 200
+          },
+          {
+            prop: 'address',
+            label: 'Alamat',
+            minWidth: 200
+          },
+          {
+            prop: 'phone',
+            label: 'No. Telepon',
+            minWidth: 150
+          },
+          {
+            prop: 'open_time',
+            label: 'Waktu Buka',
+            minWidth: 125
+          },
+          {
+            prop: 'close_time',
+            label: 'Waktu Tutup',
+            minWidth: 125
           }
         ],
         tableData: []
@@ -168,10 +197,11 @@
         alert(`Your want to edit ${row.title}`)
       },
       handleDelete (index, row) {
-        let indexToDelete = this.tableData.findIndex((tableRow) => tableRow.id === row.id)
-        if (indexToDelete >= 0) {
-          this.tableData.splice(indexToDelete, 1)
-        }
+
+        // let indexToDelete = this.tableData.findIndex((tableRow) => tableRow.id === row.id)
+        // if (indexToDelete >= 0) {
+        //   this.tableData.splice(indexToDelete, 1)
+        // }
       }
     }
   }
