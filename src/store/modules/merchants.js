@@ -18,6 +18,10 @@ const mutations = {
         if (indexToDelete >= 0) {
           state.merchants.splice(indexToDelete, 1)
         }
+	},
+	emptyMerchant (state) {
+		state.merchants = null;
+		state.meta = null
 	}
 }
 
@@ -26,16 +30,19 @@ const actions = {
 		new Promise((resolve, reject) => {
 			axios.get('http://apiadmin.portalsekampus.id/public/api/merchant').then((res) => {
 				commit('getMerchants', res.data);
-				resolve()
+				resolve();
 			}).then((er) => reject())
 		})
 	},
 	merchantDrop ({ commit }, params) {
 		new Promise((resolve, reject) => {
-			axios.delete('http://apiadmin.portalsekampus.id/public/api/merchant/delete/${params.row.id}').then((res) => {
-				console.log(res)
-				commit('deleteMerchant', params.row);
-			})
+			axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/delete/${params.id}`).then((res) => {
+				console.log(params)
+				setTimeout(() => {
+					commit('deleteMerchant', params);
+					resolve();
+				}, 1000);
+			}).catch((er) => reject())
 		})
 	}
 }
