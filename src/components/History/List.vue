@@ -1,9 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title pull-left">Merchant</h4>
-      <button class="btn btn-primary pull-right" @click="createMerchant()" style="margin-bottom: 15px">Tambah Merchant</button>
-      <!-- <p class="category"></p> -->
+      <h4 class="title pull-left">{{title}}</h4>
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
@@ -47,10 +45,7 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a> -->
-                <!-- <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a> -->
-                <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
-                <a class="btn btn-simple btn-xs btn-info btn-icon remove"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
+                <a class="btn btn-simple btn-xs btn-info" @click="detail(props.$index, props.row)">Detail</a>
               </template>
             </el-table-column>
           </el-table>
@@ -75,6 +70,7 @@
   import PPagination from 'src/components/UIComponents/Pagination.vue'
   import users from 'src/api/users'
   import swal from 'sweetalert2'
+  import axios from 'axios'
   Vue.use(Table)
   Vue.use(TableColumn)
   Vue.use(Select)
@@ -84,7 +80,7 @@
       PPagination
     },
     created() {
-      this.$store.dispatch('merchantList').then();
+      this.getList()
     },
     computed: {
       pagedData () {
@@ -97,12 +93,10 @@
        * @returns {computed.pagedData}
        */
       queriedData () {
-        this.tableData = this.$store.getters.allMerchants
         if (this.tableData) {
-          var pagination = this.$store.getters.metaMerchants.pagination;
-          this.pagination.currentPage = pagination.current_page;
-          this.pagination.perPage = pagination.per_page;
-          this.pagination.total = pagination.total;
+          this.pagination.currentPage = this.meta_pagination.current_page;
+          this.pagination.perPage = this.meta_pagination.per_page;
+          this.pagination.total = this.meta_pagination.total;
           if (!this.searchQuery) {
             this.pagination.total = this.tableData.length
             return this.pagedData
@@ -150,89 +144,49 @@
           total: 0
         },
         searchQuery: '',
-        propsToSearch: ['name', 'owner', 'open_time'],
+        propsToSearch: ['total_payment'],
         tableColumns: [
           {
-            prop: 'name',
-            label: 'Nama',
+            prop: 'total_payment',
+            label: 'Total Pembayaran',
+            minWidth: 250
+          },
+          {
+            prop: 'cash',
+            label: 'Cash',
             minWidth: 200
           },
           {
-            prop: 'owner',
-            label: 'Pemilik',
+            prop: 'status.data.status',
+            label: 'Status',
             minWidth: 200
-          },
-          {
-            prop: 'address',
-            label: 'Alamat',
-            minWidth: 200
-          },
-          {
-            prop: 'phone',
-            label: 'No. Telepon',
-            minWidth: 150
-          },
-          {
-            prop: 'open_time',
-            label: 'Waktu Buka',
-            minWidth: 125
-          },
-          {
-            prop: 'close_time',
-            label: 'Waktu Tutup',
-            minWidth: 125
           }
         ],
-        tableData: []
+        tableData: [],
+        title: '',
+        meta_pagination: ''
       }
     },
     methods: {
-      createMerchant() {
-        this.$router.push({ name: 'merchant-create'})
+      detail(index, row) {
+        this.$router.push({name: 'history-detail', params: {id: row.id}})
       },
-      handleTop (index, row) {
-        this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
-      },
-      handleEdit (index, row) {
-        this.$router.push({ name: 'merchant-edit', params: {id: row.id}});
-      },
-      handleDelete (index, row) {
-        swal({
-          title: 'Apakah anda yakin?',
-          text: 'Data tidak akan dapat dikembalikan lagi.',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Ya, hapus!',
-          cancelButtonText: 'Tidak, simpan!',
-          confirmButtonClass: 'btn btn-success btn-fill',
-          cancelButtonClass: 'btn btn-danger btn-fill',
-          buttonsStyling: false
-        }).then(() => {
-          this.$store.dispatch('merchantDrop', row).then((res) => {
-            this.queriedData;
-          }).catch(er => console.log(er))
-        }, function (dismiss) {
-          // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
-          if (dismiss === 'cancel') {
-            swal({
-              title: 'Dibatalkan',
-              text: 'Menghapus data dibatalkan',
-              type: 'error',
-              confirmButtonClass: 'btn btn-info btn-fill',
-              buttonsStyling: false
+      getList() {
+          axios.get(`http://apiadmin.portalsekampus.id/public/api/history`).then(res => {
+              this.title = res.data.meta.message;
+              this.tableData = res.data.data;
+              this.meta_pagination = res.data.meta.pagination;
+          }).catch(err => {
+            this.$notify({
+                component: {
+                    template: `<span>Terjadi kesalahan!</span>`,
+                },
+                icon: 'ti-alert',
+                horizontalAlign: 'right',
+                verticalAlign: 'top',
+                type: 'danger'
             })
-          }
-        })
-
-        // let indexToDelete = this.tableData.findIndex((tableRow) => tableRow.id === row.id)
-        // if (indexToDelete >= 0) {
-        //   this.tableData.splice(indexToDelete, 1)
-        // }
-      },
-      handleShow(index, row) {
-        this.$router.push({name: 'merchant-profile', params: {
-          id: row.id
-        }})
+          })
       }
     }
   }

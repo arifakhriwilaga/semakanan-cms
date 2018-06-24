@@ -42,14 +42,47 @@ import Calendar from 'src/components/Dashboard/Views/Calendar/CalendarRoute.vue'
 import Charts from 'src/components/Dashboard/Views/Charts.vue'
 
 
-import UserList from 'src/components/Users/UserList.vue'
-import UserCreate from 'src/components/Users/UserCreate.vue'
+// import UserList from 'src/components/Users/UserList.vue'
+// import UserCreate from 'src/components/Users/UserCreate.vue'
 
 import CategoryUkmList from 'src/components/Settings/CategoryUkmList.vue'
 
 // seKomunitas
 import Login from 'src/components/Auth/Login.vue'
+
+// Merchant
 import MerchantList from 'src/components/Merchant/MerchantList.vue'
+import MerchantProfile from 'src/components/Merchant/MerchantProfile.vue'
+import MerchantCreate from 'src/components/Merchant/MerchantFormCreate.vue'
+import MerchantEdit from 'src/components/Merchant/MerchantFormEdit.vue'
+
+// Merchant Top
+import MerchantTopList from 'src/components/Merchant/MerchantTopList.vue'
+import MerchantTopCreate from 'src/components/Merchant/MerchantTopFormCreate.vue'
+
+// Merchant Pop
+import MerchantPopList from 'src/components/Merchant/MerchantPopList.vue'
+import MerchantPopCreate from 'src/components/Merchant/MerchantPopFormCreate.vue'
+
+// Merchant Open & Close
+import MerchantOpenList from 'src/components/Merchant/MerchantOpenList.vue'
+import MerchantCloseList from 'src/components/Merchant/MerchantCloseList.vue'
+
+// Slider
+import SliderSemakananList from 'src/components/Slider/ListSemakanan.vue'
+import SliderHomeList from 'src/components/Slider/ListHome.vue'
+
+// Transaction
+import TransactionList from 'src/components/Transaction/List.vue'
+import TransactionDetail from 'src/components/Transaction/Show.vue'
+
+// History
+import HistoryList from 'src/components/History/List.vue'
+import HistoryDetail from 'src/components/History/Show.vue'
+
+// Users
+import UserList from 'src/components/Users/List.vue'
+import UserCreate from 'src/components/Users/Create.vue'
 
 let componentsMenu = {
   path: '/components',
@@ -209,21 +242,21 @@ let lockPage = {
   component: Lock
 }
 
-let usersMenu = {
-  path: '/users',
-  name: 'users',
-  component: DashboardLayout,
-  children: [{
-    path: 'list',
-    name: 'user-list',
-    component: UserList
-  },
-  {
-    path: 'create',
-    name: 'user-create',
-    component: UserCreate
-  }]
-}
+// let usersMenu = {
+//   path: '/users',
+//   name: 'users',
+//   component: DashboardLayout,
+//   children: [{
+//     path: 'list',
+//     name: 'user-list',
+//     component: UserList
+//   },
+//   {
+//     path: 'create',
+//     name: 'user-create',
+//     component: UserCreate
+//   }]
+// }
 
 let settingsMenu = {
   path: '/settings',
@@ -245,11 +278,138 @@ const merchantsMenu = {
   path: '/merchants',
   name: 'merchants',
   component: DashboardLayout,
-  children: [{
-    path: 'list',
-    name: 'merchant-list',
-    component: MerchantList
-  }]
+  children: [
+    {
+      path: 'list',
+      name: 'merchant-list',
+      component: MerchantList
+    },
+    {
+      path: 'profile/:id',
+      name: 'merchant-profile',
+      component: MerchantProfile
+    },
+    {
+      path: 'create',
+      name: 'merchant-create',
+      component: MerchantCreate
+    },
+    {
+      path: 'edit/:id',
+      name: 'merchant-edit',
+      component: MerchantEdit
+    },
+    {
+      path: 'top/list',
+      name: 'merchant-top-list',
+      component: MerchantTopList
+    },
+    {
+      path: 'top/create',
+      name: 'merchant-top-create',
+      component: MerchantTopCreate
+    },
+    {
+      path: 'pop/list',
+      name: 'merchant-pop-list',
+      component: MerchantPopList
+    },
+    {
+      path: 'pop/create',
+      name: 'merchant-pop-create',
+      component: MerchantPopCreate
+    },
+    {
+      path: 'open/list',
+      name: 'merchant-open-list',
+      component: MerchantOpenList
+    },
+    {
+      path: 'close/list',
+      name: 'merchant-close-list',
+      component: MerchantCloseList
+    }
+  ]
+}
+
+// Slider
+const sliderMenu = {
+  component: DashboardLayout,
+  name: 'slider',
+  path: '/slider',
+  children: [
+    {
+      path: 'semakanan/list',
+      name: 'slider-semakanan-list',
+      component: SliderSemakananList
+    },
+    {
+      path: 'home/list',
+      name: 'slider-home-list',
+      component: SliderHomeList
+    }
+  ]
+}
+
+// Transaction
+const transactionMenu = {
+  component: DashboardLayout,
+  name: 'transaction',
+  path: '/transaction',
+  children: [
+    {
+      path: 'list',
+      name: 'transaction-list',
+      component: TransactionList
+    },
+    {
+      path: 'detail/:id',
+      name: 'transaction-detail',
+      component: TransactionDetail
+    }
+  ]
+}
+
+// History
+const historyMenu = {
+  component: DashboardLayout,
+  name: 'history',
+  path: '/history',
+  children: [
+    {
+      path: 'list',
+      name: 'history-list',
+      component: HistoryList
+    },
+    {
+      path: 'detail/:id',
+      name: 'history-detail',
+      component: HistoryDetail
+    }
+  ]
+}
+
+const usersMenu = {
+  component: DashboardLayout,
+  name: 'users',
+  path: '/users',
+  children: [
+    {
+      path: 'list',
+      name: 'user-list',
+      component: UserList
+    },
+    {
+      path: 'create',
+      name: 'user-create',
+      component: UserCreate
+    },
+    {
+      path: 'edit/:id',
+      name: 'user-edit',
+      component: UserCreate
+    }
+  ]
 }
 
 const routes = [
@@ -281,6 +441,9 @@ const routes = [
   registerPage,
   lockPage,
   merchantsMenu,
+  sliderMenu,
+  transactionMenu,
+  historyMenu,
   {
     path: '/admin',
     component: DashboardLayout,

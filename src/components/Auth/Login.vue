@@ -77,6 +77,9 @@
         password: ""
       }
     },
+    created() {
+      this.$store.dispatch('emptyMerchant')
+    },
     methods: {
       toggleNavbar () {
         document.body.classList.toggle('nav-open')

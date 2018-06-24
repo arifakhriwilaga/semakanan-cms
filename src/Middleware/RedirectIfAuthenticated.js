@@ -11,13 +11,12 @@ export default function RedirectIfAuthenticated (router) {
          * Checks if there's a token and the next page name is none of the following
          */
         if ((token) && (to.name === 'Login' || to.name === 'Register')) {
-            // redirects according user role
+
             router.go(-1)
         }
 
         if ((!token) && to.path !== '/login') {
             // alert(token)
-            this.$store.dispatch('emptyMerchant')
             next({path: '/login'})
             // return router.go({name: 'Login'})
         }

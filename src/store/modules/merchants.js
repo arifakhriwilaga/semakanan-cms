@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
+import swal from 'sweetalert2'
 
 Vue.use(axios)
 
@@ -37,13 +38,29 @@ const actions = {
 	merchantDrop ({ commit }, params) {
 		new Promise((resolve, reject) => {
 			axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/delete/${params.id}`).then((res) => {
-				console.log(params)
-				setTimeout(() => {
-					commit('deleteMerchant', params);
-					resolve();
-				}, 1000);
-			}).catch((er) => reject())
+				commit('deleteMerchant', params);
+				swal({
+	              title: 'Terhapus!',
+	              text: 'Data berhasil terhapus.',
+	              type: 'success',
+	              confirmButtonClass: 'btn btn-success btn-fill',
+	              buttonsStyling: false
+	            })
+				resolve();
+			}).catch((er) => {
+				swal({
+	              title: 'Dibatalkan',
+	              text: 'Menghapus data dibatalkan',
+	              type: 'error',
+	              confirmButtonClass: 'btn btn-info btn-fill',
+	              buttonsStyling: false
+	            })
+				reject();
+			})
 		})
+	},
+	emptyMerchant ({ commit }) {
+		commit('emptyMerchant')
 	}
 }
 
