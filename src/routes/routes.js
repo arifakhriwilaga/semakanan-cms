@@ -52,6 +52,7 @@ import Login from 'src/components/Auth/Login.vue'
 
 // Merchant
 import MerchantList from 'src/components/Merchant/MerchantList.vue'
+import MerchantProfile from 'src/components/Merchant/MerchantProfile.vue'
 import MerchantCreate from 'src/components/Merchant/MerchantFormCreate.vue'
 import MerchantEdit from 'src/components/Merchant/MerchantFormEdit.vue'
 
@@ -282,6 +283,11 @@ const merchantsMenu = {
       path: 'list',
       name: 'merchant-list',
       component: MerchantList
+    },
+    {
+      path: 'profile/:id',
+      name: 'merchant-profile',
+      component: MerchantProfile
     },
     {
       path: 'create',

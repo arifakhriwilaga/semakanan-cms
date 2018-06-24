@@ -48,8 +48,9 @@
               label="Actions">
               <template slot-scope="props">
                 <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a> -->
-                <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a>
+                <!-- <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a> -->
                 <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
+                <a class="btn btn-simple btn-xs btn-info btn-icon remove"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
               </template>
             </el-table-column>
           </el-table>
@@ -228,6 +229,11 @@
         //   this.tableData.splice(indexToDelete, 1)
         // }
       },
+      handleShow(index, row) {
+        this.$router.push({name: 'merchant-profile', params: {
+          id: row.id
+        }})
+      }
     }
   }
 </script>
