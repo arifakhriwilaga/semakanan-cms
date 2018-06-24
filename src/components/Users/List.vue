@@ -1,39 +1,70 @@
 <template>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-6 col-xs-12">
-                        <h4 class="title" style="margin: 0">List Merchant Top List</h4>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <button class="btn btn-primary pull-right" @click="createMerchantTop">Tambah Merchant Populer</button>
-                    </div>
-                    </div>
-                    <p class="category">Daftar Top Merchant </p>
-                </div>
-                <div class="card-content table-responsive table-full-width">
-                <el-table class="table-striped" :data="tableData">
-                    <el-table-column label="Name" property="merchant.data.name"></el-table-column>
-                    <el-table-column label="Priority" property="priority"></el-table-column>
-                    <el-table-column
-                        :min-width="120"
-                        fixed="right"
-                        label="Actions">
-                        <template slot-scope="props">
-                            <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a>
-                            <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a> -->
-                            <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
-                        </template>
-                    </el-table-column>
-                </el-table>
-
-                </div>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4 class="title pull-left">Pengguna</h4>
+      <button class="btn btn-primary pull-right" @click="createUser()" style="margin-bottom: 15px">Tambah Pengguna</button>
     </div>
-
+    <div class="col-md-12 card">
+      <div class="card-header">
+        <div class="category">Extended tables</div>
+      </div>
+      <div class="card-content row">
+        <div class="col-sm-6">
+          <el-select
+            class="select-default"
+            v-model="pagination.perPage"
+            placeholder="Per page">
+            <el-option
+              class="select-default"
+              v-for="item in pagination.perPageOptions"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="col-sm-6">
+          <div class="pull-right">
+            <label>
+              <input type="search" class="form-control input-sm" placeholder="Search records" v-model="searchQuery" aria-controls="datatables">
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <el-table class="table-striped"
+                    :data="queriedData"
+                    border
+                    style="width: 100%">
+            <el-table-column v-for="column in tableColumns"
+                             :key="column.label"
+                             :min-width="column.minWidth"
+                             :prop="column.prop"
+                             :label="column.label">
+            </el-table-column>
+            <el-table-column
+              :min-width="120"
+              fixed="right"
+              label="Actions">
+              <template slot-scope="props">
+                <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.row)"><i class="ti-pencil-alt"></i></a>
+                <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.row)"><i class="ti-close"></i></a>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <div class="col-sm-6 pagination-info">
+          <p class="category">Showing {{from + 1}} to {{to}} of {{total}} entries</p>
+        </div>
+        <div class="col-sm-6">
+          <p-pagination class="pull-right"
+                        v-model="pagination.currentPage"
+                        :per-page="pagination.perPage"
+                        :total="pagination.total">
+          </p-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
   import Vue from 'vue'
@@ -51,7 +82,7 @@
       PPagination
     },
     created() {
-        this.getList()
+      this.getList()
     },
     computed: {
       pagedData () {
@@ -65,10 +96,9 @@
        */
       queriedData () {
         if (this.tableData) {
-        //   var pagination = this.$store.getters.metaMerchants.pagination;
-        //   this.pagination.currentPage = pagination.current_page;
-        //   this.pagination.perPage = pagination.per_page;
-        //   this.pagination.total = pagination.total;
+          this.pagination.currentPage = this.meta_pagination.current_page;
+          this.pagination.perPage = this.meta_pagination.per_page;
+          this.pagination.total = this.meta_pagination.total;
           if (!this.searchQuery) {
             this.pagination.total = this.tableData.length
             return this.pagedData
@@ -116,7 +146,7 @@
           total: 0
         },
         searchQuery: '',
-        propsToSearch: ['name'],
+        propsToSearch: ['name', 'email'],
         tableColumns: [
           {
             prop: 'name',
@@ -124,40 +154,41 @@
             minWidth: 200
           },
           {
-            prop: 'priority',
-            label: 'Prioritas',
+            prop: 'email',
+            label: 'Email',
             minWidth: 200
+          },
+          {
+            prop: 'phone',
+            label: 'No. Telepon',
+            minWidth: 150
+          },
+          {
+            prop: 'fcm_token',
+            label: 'FCM Token',
+            minWidth: 200
+          },
+          {
+            props: 'activate_token',
+            label: 'Activate Token',
+            minWidth: 150
           }
         ],
-        tableData: []
+        tableData: [],
+        title: '',
+        meta_pagination: ''
       }
     },
     methods: {
-      getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant/top`).then(res => {
-                this.tableData = res.data.data
-            }).catch(err => {
-                this.$notify({
-                    component: {
-                        template: `<span>Terjadi kesalahan!</span>`,
-                    },
-                    icon: 'ti-alert',
-                    horizontalAlign: 'right',
-                    verticalAlign: 'top',
-                    type: 'danger'
-                })
-            })
+      createUser() {
+        this.$router.push({name: 'user-create'})
       },
-      createMerchant() {
-        // this.$router.push({ name: 'merchant-create'})
+      handleEdit(row) {
+        this.$router.push({name: 'user-edit', params: {
+            id: row.id
+        }})
       },
-      handleTop (index, row) {
-        // this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
-      },
-      handleEdit (index, row) {
-        // this.$router.push({ name: 'merchant-edit', params: {id: row.id}});
-      },
-      handleDelete (index, row) {
+      handleDelete(row) {
         swal({
           title: 'Apakah anda yakin?',
           text: 'Data tidak akan dapat dikembalikan lagi.',
@@ -170,7 +201,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/top/delete/${row.id}`).then((res) => {
+                axios.delete(`http://apiadmin.portalsekampus.id/public/api/user/${row.id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Data berhasil terhapus.',
@@ -203,14 +234,23 @@
             })
           }
         })
-
-        // let indexToDelete = this.tableData.findIndex((tableRow) => tableRow.id === row.id)
-        // if (indexToDelete >= 0) {
-        //   this.tableData.splice(indexToDelete, 1)
-        // }
       },
-      createMerchantTop() {
-          this.$router.push({name: 'merchant-top-create'})
+      getList() {
+          axios.get(`http://apiadmin.portalsekampus.id/public/api/user`).then(res => {
+              this.title = res.data.meta.message;
+              this.tableData = res.data.data;
+              this.meta_pagination = res.data.meta.pagination;
+          }).catch(err => {
+            this.$notify({
+                component: {
+                    template: `<span>Terjadi kesalahan!</span>`,
+                },
+                icon: 'ti-alert',
+                horizontalAlign: 'right',
+                verticalAlign: 'top',
+                type: 'danger'
+            })
+          })
       }
     }
   }

@@ -42,8 +42,8 @@ import Calendar from 'src/components/Dashboard/Views/Calendar/CalendarRoute.vue'
 import Charts from 'src/components/Dashboard/Views/Charts.vue'
 
 
-import UserList from 'src/components/Users/UserList.vue'
-import UserCreate from 'src/components/Users/UserCreate.vue'
+// import UserList from 'src/components/Users/UserList.vue'
+// import UserCreate from 'src/components/Users/UserCreate.vue'
 
 import CategoryUkmList from 'src/components/Settings/CategoryUkmList.vue'
 
@@ -78,6 +78,10 @@ import TransactionDetail from 'src/components/Transaction/Show.vue'
 // History
 import HistoryList from 'src/components/History/List.vue'
 import HistoryDetail from 'src/components/History/Show.vue'
+
+// Users
+import UserList from 'src/components/Users/List.vue'
+import UserCreate from 'src/components/Users/Create.vue'
 
 let componentsMenu = {
   path: '/components',
@@ -237,21 +241,21 @@ let lockPage = {
   component: Lock
 }
 
-let usersMenu = {
-  path: '/users',
-  name: 'users',
-  component: DashboardLayout,
-  children: [{
-    path: 'list',
-    name: 'user-list',
-    component: UserList
-  },
-  {
-    path: 'create',
-    name: 'user-create',
-    component: UserCreate
-  }]
-}
+// let usersMenu = {
+//   path: '/users',
+//   name: 'users',
+//   component: DashboardLayout,
+//   children: [{
+//     path: 'list',
+//     name: 'user-list',
+//     component: UserList
+//   },
+//   {
+//     path: 'create',
+//     name: 'user-create',
+//     component: UserCreate
+//   }]
+// }
 
 let settingsMenu = {
   path: '/settings',
@@ -375,6 +379,29 @@ const historyMenu = {
       path: 'detail/:id',
       name: 'history-detail',
       component: HistoryDetail
+    }
+  ]
+}
+
+const usersMenu = {
+  component: DashboardLayout,
+  name: 'users',
+  path: '/users',
+  children: [
+    {
+      path: 'list',
+      name: 'user-list',
+      component: UserList
+    },
+    {
+      path: 'create',
+      name: 'user-create',
+      component: UserCreate
+    },
+    {
+      path: 'edit/:id',
+      name: 'user-edit',
+      component: UserCreate
     }
   ]
 }

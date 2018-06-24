@@ -60,6 +60,16 @@ export default [
     ]
   },
   {
+    name: 'Users',
+    icon: 'ti-user',
+    children: [
+      {
+        name: 'Daftar Pengguna',
+        path: '/users/list'
+      }
+    ]
+  },
+  {
     name: 'Settings',
     icon: 'ti-settings',
     children: [{
