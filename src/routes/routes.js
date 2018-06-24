@@ -67,6 +67,9 @@ import MerchantPopCreate from 'src/components/Merchant/MerchantPopFormCreate.vue
 import MerchantOpenList from 'src/components/Merchant/MerchantOpenList.vue'
 import MerchantCloseList from 'src/components/Merchant/MerchantCloseList.vue'
 
+// Slider
+import SliderSemakananList from 'src/components/Slider/ListSemakanan.vue'
+import SliderHomeList from 'src/components/Slider/ListHome.vue'
 
 let componentsMenu = {
   path: '/components',
@@ -311,6 +314,25 @@ const merchantsMenu = {
   ]
 }
 
+// Slider
+const sliderMenu = {
+  component: DashboardLayout,
+  name: 'slider',
+  path: '/slider',
+  children: [
+    {
+      path: 'semakanan/list',
+      name: 'slider-semakanan-list',
+      component: SliderSemakananList
+    },
+    {
+      path: 'home/list',
+      name: 'slider-home-list',
+      component: SliderHomeList
+    }
+  ]
+}
+
 const routes = [
   {
     path: '/',
@@ -340,6 +362,7 @@ const routes = [
   registerPage,
   lockPage,
   merchantsMenu,
+  sliderMenu,
   {
     path: '/admin',
     component: DashboardLayout,

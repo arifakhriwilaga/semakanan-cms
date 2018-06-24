@@ -26,6 +26,20 @@ export default [
     ]
   },
   {
+    name: 'Slider',
+    icon: 'ti-image',
+    children: [
+      {
+        name: 'Slider seMakanan',
+        path: '/slider/semakanan/list'
+      },
+      {
+        name: 'Slider Home',
+        path: '/slider/home/list'
+      }
+    ]
+  },
+  {
     name: 'Settings',
     icon: 'ti-settings',
     children: [{
