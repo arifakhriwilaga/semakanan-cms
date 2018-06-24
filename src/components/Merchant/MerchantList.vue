@@ -47,7 +47,7 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleLike(props.$index, props.row)"><i class="ti-heart"></i></a>
+                <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a>
                 <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a>
                 <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
               </template>
@@ -189,8 +189,8 @@
       createMerchant() {
         this.$router.push({ name: 'merchant-create'})
       },
-      handleLike (index, row) {
-        alert(`Your want to like ${row.title}`)
+      handleTop (index, row) {
+        this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
       },
       handleEdit (index, row) {
         this.$router.push({ name: 'merchant-edit', params: {id: row.id}});

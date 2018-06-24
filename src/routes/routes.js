@@ -55,6 +55,10 @@ import MerchantList from 'src/components/Merchant/MerchantList.vue'
 import MerchantCreate from 'src/components/Merchant/MerchantFormCreate.vue'
 import MerchantEdit from 'src/components/Merchant/MerchantFormEdit.vue'
 
+// Merchant Top
+import MerchantTopList from 'src/components/Merchant/MerchantTopList.vue'
+import MerchantTopCreate from 'src/components/Merchant/MerchantTopFormCreate.vue'
+
 let componentsMenu = {
   path: '/components',
   component: DashboardLayout,
@@ -264,6 +268,16 @@ const merchantsMenu = {
       path: 'edit/:id',
       name: 'merchant-edit',
       component: MerchantEdit
+    },
+    {
+      path: 'top/list',
+      name: 'merchant-top-list',
+      component: MerchantTopList
+    },
+    {
+      path: 'top/create/:id',
+      name: 'merchant-top-create',
+      component: MerchantTopCreate
     }
   ]
 }

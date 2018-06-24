@@ -2,10 +2,16 @@ export default [
   {
     name: 'Merchants',
     icon: 'ti-star',
-    children: [{
-      name: 'Daftar Merchants',
-      path: '/merchants/list'
-    }]
+    children: [
+      {
+        name: 'Daftar Merchants',
+        path: '/merchants/list'
+      },
+      {
+        name: 'Daftar Merchant Teratas',
+        path: '/merchants/top/list'
+      }
+    ]
   },
   {
     name: 'Settings',
