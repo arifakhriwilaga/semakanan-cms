@@ -10,6 +10,10 @@ export default [
       {
         name: 'Daftar Merchant Teratas',
         path: '/merchants/top/list'
+      },
+      {
+        name: 'Daftar Merchant Populer',
+        path: '/merchants/pop/list'
       }
     ]
   },
