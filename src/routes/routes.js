@@ -75,6 +75,10 @@ import SliderHomeList from 'src/components/Slider/ListHome.vue'
 import TransactionList from 'src/components/Transaction/List.vue'
 import TransactionDetail from 'src/components/Transaction/Show.vue'
 
+// History
+import HistoryList from 'src/components/History/List.vue'
+import HistoryDetail from 'src/components/History/Show.vue'
+
 let componentsMenu = {
   path: '/components',
   component: DashboardLayout,
@@ -356,6 +360,25 @@ const transactionMenu = {
   ]
 }
 
+// History
+const historyMenu = {
+  component: DashboardLayout,
+  name: 'history',
+  path: '/history',
+  children: [
+    {
+      path: 'list',
+      name: 'history-list',
+      component: HistoryList
+    },
+    {
+      path: 'detail/:id',
+      name: 'history-detail',
+      component: HistoryDetail
+    }
+  ]
+}
+
 const routes = [
   {
     path: '/',
@@ -387,6 +410,7 @@ const routes = [
   merchantsMenu,
   sliderMenu,
   transactionMenu,
+  historyMenu,
   {
     path: '/admin',
     component: DashboardLayout,

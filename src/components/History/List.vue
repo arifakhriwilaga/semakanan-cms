@@ -45,8 +45,7 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <button class="btn btn-xs btn-info" @click="changeState(props.row)">Ubah Status</button>
-                <button class="btn btn-xs btn-warning" @click="cancel(props.row)">Batalkan</button>
+                <a class="btn btn-simple btn-xs btn-info" @click="detail(props.$index, props.row)">Detail</a>
               </template>
             </el-table-column>
           </el-table>
@@ -148,43 +147,18 @@
         propsToSearch: ['total_payment'],
         tableColumns: [
           {
-            prop: 'address.data.address',
-            label: 'Alamat',
+            prop: 'total_payment',
+            label: 'Total Pembayaran',
             minWidth: 250
           },
           {
-            prop: 'waktu_kirim',
-            label: 'Waktu Kirim',
-            minWidth: 100
-          },
-          {
-            prop: 'tanggal_kirim',
-            label: 'Tanggal Kirim',
-            minWidth: 100
-          },
-          {
-            prop: 'total_price',
-            label: 'Total Harga',
-            minWidth: 100
-          },
-          {
-            prop: 'total_m_price',
-            label: 'Total M Harga',
-            minWidth: 100
+            prop: 'cash',
+            label: 'Cash',
+            minWidth: 200
           },
           {
             prop: 'status.data.status',
             label: 'Status',
-            minWidth: 100
-          },
-          {
-            prop: 'rating',
-            label: 'Rating',
-            minWidth: 100
-          },
-          {
-            prop: 'message',
-            label: 'Pesan',
             minWidth: 200
           }
         ],
@@ -194,56 +168,11 @@
       }
     },
     methods: {
-      changeState(row) {
-        axios.put(`http://apiadmin.portalsekampus.id/public/api/transaction/${this.$router.currentRoute.params.id}/${row.id}`).then(res => {
-            this.$notify({
-                component: {
-                    template: `<span>${res.data.meta.message}</span>`
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'success'
-            })
-            this.getList()
-        }).catch(err => {
-            this.$notify({
-                component: {
-                    template: `<span>Terjadi kesalahan!</span>`,
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'danger'
-            })
-        })
-      },
-      cancel(row) {
-        axios.put(`http://apiadmin.portalsekampus.id/public/api/transaction/${row.id}/cancel`).then(res => {
-            this.$notify({
-                component: {
-                    template: `<span>${res.data.meta.message}</span>`
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'success'
-            })
-            this.getList()
-        }).catch(err => {
-            this.$notify({
-                component: {
-                    template: `<span>Terjadi kesalahan!</span>`,
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'danger'
-            })
-        })
+      detail(index, row) {
+        this.$router.push({name: 'history-detail', params: {id: row.id}})
       },
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/transaction/${this.$router.currentRoute.params.id}`).then(res => {
+          axios.get(`http://apiadmin.portalsekampus.id/public/api/history`).then(res => {
               this.title = res.data.meta.message;
               this.tableData = res.data.data;
               this.meta_pagination = res.data.meta.pagination;

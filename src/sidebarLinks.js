@@ -50,6 +50,16 @@ export default [
     ]
   },
   {
+    name: 'History',
+    icon: 'ti-menu-alt',
+    children: [
+      {
+        name: 'Daftar History',
+        path: '/history/list'
+      }
+    ]
+  },
+  {
     name: 'Settings',
     icon: 'ti-settings',
     children: [{
