@@ -49,7 +49,11 @@ import CategoryUkmList from 'src/components/Settings/CategoryUkmList.vue'
 
 // seKomunitas
 import Login from 'src/components/Auth/Login.vue'
+
+// Merchant
 import MerchantList from 'src/components/Merchant/MerchantList.vue'
+import MerchantCreate from 'src/components/Merchant/MerchantFormCreate.vue'
+import MerchantEdit from 'src/components/Merchant/MerchantFormEdit.vue'
 
 let componentsMenu = {
   path: '/components',
@@ -245,11 +249,23 @@ const merchantsMenu = {
   path: '/merchants',
   name: 'merchants',
   component: DashboardLayout,
-  children: [{
-    path: 'list',
-    name: 'merchant-list',
-    component: MerchantList
-  }]
+  children: [
+    {
+      path: 'list',
+      name: 'merchant-list',
+      component: MerchantList
+    },
+    {
+      path: 'create',
+      name: 'merchant-create',
+      component: MerchantCreate
+    },
+    {
+      path: 'edit/:id',
+      name: 'merchant-edit',
+      component: MerchantEdit
+    }
+  ]
 }
 
 const routes = [

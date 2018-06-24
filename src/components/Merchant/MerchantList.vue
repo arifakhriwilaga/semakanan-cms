@@ -1,7 +1,8 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title">Merchant</h4>
+      <h4 class="title pull-left">Merchant</h4>
+      <button class="btn btn-primary pull-right" @click="createMerchant()" style="margin-bottom: 15px">Tambah Merchant</button>
       <!-- <p class="category"></p> -->
     </div>
     <div class="col-md-12 card">
@@ -185,11 +186,14 @@
       }
     },
     methods: {
+      createMerchant() {
+        this.$router.push({ name: 'merchant-create'})
+      },
       handleLike (index, row) {
         alert(`Your want to like ${row.title}`)
       },
       handleEdit (index, row) {
-        alert(`Your want to edit ${row.title}`)
+        this.$router.push({ name: 'merchant-edit', params: {id: row.id}});
       },
       handleDelete (index, row) {
         swal({

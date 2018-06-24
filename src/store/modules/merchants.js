@@ -37,13 +37,6 @@ const actions = {
 	},
 	merchantDrop ({ commit }, params) {
 		new Promise((resolve, reject) => {
-			swal({
-	              title: 'Terhapus!',
-	              text: 'Data berhasil terhapus.',
-	              type: 'success',
-	              confirmButtonClass: 'btn btn-success btn-fill',
-	              buttonsStyling: false
-	            })
 			axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/delete/${params.id}`).then((res) => {
 				commit('deleteMerchant', params);
 				swal({
@@ -65,6 +58,9 @@ const actions = {
 				reject();
 			})
 		})
+	},
+	emptyMerchant ({ commit }) {
+		commit('emptyMerchant')
 	}
 }
 
