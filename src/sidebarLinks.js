@@ -40,6 +40,16 @@ export default [
     ]
   },
   {
+    name: 'Transaksi',
+    icon: 'ti-shopping-cart',
+    children: [
+      {
+        name: 'Daftar Transaksi',
+        path: '/transaction/list'
+      }
+    ]
+  },
+  {
     name: 'Settings',
     icon: 'ti-settings',
     children: [{

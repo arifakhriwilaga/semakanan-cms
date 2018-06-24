@@ -71,6 +71,10 @@ import MerchantCloseList from 'src/components/Merchant/MerchantCloseList.vue'
 import SliderSemakananList from 'src/components/Slider/ListSemakanan.vue'
 import SliderHomeList from 'src/components/Slider/ListHome.vue'
 
+// Transaction
+import TransactionList from 'src/components/Transaction/List.vue'
+import TransactionDetail from 'src/components/Transaction/Show.vue'
+
 let componentsMenu = {
   path: '/components',
   component: DashboardLayout,
@@ -333,6 +337,25 @@ const sliderMenu = {
   ]
 }
 
+// Transaction
+const transactionMenu = {
+  component: DashboardLayout,
+  name: 'transaction',
+  path: '/transaction',
+  children: [
+    {
+      path: 'list',
+      name: 'transaction-list',
+      component: TransactionList
+    },
+    {
+      path: 'detail/:id',
+      name: 'transaction-detail',
+      component: TransactionDetail
+    }
+  ]
+}
+
 const routes = [
   {
     path: '/',
@@ -363,6 +386,7 @@ const routes = [
   lockPage,
   merchantsMenu,
   sliderMenu,
+  transactionMenu,
   {
     path: '/admin',
     component: DashboardLayout,
