@@ -3,20 +3,12 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-6 col-xs-12">
-                        <h4 class="title" style="margin: 0">List Merchant Top List</h4>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <button class="btn btn-primary pull-right" @click="createMerchantTop">Tambah Merchant Populer</button>
-                    </div>
-                    </div>
-                    <p class="category">Daftar Top Merchant </p>
+                    <h4 class="title">List Merchant Open List</h4>
+                    <p class="category">Menampilkan merchant yang sudah buka </p>
                 </div>
                 <div class="card-content table-responsive table-full-width">
                 <el-table class="table-striped" :data="tableData">
                     <el-table-column label="Name" property="merchant.data.name"></el-table-column>
-                    <el-table-column label="Priority" property="priority"></el-table-column>
                     <el-table-column
                         :min-width="120"
                         fixed="right"
@@ -134,7 +126,7 @@
     },
     methods: {
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant/top`).then(res => {
+          axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant/open`).then(res => {
                 this.tableData = res.data.data
             }).catch(err => {
                 this.$notify({
@@ -170,20 +162,20 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/top/delete/${row.id}`).then((res) => {
+                axios.put(`http://apiadmin.portalsekampus.id/public/api/merchant/state/change/${row.id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
-                    text: 'Data berhasil terhapus.',
+                    text: 'Status berhasil diubah.',
                     type: 'success',
                     confirmButtonClass: 'btn btn-success btn-fill',
                     buttonsStyling: false
                     })
-                    this.getList
+                    this.getList()
                     resolve();
                 }).catch((er) => {
                     swal({
                     title: 'Dibatalkan',
-                    text: 'Menghapus data dibatalkan',
+                    text: 'Mengubah status dibatalkan',
                     type: 'error',
                     confirmButtonClass: 'btn btn-info btn-fill',
                     buttonsStyling: false
@@ -209,9 +201,6 @@
         //   this.tableData.splice(indexToDelete, 1)
         // }
       },
-      createMerchantTop() {
-          this.$router.push({name: 'merchant-top-create'})
-      }
     }
   }
 </script>

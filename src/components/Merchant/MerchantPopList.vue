@@ -137,7 +137,15 @@
           axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant/pop`).then(res => {
                 this.tableData = res.data.data
             }).catch(err => {
-                console.log(err)
+                this.$notify({
+                    component: {
+                        template: `<span>Terjadi kesalahan!</span>`,
+                    },
+                    icon: 'ti-alert',
+                    horizontalAlign: 'right',
+                    verticalAlign: 'top',
+                    type: 'danger'
+                })
             })
       },
       createMerchant() {

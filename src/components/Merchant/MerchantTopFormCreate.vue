@@ -35,6 +35,20 @@
                                         </el-option>
                                     </el-select>
                                 </div>
+                                <div class="form-group">
+                                    <label for="">Merchant</label>
+                                    <el-select class="select-danger"
+                                            size="large"
+                                            placeholder="Pilih Prioritas"
+                                            v-model="merchant_id">
+                                        <el-option v-for="option in merchant_options"
+                                                    class="select-danger"
+                                                    :value="option.value"
+                                                    :label="option.label"
+                                                    :key="option.label">
+                                        </el-option>
+                                    </el-select>
+                                </div>
                                 <div class="form-group" v-if="!error">
                                     <a href="javascript:;" style="width: 100%" class="btn btn-primary" @click="save">Tambah Merchant Top</a>
                                 </div>
@@ -76,6 +90,8 @@
                         value: 5, label: 5
                     }
                 ],
+                merchant_options: [],
+                merchant_id: '',
                 error: true
             }
         },
@@ -93,7 +109,7 @@
                     })
                 } else {
                     const formData = new FormData();
-                    formData.append('merchant_id', this.$router.currentRoute.params.id);
+                    formData.append('merchant_id', this.merchant_id);
                     formData.append('priority', this.priority);
 
                     axios.post(`http://apiadmin.portalsekampus.id/public/api/merchant/top/add`, formData).then(res => {
@@ -106,7 +122,7 @@
                             horizontalAlign: 'right',
                             type: 'success'
                         })
-                        this.$router.push({ name: 'merchant-list'})
+                        this.$router.push({ name: 'merchant-top-list'})
                     }).catch(err => {
                          this.$notify({
                         component: {
@@ -125,19 +141,15 @@
             }
         },
         mounted () {
-            axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant/${this.$router.currentRoute.params.id}`).then(res => {
-                this.name = res.data.data.merchant.data.name
-                this.error = false
-            }).catch(err => {
-                this.$notify({
-                    component: {
-                        template: `<span>${err.response.data.message}</span>`
-                    },
-                    icon: 'ti-alert',
-                    horizontalAlign: 'right',
-                    verticalAlign: 'top',
-                    type: 'danger'
-                })
+            axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant`).then(res => {
+                for (let index = 0; index < res.data.data.length; index++) {
+                    console.log(res.data.data[index])
+                    this.merchant_options.push({
+                        value: res.data.data[index].id,
+                        label: res.data.data[index].name
+                    });
+                }
+                this.error = false;
             })
         }
     }

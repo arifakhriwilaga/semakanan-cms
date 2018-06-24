@@ -14,6 +14,14 @@ export default [
       {
         name: 'Daftar Merchant Populer',
         path: '/merchants/pop/list'
+      },
+      {
+        name: 'Daftar Merchant Open',
+        path: '/merchants/open/list'
+      },
+      {
+        name: 'Daftar Merchant Close',
+        path: '/merchants/close/list'
       }
     ]
   },

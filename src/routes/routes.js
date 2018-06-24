@@ -63,6 +63,11 @@ import MerchantTopCreate from 'src/components/Merchant/MerchantTopFormCreate.vue
 import MerchantPopList from 'src/components/Merchant/MerchantPopList.vue'
 import MerchantPopCreate from 'src/components/Merchant/MerchantPopFormCreate.vue'
 
+// Merchant Open & Close
+import MerchantOpenList from 'src/components/Merchant/MerchantOpenList.vue'
+import MerchantCloseList from 'src/components/Merchant/MerchantCloseList.vue'
+
+
 let componentsMenu = {
   path: '/components',
   component: DashboardLayout,
@@ -279,7 +284,7 @@ const merchantsMenu = {
       component: MerchantTopList
     },
     {
-      path: 'top/create/:id',
+      path: 'top/create',
       name: 'merchant-top-create',
       component: MerchantTopCreate
     },
@@ -292,6 +297,16 @@ const merchantsMenu = {
       path: 'pop/create',
       name: 'merchant-pop-create',
       component: MerchantPopCreate
+    },
+    {
+      path: 'open/list',
+      name: 'merchant-open-list',
+      component: MerchantOpenList
+    },
+    {
+      path: 'close/list',
+      name: 'merchant-close-list',
+      component: MerchantCloseList
     }
   ]
 }
