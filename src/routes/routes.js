@@ -71,6 +71,7 @@ import MerchantCloseList from 'src/components/Merchant/MerchantCloseList.vue'
 // Slider
 import SliderSemakananList from 'src/components/Slider/ListSemakanan.vue'
 import SliderHomeList from 'src/components/Slider/ListHome.vue'
+import SliderCreate from 'src/components/Slider/Create.vue'
 
 // Transaction
 import TransactionList from 'src/components/Transaction/List.vue'
@@ -347,6 +348,16 @@ const sliderMenu = {
       path: 'home/list',
       name: 'slider-home-list',
       component: SliderHomeList
+    },
+    {
+      path: 'create',
+      name: 'slider-create',
+      component: SliderCreate
+    },
+    {
+      path: 'edit/:id',
+      name: 'slider-edit',
+      component: SliderCreate
     }
   ]
 }
