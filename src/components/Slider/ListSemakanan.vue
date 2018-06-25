@@ -3,7 +3,14 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="title">List Slider seMakanan</h4>
+                    <div class="row">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <h4 class="title" style="margin: 0">List Slider seMakanan</h4>
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <button class="btn btn-primary pull-right" @click="createSlider()" style="margin-bottom: 15px">Tambah Merchant</button>
+                      </div>
+                    </div>
                     <p class="category">{{title}} </p>
                 </div>
                 <div class="card-content table-responsive table-full-width">
@@ -149,8 +156,8 @@
                 })
             })
       },
-      createMerchant() {
-        // this.$router.push({ name: 'merchant-create'})
+      createSlider() {
+        this.$router.push({ name: 'slider-create'})
       },
       handleTop (index, row) {
         // this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
