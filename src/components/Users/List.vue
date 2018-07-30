@@ -162,16 +162,6 @@
             prop: 'phone',
             label: 'No. Telepon',
             minWidth: 150
-          },
-          {
-            prop: 'fcm_token',
-            label: 'FCM Token',
-            minWidth: 200
-          },
-          {
-            props: 'activate_token',
-            label: 'Activate Token',
-            minWidth: 150
           }
         ],
         tableData: [],
