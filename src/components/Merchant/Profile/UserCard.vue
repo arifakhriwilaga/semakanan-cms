@@ -6,57 +6,33 @@
     <div class="card-content">
       <div class="author">
         <img class="avatar border-white" src="static/img/faces/face-2.jpg" alt="...">
-        <h4 class="title">{{name}}
+        <h4 class="title">{{merchant.name}}
           <br>
           <button class="btn btn-success" style="margin: 4px 0 4px 0" v-if="open" @click="status()">BUKA</button>
           <button class="btn btn-danger" style="margin: 4px 0 4px 0" v-if="!open" @click="status()">TUTUP</button>
           <br>
           <a href="#">
-            <small>{{owner}}</small>
+            <small>{{merchant.owner}}</small>
           </a>
         </h4>
       </div>
       <p class="description text-center">
-        "{{description}}"
       </p>
     </div>
   </div>
 </template>
 <script>
+  let SERVER = process.env.HOST_URL;
+
   import axios from 'axios'
   export default {
-    props:['data'],
-    data () {
-      return {
-        details: [
-          {
-            title: '12',
-            subTitle: 'Files'
-          },
-          {
-            title: '2GB',
-            subTitle: 'Used'
-          },
-          {
-            title: '24,6$',
-            subTitle: 'Spent'
-          }
-        ],
-        name: '',
-        owner: '',
-        description: '',
+    props:{
+      merchant: Object
+    },
+    data(){
+      return{
         open: ''
       }
-    },
-    created() {
-      axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant/${this.$router.currentRoute.params.id}`).then(res => {
-        const data = res.data.data.merchant;
-
-        this.name = data.data.name;
-        this.owner = data.data.owner;
-        this.description = res.data.data.description;
-        this.open = res.data.data.buka;
-      })
     },
     methods: {
       getClasses (index) {
@@ -70,7 +46,7 @@
         }
       },
       status() {
-        axios.put(`http://apiadmin.portalsekampus.id/public/api/merchant/state/change/${this.$router.currentRoute.params.id}`).then(res => {
+        axios.put(SERVER + `/api/merchant/state/change/${this.$router.currentRoute.params.id}`).then(res => {
           this.$notify({
             component: {
               template: `<span>${res.data.meta.message}</span>`

@@ -15,6 +15,7 @@ const mutations = {
 		state.meta = payload.meta
 	},
 	deleteMerchant (state, row) {
+	  console.log(state, row);
 		let indexToDelete = state.merchants.findIndex((tableRow) => tableRow.id === row.id)
         if (indexToDelete >= 0) {
           state.merchants.splice(indexToDelete, 1)
@@ -28,6 +29,7 @@ const mutations = {
 
 const actions = {
 	merchantList ({ commit }, req) {
+
 		new Promise((resolve, reject) => {
 			axios.get('http://apiadmin.portalsekampus.id/public/api/merchant').then((res) => {
 				commit('getMerchants', res.data);
@@ -38,7 +40,9 @@ const actions = {
 	merchantDrop ({ commit }, params) {
 		new Promise((resolve, reject) => {
 			axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/delete/${params.id}`).then((res) => {
-				commit('deleteMerchant', params);
+			  // console.log('mau delte');
+			  // console.log(res);
+				// commit('deleteMerchant', params);
 				swal({
 	              title: 'Terhapus!',
 	              text: 'Data berhasil terhapus.',

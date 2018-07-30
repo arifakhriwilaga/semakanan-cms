@@ -35,7 +35,7 @@ Vue.use(GlobalComponents)
 Vue.use(VueNotify)
 Vue.use(SideBar, {sidebarLinks: sidebarLinks})
 Vue.use(VeeValidate)
-Vue.use(axios)
+// Vue.use(axios)
 locale.use(lang)
 
 // configure router

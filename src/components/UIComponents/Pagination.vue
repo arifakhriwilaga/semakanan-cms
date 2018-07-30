@@ -97,7 +97,8 @@
         return arr
       },
       changePage (item) {
-        this.$emit('input', item)
+        this.$emit('input', item);
+        this.$emit('paginate');
       },
       nextPage () {
         if (this.value < this.totalPages) {

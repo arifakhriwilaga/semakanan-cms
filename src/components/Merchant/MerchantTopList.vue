@@ -15,8 +15,7 @@
                 </div>
                 <div class="card-content table-responsive table-full-width">
                 <el-table class="table-striped" :data="tableData">
-                    <el-table-column label="Name" property="merchant.data.name"></el-table-column>
-                    <el-table-column label="Priority" property="priority"></el-table-column>
+                    <el-table-column label="Name" property="merchant_name"></el-table-column>
                     <el-table-column
                         :min-width="120"
                         fixed="right"
@@ -36,10 +35,10 @@
 
 </template>
 <script>
+  let SERVER = process.env.HOST_URL;
   import Vue from 'vue'
   import {Table, TableColumn, Select, Option} from 'element-ui'
   import PPagination from 'src/components/UIComponents/Pagination.vue'
-  import users from 'src/api/users'
   import swal from 'sweetalert2'
   import axios from 'axios'
   Vue.use(Table)
@@ -122,11 +121,6 @@
             prop: 'name',
             label: 'Nama',
             minWidth: 200
-          },
-          {
-            prop: 'priority',
-            label: 'Prioritas',
-            minWidth: 200
           }
         ],
         tableData: []
@@ -134,7 +128,7 @@
     },
     methods: {
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant/top`).then(res => {
+          axios.get(SERVER + `/api/merchant/top`).then(res => {
                 this.tableData = res.data.data
             }).catch(err => {
                 this.$notify({
@@ -170,7 +164,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/top/delete/${row.id}`).then((res) => {
+                axios.delete(SERVER+`/api/merchant/top/delete/${row.id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Data berhasil terhapus.',
