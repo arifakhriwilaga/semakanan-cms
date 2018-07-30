@@ -6,7 +6,7 @@
         </div>
 
         <!-- Form Input -->
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="card">
                 <form action="">
                     <div class="card-header">
@@ -22,8 +22,8 @@
                         <div class="row">
                             <div class="col-md-offset-2 col-md-8 col-sm-8 col-xs-12">
                                 <div class="form-group">
-                                    <label for="">Prioritas</label>
-                                    <el-select class="select-danger"
+                                    <label for=" ">Prioritas</label>
+                                    <el-select class="select-primary"
                                             size="large"
                                             placeholder="Pilih Prioritas"
                                             v-model="priority">
@@ -37,9 +37,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Merchant</label>
-                                    <el-select class="select-danger"
+                                    <el-select class="select-primary"
                                             size="large"
-                                            placeholder="Pilih Prioritas"
+                                            placeholder="Pilih merchant"
                                             v-model="merchant_id">
                                         <el-option v-for="option in merchant_options"
                                                     class="select-danger"
@@ -50,7 +50,7 @@
                                     </el-select>
                                 </div>
                                 <div class="form-group" v-if="!error">
-                                    <a href="javascript:;" style="width: 100%" class="btn btn-primary" @click="save">Tambah Merchant Top</a>
+                                    <button  class="btn btn-primary btn-fill" @click="save">Tambah Merchant Top</button>
                                 </div>
                             </div>
                         </div>
