@@ -16,7 +16,6 @@
                 <div class="card-content table-responsive table-full-width">
                 <el-table class="table-striped" :data="tableData">
                     <el-table-column label="Name" property="merchant.data.name"></el-table-column>
-                    <el-table-column label="Priority" property="priority"></el-table-column>
                     <el-table-column
                         :min-width="120"
                         fixed="right"
@@ -170,7 +169,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/pop/delete/${row.id}`).then((res) => {
+                axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/pop/delete/${row.merchant_id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Data berhasil terhapus.',
