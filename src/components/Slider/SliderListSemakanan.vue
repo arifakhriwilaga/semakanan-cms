@@ -40,13 +40,12 @@
   import Vue from 'vue'
   import {Table, TableColumn, Select, Option} from 'element-ui'
   import PPagination from 'src/components/UIComponents/Pagination.vue'
-  import users from 'src/api/users'
   import swal from 'sweetalert2'
   import axios from 'axios'
-  Vue.use(Table)
-  Vue.use(TableColumn)
-  Vue.use(Select)
-  Vue.use(Option)
+  Vue.use(Table);
+  Vue.use(TableColumn);
+  Vue.use(Select);
+  Vue.use(Option);
   export default{
     components: {
       PPagination
@@ -141,7 +140,7 @@
     },
     methods: {
       getList() {
-          axios.get(`/api/sliders?type=semakanan`).then(res => {
+          axios.get(`/api/sliders`).then(res => {
                 this.tableData = res.data.data
                 this.title = res.data.meta.message
             }).catch(err => {

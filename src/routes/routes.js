@@ -69,7 +69,7 @@ import MerchantCloseList from 'src/components/Merchant/MerchantCloseList.vue'
 
 // Slider
 import SliderListSemakanan from 'src/components/Slider/SliderListSemakanan.vue'
-import SliderHomeList from 'src/components/Slider/ListHome.vue'
+import SliderHomeList from 'src/components/Slider/SliderListHome.vue'
 import SliderForm from 'src/components/Slider/SliderForm.vue'
 
 // Transaction

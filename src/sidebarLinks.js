@@ -30,12 +30,8 @@ export default [
     icon: 'ti-image',
     children: [
       {
-        name: 'Slider seMakanan',
+        name: 'Slider',
         path: '/slider/semakanan/list'
-      },
-      {
-        name: 'Slider Home',
-        path: '/slider/home/list'
       }
     ]
   },

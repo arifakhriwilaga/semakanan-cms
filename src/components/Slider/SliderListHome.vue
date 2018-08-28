@@ -9,15 +9,21 @@
                 <div class="card-content table-responsive table-full-width">
                 <el-table class="table-striped" :data="tableData">
                     <el-table-column label="Caption" property="caption"></el-table-column>
-                    <el-table-column label="Location" property="location"></el-table-column>
+                    <el-table-column label="Image">
+                      <template slot-scope="props">
+                        <div class="img-container">
+                          <img :src="props.row.image" alt="Agenda">
+                        </div>
+                      </template>
+                    </el-table-column>
                     <el-table-column label="Type" property="type"></el-table-column>
                     <el-table-column
                         :min-width="120"
                         fixed="right"
                         label="Actions">
                         <template slot-scope="props">
-                            <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a>
-                            <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a> -->
+                            <!--&lt;!&ndash; <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a>-->
+                            <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a>
                             <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
                         </template>
                     </el-table-column>
@@ -134,7 +140,7 @@
     },
     methods: {
       getList() {
-          axios.get(`/api/slider?type=home`).then(res => {
+          axios.get(`/api/sliders?type=home`).then(res => {
                 this.tableData = res.data.data
                 this.title = res.data.meta.message
             }).catch(err => {
@@ -171,7 +177,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.put(`/api/slider/delete/${row.id}`).then((res) => {
+                axios.delete(`/api/sliders/${row.id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Slider berhasil dihapus.',
