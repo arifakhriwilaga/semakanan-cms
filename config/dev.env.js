@@ -3,5 +3,5 @@ var prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  HOST_URL: '"http://apiadmin.portalsekampus.id/public"'
+  HOST_URL: '"http://apidevadmin.sekampus.id"'
 })

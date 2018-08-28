@@ -9,7 +9,7 @@ export default class BaseService {
   constructor(hostUrl = process.env.HOST_URL, service = axios) {
     let config = {
       headers: {
-        'Content-Type': 'Application/Json',
+        'Content-Type': 'application/json',
         'Accept': 'Application/Json'
       }
     }

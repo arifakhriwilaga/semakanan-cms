@@ -54,7 +54,6 @@ import Login from 'src/components/Auth/Login.vue'
 import MerchantList from 'src/components/Merchant/MerchantList.vue'
 import MerchantProfile from 'src/components/Merchant/MerchantProfile.vue'
 import MerchantCreate from 'src/components/Merchant/MerchantFormCreate.vue'
-import MerchantEdit from 'src/components/Merchant/MerchantFormEdit.vue'
 
 // Merchant Top
 import MerchantTopList from 'src/components/Merchant/MerchantTopList.vue'
@@ -69,9 +68,9 @@ import MerchantOpenList from 'src/components/Merchant/MerchantOpenList.vue'
 import MerchantCloseList from 'src/components/Merchant/MerchantCloseList.vue'
 
 // Slider
-import SliderSemakananList from 'src/components/Slider/ListSemakanan.vue'
+import SliderListSemakanan from 'src/components/Slider/SliderListSemakanan.vue'
 import SliderHomeList from 'src/components/Slider/ListHome.vue'
-import SliderCreate from 'src/components/Slider/Create.vue'
+import SliderForm from 'src/components/Slider/SliderForm.vue'
 
 // Transaction
 import TransactionList from 'src/components/Transaction/List.vue'
@@ -296,9 +295,9 @@ const merchantsMenu = {
       component: MerchantCreate
     },
     {
-      path: 'edit/:id',
+      path: ':id',
       name: 'merchant-edit',
-      component: MerchantEdit
+      component: MerchantCreate
     },
     {
       path: 'top/list',
@@ -341,8 +340,8 @@ const sliderMenu = {
   children: [
     {
       path: 'semakanan/list',
-      name: 'slider-semakanan-list',
-      component: SliderSemakananList
+      name: 'slider-list-semakanan',
+      component: SliderListSemakanan
     },
     {
       path: 'home/list',
@@ -352,12 +351,12 @@ const sliderMenu = {
     {
       path: 'create',
       name: 'slider-create',
-      component: SliderCreate
+      component: SliderForm
     },
     {
       path: 'edit/:id',
       name: 'slider-edit',
-      component: SliderCreate
+      component: SliderForm
     }
   ]
 }

@@ -8,7 +8,7 @@
                         <h4 class="title" style="margin: 0">List Slider seMakanan</h4>
                       </div>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        <button class="btn btn-primary pull-right" @click="createSlider()" style="margin-bottom: 15px">Tambah Merchant</button>
+                        <button class="btn btn-primary pull-right" @click="createSlider()" style="margin-bottom: 15px">Tambah Slider</button>
                       </div>
                     </div>
                     <p class="category">{{title}} </p>
@@ -23,8 +23,8 @@
                         fixed="right"
                         label="Actions">
                         <template slot-scope="props">
-                            <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a>
-                            <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a> -->
+                            <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a> -->
+                            <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a>
                             <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
                         </template>
                     </el-table-column>
@@ -141,7 +141,7 @@
     },
     methods: {
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/slider?type=semakanan`).then(res => {
+          axios.get(`/api/sliders?type=semakanan`).then(res => {
                 this.tableData = res.data.data
                 this.title = res.data.meta.message
             }).catch(err => {
@@ -163,7 +163,7 @@
         // this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
       },
       handleEdit (index, row) {
-        // this.$router.push({ name: 'merchant-edit', params: {id: row.id}});
+        this.$router.push({ name: 'slider-edit', params: {id: row.id}});
       },
       handleDelete (index, row) {
         swal({
@@ -178,7 +178,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.put(`http://apiadmin.portalsekampus.id/public/api/slider/delete/${row.id}`).then((res) => {
+                axios.delete(`/api/sliders/${row.id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Slider berhasil dihapus.',

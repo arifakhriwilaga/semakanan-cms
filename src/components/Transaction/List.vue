@@ -172,7 +172,7 @@
         this.$router.push({name: 'transaction-detail', params: {id: row.id}})
       },
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/transaction`).then(res => {
+          axios.get(`/api/transactions`).then(res => {
               this.title = res.data.meta.message;
               this.tableData = res.data.data;
               this.meta_pagination = res.data.meta.pagination;

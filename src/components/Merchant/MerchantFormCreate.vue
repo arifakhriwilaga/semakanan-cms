@@ -27,9 +27,9 @@
                                            name="nama">
                                     <span>{{ errors.first('nama') }}</span>
                                 </div>
-                                <div class="form-group">
+                              <div class="form-group">
                                     <label>Gambar</label>
-                                    <input type="file" class="form-control" @change="onFileChanged" v-validate="'required'"
+                                    <input type="file" class="form-control" @change="onFileChanged"
                                     name="image"
                                     >
                                     <span>{{ errors.first('image') }}</span>
@@ -88,6 +88,9 @@
                                     <button type="submit" class="btn btn-fill btn-primary" :disabled="isSubmitted">
                                       {{mode}} Merchant</button>
                                 </div>
+                                <pre>
+                                  {{merchant}}
+                                </Pre>
                             </div>
                         </div>
                     </div>
@@ -101,8 +104,14 @@
                     <div class="card-content">
                         <div class="form-group">
                             <label for="">Alamat</label>
-                            <textarea name="" id="" cols="30" rows="10" class="form-control"
-                                      v-model="address" name="alamat" v-validate="'required'"></textarea>
+                            <textarea name="" id="" cols="15" rows="10" class="form-control"
+                                      v-model="merchant.address" name="alamat" v-validate="'required'"></textarea>
+                            <span>{{ errors.first('alamat') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Description</label>
+                            <textarea name="" id="" cols="15" rows="10" class="form-control"
+                                      v-model="merchant.description" name="alamat" v-validate="'required'"></textarea>
                             <span>{{ errors.first('alamat') }}</span>
                         </div>
                         <div class="form-group">
@@ -124,37 +133,46 @@
     import GoogleMapsLoader from 'google-maps'
     import axios from 'axios'
     import {DatePicker, TimeSelect, Slider, Tag, Input, Button, Select, Option} from 'element-ui'
+
+    import ImageUpload from 'src/components/Base/ImageUpload';
+
     GoogleMapsLoader.KEY = API_KEY
 
 
     export default {
-        props:{
-          merchant: Object
-        },
+        // props:{
+        //   merchant: Object
+        // },
         components: {
-            [TimeSelect.name]: TimeSelect
+            [TimeSelect.name]: TimeSelect, ImageUpload
         },
         data () {
-            return {
-                map: '',
-                markers: '',
-                latitude: '',
-                longitude: '',
-                name: '',
-                address: '',
-                owner: '',
-                image: '',
-                phone: '',
-                open_time: '',
-                close_time: '',
-                isSubmitted: false
-            }
+          return {
+            merchant: {
+              latitude: 'qweq',
+              longitude: 'qweqw',
+              name: 'qweq',
+              address: 'qweq',
+              owner: 'qwe',
+              image: '',
+              phone: 'qweqwe',
+              open_time: '12312',
+              close_time: '123123',
+              description: ''
+            },
+            isSubmitted: false
+
+          }
         },
         created(){
-          // let merchant_id = this.$router.currentRoute.params.id;
-          // if (merchant_id != "undefined"){
-          //       this.getMerchant(merchant_id)
-          // }
+          let merchant_id = this.$router.currentRoute.params.id;
+          console.log(merchant_id);
+          if (typeof(merchant_id) != "undefined"){
+                console.log("masuk konidisi");
+                this.getMerchant(merchant_id)
+          }else{
+            console.log("tidak masuk log");
+          }
         },
         computed: {
           mode(){
@@ -166,19 +184,22 @@
           }
         },
         methods: {
+            onLoad(avatar) {
+              this.merchant.image = avatar.src;
+            },
             getMerchant(merchant_id){
-              axios.get(`${SERVER}/api/merchant/${merchant_id}`).then(res => {
+              axios.get(`${SERVER}/api/merchants/${merchant_id}`).then(res => {
                 const data = res.data;
 
-                this.name = data.data.name;
-                this.image = data.data.image;
-                this.address = data.data.address;
-                this.owner = data.data.owner;
-                this.phone = data.data.phone;
-                this.latitude = Number(data.data.latitude);
-                this.longitude = Number(data.data.longitude);
-                this.open_time = data.data.open_time;
-                this.close_time = data.data.close_time;
+                this.merchant.name = data.data.name;
+                this.merchant.image = data.data.image;
+                this.merchant.address = data.data.address;
+                this.merchant.owner = data.data.owner;
+                this.merchant.phone = data.data.phone;
+                this.merchant.latitude = Number(data.data.latitude);
+                this.merchant.longitude = Number(data.data.longitude);
+                this.merchant.open_time = data.data.open_time;
+                this.merchant.close_time = data.data.close_time;
               }).catch( err => {
 //                this.$router.push({ name: 'merchant-list' })
               })
@@ -209,8 +230,8 @@
                     position: location,
                     map: this.map
                 })
-                this.latitude = this.markers.getPosition().lat()
-                this.longitude = this.markers.getPosition().lng()
+                this.merchant.latitude = this.markers.getPosition().lat()
+                this.merchant.longitude = this.markers.getPosition().lng()
             },
             deleteMarkers () {
                 this.markers.setMap(null)
@@ -224,49 +245,73 @@
 
                   this.isSubmitted = true;
 
-                  var formData = new FormData();
-                  formData.append('name', this.name);
-                  formData.append('image', this.image);
-                  formData.append('address', this.address);
-                  formData.append('phone', this.phone);
-                  formData.append('owner', this.owner);
-                  formData.append('latitude', this.latitude);
-                  formData.append('longitude', this.longitude);
-                  formData.append('open_time', this.open_time);
-                  formData.append('close_time', this.close_time);
-
-                  axios.post(SERVER + '/api/merchant/create', formData).then(res => {
-                    if (res.status == 200 || res.status == 201){
-                      this.listMerchant();
+                  if (this.$router.currentRoute.params.id) {
+                    console.log('aku mau ngedit');
+                    axios.put(SERVER + '/api/merchants/' + this.$router.currentRoute.params.id, this.merchant).then(res => {
+                      if (res.status == 200) {
+                        console.log(res);
+                        this.listMerchant();
+                        this.$notify({
+                          component: {
+                            template: `<span>`+ res.data.meta.message +`</span>`
+                          },
+                          icon: 'ti-alert',
+                          horizontalAlign: 'right',
+                          verticalAlign: 'top',
+                          type: 'success'
+                        })
+                      }
+                    }).catch(err => {
                       this.$notify({
                         component: {
-                          template: `<span>Data berhasil disimpan!</span>`
+                          template: `<span>Terjadi kesalahan!</span>`
                         },
                         icon: 'ti-alert',
                         horizontalAlign: 'right',
                         verticalAlign: 'top',
-                        type: 'success'
+                        type: 'danger'
                       })
-                    }
-                  }).catch(err => {
-                    this.$notify({
-                      component: {
-                        template: `<span>Terjadi kesalahan!</span>`
-                      },
-                      icon: 'ti-alert',
-                      horizontalAlign: 'right',
-                      verticalAlign: 'top',
-                      type: 'danger'
-                    })
-                    this.isSubmitted = false;
-                  })
+                      this.isSubmitted = false;
+                    });
+                  } else {
+                    axios.post(SERVER + '/api/merchants', this.merchant).then(res => {
+                      if (res.status == 201) {
+                        this.listMerchant();
+                        this.$notify({
+                          component: {
+                            template: `<span>Data berhasil disimpan!</span>`
+                          },
+                          icon: 'ti-alert',
+                          horizontalAlign: 'right',
+                          verticalAlign: 'top',
+                          type: 'success'
+                        })
+                      }
+                    }).catch(err => {
+                      this.$notify({
+                        component: {
+                          template: `<span>` + err.response.data.message + `</span>`
+                        },
+                        icon: 'ti-alert',
+                        horizontalAlign: 'right',
+                        verticalAlign: 'top',
+                        type: 'danger'
+                      })
+                      this.isSubmitted = false;
+                    });
+                  }
                 }
               });
 
 
             },
-            onFileChanged (event) {
-                this.image = event.target.files[0];
+            onFileChanged (e) {
+                const image = e.target.files[0];
+                const reader = new FileReader();
+                reader.readAsDataURL(image);
+                reader.onload = e =>{
+                    this.merchant.image = e.target.result;
+                };
             }
         },
         mounted () {

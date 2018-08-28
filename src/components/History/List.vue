@@ -172,7 +172,7 @@
         this.$router.push({name: 'history-detail', params: {id: row.id}})
       },
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/history`).then(res => {
+          axios.get(`/api/histories`).then(res => {
               this.title = res.data.meta.message;
               this.tableData = res.data.data;
               this.meta_pagination = res.data.meta.pagination;

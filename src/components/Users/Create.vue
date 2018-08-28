@@ -59,9 +59,9 @@
         },
         mounted() {
             if (this.$router.currentRoute.params.id) {
-                this.url = `http://apiadmin.portalsekampus.id/public/api/user/${this.$router.currentRoute.params.id}`;
+                this.url = `/api/users/${this.$router.currentRoute.params.id}`;
             } else {
-                this.url = `http://apiadmin.portalsekampus.id/public/api/user/create`
+                this.url = `/api/users/create`
             }
         },
         methods: {

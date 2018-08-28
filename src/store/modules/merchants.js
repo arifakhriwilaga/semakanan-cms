@@ -31,7 +31,7 @@ const actions = {
 	merchantList ({ commit }, req) {
 
 		new Promise((resolve, reject) => {
-			axios.get('http://apiadmin.portalsekampus.id/public/api/merchant').then((res) => {
+			axios.get('/api/merchants').then((res) => {
 				commit('getMerchants', res.data);
 				resolve();
 			}).then((er) => reject())
@@ -39,7 +39,7 @@ const actions = {
 	},
 	merchantDrop ({ commit }, params) {
 		new Promise((resolve, reject) => {
-			axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/${params.id}`).then((res) => {
+			axios.delete(`/merchants/${params.id}`).then((res) => {
 			  // console.log('mau delte');
 			  // console.log(res);
 				// commit('deleteMerchant', params);

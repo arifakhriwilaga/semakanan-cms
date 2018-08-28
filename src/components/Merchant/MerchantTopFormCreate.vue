@@ -112,7 +112,7 @@
                     formData.append('merchant_id', this.merchant_id);
                     formData.append('priority', this.priority);
 
-                    axios.post(`http://apiadmin.portalsekampus.id/public/api/merchant/top/add`, formData).then(res => {
+                    axios.post(`/merchants/top`, formData).then(res => {
                         this.$notify({
                             component: {
                                 template: `<span>Data berhasil disimpan</span>`
@@ -141,7 +141,7 @@
             }
         },
         mounted () {
-            axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant`).then(res => {
+            axios.get(`/api/merchants`).then(res => {
                 for (let index = 0; index < res.data.data.length; index++) {
                     console.log(res.data.data[index])
                     this.merchant_options.push({

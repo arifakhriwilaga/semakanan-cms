@@ -168,7 +168,7 @@
               formData.append('open_time', this.open_time);
               formData.append('close_time', this.close_time);
 
-              axios.post(`http://apiadmin.portalsekampus.id/public/api/merchant/edit/${this.$router.currentRoute.params.id}`, formData).then(res => {
+              axios.post(`/api/merchants/${this.$router.currentRoute.params.id}`, formData).then(res => {
                   this.$notify({
                       component: {
                           template: `<span>Data berhasil disimpan!</span>`
@@ -195,7 +195,7 @@
           this.image = event.target.files[0];
       },
       getList() {
-        axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant/${this.$router.currentRoute.params.id}`).then(res => {
+        axios.get(`/api/merchants/${this.$router.currentRoute.params.id}`).then(res => {
             const data = res.data.data.merchant;
 
             this.name = data.data.name;

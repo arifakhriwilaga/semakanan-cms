@@ -29,7 +29,7 @@ const actions = {
 			var data = new FormData();
 			data.append("email", creds.email);
 			data.append("password", creds.password);
-			axios.post('http://apiadmin.portalsekampus.id/public/api/auth/login', data).then((res) => {
+			axios.post('/api/auth/login', data).then((res) => {
 				if (res.data.error) {
 					reject();
 				} else {

@@ -191,7 +191,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.delete(`http://apiadmin.portalsekampus.id/public/api/user/${row.id}`).then((res) => {
+                axios.delete(`/api/users/${row.id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Data berhasil terhapus.',
@@ -226,7 +226,7 @@
         })
       },
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/user`).then(res => {
+          axios.get(`/api/users`).then(res => {
               this.title = res.data.meta.message;
               this.tableData = res.data.data;
               this.meta_pagination = res.data.meta.pagination;

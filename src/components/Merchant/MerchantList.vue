@@ -23,7 +23,7 @@
           <el-table class="table-striped"
                     :data="tableData"
                     border
-                    style="width: 100%">
+                    style="">
             <el-table-column v-for="column in tableColumns"
                              :key="column.label"
                              :min-width="column.minWidth"
@@ -144,7 +144,7 @@
       },
       getMerchants(params=null){
         console.log(params);
-        axios.get(SERVER + '/api/merchant', {params:params} ).then((resp) => {
+        axios.get(SERVER + '/api/merchants', {params:params} ).then((resp) => {
           if (resp.status == 200) {
             this.tableData = resp.data.data;
             let pagination = resp.data.meta.pagination;
@@ -195,7 +195,7 @@
         // }
       },
       handleShow(index, row) {
-        this.$router.push({name: 'merchant-profile', params: {
+        this.$router.push({name: 'merchant-edit', params: {
           id: row.id
         }})
       }

@@ -134,7 +134,7 @@
     },
     methods: {
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/slider?type=home`).then(res => {
+          axios.get(`/api/slider?type=home`).then(res => {
                 this.tableData = res.data.data
                 this.title = res.data.meta.message
             }).catch(err => {
@@ -171,7 +171,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.put(`http://apiadmin.portalsekampus.id/public/api/slider/delete/${row.id}`).then((res) => {
+                axios.put(`/api/slider/delete/${row.id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Slider berhasil dihapus.',

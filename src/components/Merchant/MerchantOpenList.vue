@@ -126,7 +126,7 @@
     },
     methods: {
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant/open`).then(res => {
+          axios.get(`/api/merchants/open`).then(res => {
                 this.tableData = res.data.data
             }).catch(err => {
                 this.$notify({
@@ -162,7 +162,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.put(`http://apiadmin.portalsekampus.id/public/api/merchant/state/change/${row.id}`).then((res) => {
+                axios.put(`/api/merchants/state/${row.id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Status berhasil diubah.',

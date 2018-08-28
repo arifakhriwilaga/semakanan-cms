@@ -133,7 +133,7 @@
     },
     methods: {
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/merchant/pop`).then(res => {
+          axios.get(`/api/merchants`).then(res => {
                 this.tableData = res.data.data
             }).catch(err => {
                 this.$notify({
@@ -169,7 +169,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.delete(`http://apiadmin.portalsekampus.id/public/api/merchant/pop/delete/${row.merchant_id}`).then((res) => {
+                axios.delete(`/api/merchants/pop${row.merchant_id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Data berhasil terhapus.',

@@ -195,7 +195,7 @@
     },
     methods: {
       changeState(row) {
-        axios.put(`http://apiadmin.portalsekampus.id/public/api/transaction/${this.$router.currentRoute.params.id}/${row.id}`).then(res => {
+        axios.put(`/api/transactions/${this.$router.currentRoute.params.id}/${row.id}`).then(res => {
             this.$notify({
                 component: {
                     template: `<span>${res.data.meta.message}</span>`
@@ -219,7 +219,7 @@
         })
       },
       cancel(row) {
-        axios.put(`http://apiadmin.portalsekampus.id/public/api/transaction/${row.id}/cancel`).then(res => {
+        axios.put(`/api/transactions/${row.id}/cancel`).then(res => {
             this.$notify({
                 component: {
                     template: `<span>${res.data.meta.message}</span>`
@@ -243,7 +243,7 @@
         })
       },
       getList() {
-          axios.get(`http://apiadmin.portalsekampus.id/public/api/transaction/${this.$router.currentRoute.params.id}`).then(res => {
+          axios.get(`/api/transactions/${this.$router.currentRoute.params.id}`).then(res => {
               this.title = res.data.meta.message;
               this.tableData = res.data.data;
               this.meta_pagination = res.data.meta.pagination;

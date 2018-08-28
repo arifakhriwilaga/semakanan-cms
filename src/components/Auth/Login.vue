@@ -78,6 +78,7 @@
       }
     },
     created() {
+      console.log('kesini');
       this.$store.dispatch('emptyMerchant')
     },
     methods: {
