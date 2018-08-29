@@ -25,14 +25,16 @@ const mutations = {
 const actions = {
 	login ({ commit }, creds) {
 		return new Promise((resolve, reject) => {
-
-			var data = new FormData();
-			data.append("email", creds.email);
-			data.append("password", creds.password);
-			axios.post('/api/auth/login', data).then((res) => {
-				if (res.data.error) {
-					reject();
-				} else {
+			let data = {
+			  'email': creds.email,
+        'password': creds.password
+      };
+      axios.post('/api/auth/login', data, {
+        headers: {'Content-Type': 'application/json'}
+      }).then((res) => {
+        if (res.data.error) {
+          reject();
+        } else {
 					commit('login');
 					commit('login_success', res.data.data);
 					localStorage.setItem('token', 'Bearer '+res.data.meta.token);

@@ -22,11 +22,11 @@
                         <div class="row">
                             <div class="col-md-offset-2 col-md-8 col-sm-8 col-xs-12">
                                 <div class="form-group">
-                                    <label for=" ">Prioritas</label>
+                                    <label for="">Prioritas</label>
                                     <el-select class="select-primary"
                                             size="large"
                                             placeholder="Pilih Prioritas"
-                                            v-model="priority">
+                                            v-model="merchant.priority">
                                         <el-option v-for="option in priority_options"
                                                     class="select-danger"
                                                     :value="option.value"
@@ -40,7 +40,7 @@
                                     <el-select class="select-primary"
                                             size="large"
                                             placeholder="Pilih merchant"
-                                            v-model="merchant_id">
+                                            v-model="merchant.merchant_id">
                                         <el-option v-for="option in merchant_options"
                                                     class="select-danger"
                                                     :value="option.value"
@@ -71,8 +71,11 @@
         },
         data () {
             return {
+                merchant:{
+                  priority: '',
+                  merchant_id: '',
+                },
                 name: '',
-                priority: '',
                 priority_options: [
                     {
                         value: 1, label: 1
@@ -91,13 +94,12 @@
                     }
                 ],
                 merchant_options: [],
-                merchant_id: '',
                 error: true
             }
         },
         methods: {
             save() {
-                if (!this.priority) {
+                if (!this.merchant.priority) {
                     this.$notify({
                         component: {
                             template: `<span>Prioritas belum dipilih</span>`
@@ -107,12 +109,8 @@
                         verticalAlign: 'top',
                         type: 'danger'
                     })
-                } else {
-                    const formData = new FormData();
-                    formData.append('merchant_id', this.merchant_id);
-                    formData.append('priority', this.priority);
-
-                    axios.post(`/merchants/top`, formData).then(res => {
+                }else {
+                    axios.post(`/api/merchants/top`, this.merchant).then(res => {
                         this.$notify({
                             component: {
                                 template: `<span>Data berhasil disimpan</span>`

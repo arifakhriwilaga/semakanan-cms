@@ -50,7 +50,7 @@
                                     </el-select>
                                 </div>
                                 <div class="form-group" v-if="!error">
-                                  <button class="btn btn-primary btn-fill" @click="save">Tambah Merchant Top</button>
+                                  <button class="btn btn-primary btn-fill" @click="save">Tambah Merchant</button>
                                 </div>
                             </div>
                         </div>

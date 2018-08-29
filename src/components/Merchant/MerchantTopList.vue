@@ -15,7 +15,10 @@
                 </div>
                 <div class="card-content table-responsive table-full-width">
                 <el-table class="table-striped" :data="tableData">
-                    <el-table-column label="Name" property="merchant_name"></el-table-column>
+                    <el-table-column label="Name" property="name"></el-table-column>
+                    <el-table-column label="Phone" property="phone"></el-table-column>
+                    <el-table-column label="Open" property="open_time"></el-table-column>
+                    <el-table-column label="Close" property="close_time"></el-table-column>
                     <el-table-column
                         :min-width="120"
                         fixed="right"
@@ -54,7 +57,7 @@
     },
     computed: {
       pagedData () {
-        return this.tableData.slice(this.from, this.to)
+        // return this.tableData.slice(this.from, this.to)
       },
       /***
        * Searches through table data and returns a paginated array.
@@ -63,29 +66,29 @@
        * @returns {computed.pagedData}
        */
       queriedData () {
-        if (this.tableData) {
-        //   var pagination = this.$store.getters.metaMerchants.pagination;
-        //   this.pagination.currentPage = pagination.current_page;
-        //   this.pagination.perPage = pagination.per_page;
-        //   this.pagination.total = pagination.total;
-          if (!this.searchQuery) {
-            this.pagination.total = this.tableData.length
-            return this.pagedData
-          }
-          let result = this.tableData
-            .filter((row) => {
-              let isIncluded = false
-              for (let key of this.propsToSearch) {
-                let rowValue = row[key].toString()
-                if (rowValue.includes && rowValue.includes(this.searchQuery)) {
-                  isIncluded = true
-                }
-              }
-              return isIncluded
-            })
-          this.pagination.total = result.length
-          return result.slice(this.from, this.to)
-        }
+        // if (this.tableData) {
+        // //   var pagination = this.$store.getters.metaMerchants.pagination;
+        // //   this.pagination.currentPage = pagination.current_page;
+        // //   this.pagination.perPage = pagination.per_page;
+        // //   this.pagination.total = pagination.total;
+        //   if (!this.searchQuery) {
+        //     this.pagination.total = this.tableData.length
+        //     return this.pagedData
+        //   }
+        //   let result = this.tableData
+        //     .filter((row) => {
+        //       let isIncluded = false
+        //       for (let key of this.propsToSearch) {
+        //         let rowValue = row[key].toString()
+        //         if (rowValue.includes && rowValue.includes(this.searchQuery)) {
+        //           isIncluded = true
+        //         }
+        //       }
+        //       return isIncluded
+        //     })
+        //   this.pagination.total = result.length
+        //   return result.slice(this.from, this.to)
+        // }
       },
       to () {
         let highBound = this.from + this.pagination.perPage
@@ -116,13 +119,6 @@
         },
         searchQuery: '',
         propsToSearch: ['name'],
-        tableColumns: [
-          {
-            prop: 'name',
-            label: 'Nama',
-            minWidth: 200
-          }
-        ],
         tableData: []
       }
     },
@@ -164,7 +160,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.delete(SERVER+`/api/merchant/top/delete/${row.merchant_id}`).then((res) => {
+                axios.delete(SERVER+`/api/merchants/top/${row.merchant_id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Data berhasil terhapus.',

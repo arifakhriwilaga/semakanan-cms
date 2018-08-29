@@ -144,7 +144,7 @@
       },
       getMerchants(params=null){
         console.log(params);
-        axios.get(SERVER + '/api/merchants/opened', {params:params} ).then((resp) => {
+        axios.get(SERVER + '/api/merchants', {params:params} ).then((resp) => {
           if (resp.status == 200) {
             this.tableData = resp.data.data;
             let pagination = resp.data.meta.pagination;

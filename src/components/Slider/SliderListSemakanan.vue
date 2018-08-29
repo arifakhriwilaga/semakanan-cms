@@ -146,7 +146,7 @@
     },
     methods: {
       getList() {
-          axios.get(`/api/sliders?type=semakanan`).then(res => {
+          axios.get(`/api/sliders`).then(res => {
                 this.tableData = res.data.data
                 this.title = res.data.meta.message
             }).catch(err => {

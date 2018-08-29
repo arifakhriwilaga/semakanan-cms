@@ -32,6 +32,7 @@
                                     <input type="file" class="form-control" @change="onFileChanged"
                                     name="image"
                                     >
+                                    <img :src="merchant.image" v-if="merchant.image!=''">
                                     <span>{{ errors.first('image') }}</span>
                                 </div>
 
@@ -110,7 +111,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Description</label>
-                            <textarea name="" id="" cols="15" rows="10" class="form-control"
+                            <textarea cols="15" rows="10" class="form-control"
                                       v-model="merchant.description" name="alamat" v-validate="'required'"></textarea>
                             <span>{{ errors.first('alamat') }}</span>
                         </div>
@@ -126,7 +127,7 @@
 </template>
 
 <script>
-
+    import Vue from 'vue';
     let SERVER = process.env.HOST_URL;
 
     import {API_KEY} from 'src/components/Dashboard/Views/Maps/API_KEY'
@@ -246,7 +247,10 @@
                   this.isSubmitted = true;
 
                   if (this.$router.currentRoute.params.id) {
-                    console.log('aku mau ngedit');
+                    if (this.merchant.image.slice(0, 10) != "data:image") {
+                      Vue.delete(this.merchant, 'image');
+                    };
+                    // if (this.image.spli)
                     axios.put(SERVER + '/api/merchants/' + this.$router.currentRoute.params.id, this.merchant).then(res => {
                       if (res.status == 200) {
                         console.log(res);

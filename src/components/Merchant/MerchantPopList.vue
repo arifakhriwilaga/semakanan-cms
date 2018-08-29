@@ -133,7 +133,7 @@
     },
     methods: {
       getList() {
-          axios.get(`/api/merchants`).then(res => {
+          axios.get(`/api/merchants/pop`).then(res => {
                 this.tableData = res.data.data
             }).catch(err => {
                 this.$notify({
