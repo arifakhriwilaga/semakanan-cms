@@ -16,7 +16,13 @@
                 <div class="card-content table-responsive table-full-width">
                 <el-table class="table-striped" :data="tableData">
                     <el-table-column label="Caption" property="caption"></el-table-column>
-                    <el-table-column label="Location" property="location"></el-table-column>
+                    <el-table-column label="Image">
+                      <template slot-scope="props">
+                        <div class="img-container">
+                          <img :src="props.row.image" alt="Agenda" height="50">
+                        </div>
+                      </template>
+                    </el-table-column>
                     <el-table-column label="Type" property="type"></el-table-column>
                     <el-table-column
                         :min-width="120"
@@ -140,7 +146,7 @@
     },
     methods: {
       getList() {
-          axios.get(`/api/sliders`).then(res => {
+          axios.get(`/api/sliders?type=semakanan`).then(res => {
                 this.tableData = res.data.data
                 this.title = res.data.meta.message
             }).catch(err => {

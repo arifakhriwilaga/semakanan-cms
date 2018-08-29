@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <h4 class="title pull-left">Form Slider</h4>
-            <button class="btn btn-primary pull-right" style="margin-bottom: 15px" @click="toList">List Slider </button>
+            <button class="btn btn-success btn-fill pull-right" style="margin-bottom: 15px" @click="toList">List Slider </button>
         </div>
 
         <!-- Form Input -->
@@ -32,7 +32,7 @@
                                             placeholder="Pilih Tipe"
                                             v-model="slider.type">
                                         <el-option v-for="option in type_options"
-                                                    class="select-danger"
+                                                    class="select-primary"
                                                     :value="option.value"
                                                     :label="option.label"
                                                     :key="option.label">
@@ -46,9 +46,10 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <a href="javascript:;" style="width: 100%" class="btn btn-primary" @click="save">{{label}}</a>
+                                    <a href="javascript:;"   class="btn btn-primary btn-fill" @click="save"
+                                    :disabled="isSubmitted"
+                                    >{{label}}</a>
                                 </div>
-                                {{slider}}
                             </div>
                         </div>
                     </div>
@@ -62,7 +63,7 @@
     import axios from 'axios';
     import SliderService from './SliderService';
 
-    import {DatePicker, TimeSelect, Slider, Tag, Input, Button, Select, Option} from 'element-ui'
+    import { Select} from 'element-ui'
 
     let sliderService = new SliderService();
     export default {
@@ -77,6 +78,7 @@
       },
       data() {
         return {
+          isSubmitted: false,
           slider: {
             caption: '',
             type: '',
@@ -121,6 +123,7 @@
           });
         },
         save() {
+          this.isSubmitted = true;
           let slider_id = this.$router.currentRoute.params.id;
           if (typeof(slider_id) == "undefined") {
             sliderService.post(this.slider).then(res => {
@@ -150,6 +153,8 @@
                 verticalAlign: 'top',
                 type: 'danger'
               })
+              this.isSubmitted = false;
+
             })
           } else {
             sliderService.put(slider_id, this.slider).then(res => {
@@ -179,12 +184,14 @@
                 verticalAlign: 'top',
                 type: 'danger'
               })
+              this.isSubmitted = false;
+
             })
           }
 
         },
         toList() {
-          this.$router.push({name: 'slider-semakanan-list'})
+          this.$router.push({name: 'slider-list-semakanan'})
         },
         onFileChanged(e) {
           if (!e.target.files.length) return;

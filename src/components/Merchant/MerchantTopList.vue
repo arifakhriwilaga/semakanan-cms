@@ -128,7 +128,7 @@
     },
     methods: {
       getList() {
-          axios.get(SERVER + `/api/merchant/top`).then(res => {
+          axios.get(SERVER + `/api/merchants/top`).then(res => {
                 this.tableData = res.data.data
             }).catch(err => {
                 this.$notify({
