@@ -16,9 +16,7 @@
                 <div class="card-content table-responsive table-full-width">
                 <el-table class="table-striped" :data="tableData">
                     <el-table-column label="Name" property="name"></el-table-column>
-                    <el-table-column label="Phone" property="phone"></el-table-column>
-                    <el-table-column label="Open" property="open_time"></el-table-column>
-                    <el-table-column label="Close" property="close_time"></el-table-column>
+                    <el-table-column label="Priority" property="priority"></el-table-column>
                     <el-table-column
                         :min-width="120"
                         fixed="right"
@@ -30,7 +28,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
-
+                <pagination @paginate="page($event)" :pagination="pagination"></pagination>
                 </div>
             </div>
         </div>
@@ -38,10 +36,9 @@
 
 </template>
 <script>
-  let SERVER = process.env.HOST_URL;
   import Vue from 'vue'
   import {Table, TableColumn, Select, Option} from 'element-ui'
-  import PPagination from 'src/components/UIComponents/Pagination.vue'
+  import Pagination from 'src/components/Base/Pagination.vue'
   import swal from 'sweetalert2'
   import axios from 'axios'
   Vue.use(Table)
@@ -50,99 +47,42 @@
   Vue.use(Option)
   export default{
     components: {
-      PPagination
+      Pagination
     },
     created() {
         this.getList()
     },
-    computed: {
-      pagedData () {
-        // return this.tableData.slice(this.from, this.to)
-      },
-      /***
-       * Searches through table data and returns a paginated array.
-       * Note that this should not be used for table with a lot of data as it might be slow!
-       * Do the search and the pagination on the server and display the data retrieved from server instead.
-       * @returns {computed.pagedData}
-       */
-      queriedData () {
-        // if (this.tableData) {
-        // //   var pagination = this.$store.getters.metaMerchants.pagination;
-        // //   this.pagination.currentPage = pagination.current_page;
-        // //   this.pagination.perPage = pagination.per_page;
-        // //   this.pagination.total = pagination.total;
-        //   if (!this.searchQuery) {
-        //     this.pagination.total = this.tableData.length
-        //     return this.pagedData
-        //   }
-        //   let result = this.tableData
-        //     .filter((row) => {
-        //       let isIncluded = false
-        //       for (let key of this.propsToSearch) {
-        //         let rowValue = row[key].toString()
-        //         if (rowValue.includes && rowValue.includes(this.searchQuery)) {
-        //           isIncluded = true
-        //         }
-        //       }
-        //       return isIncluded
-        //     })
-        //   this.pagination.total = result.length
-        //   return result.slice(this.from, this.to)
-        // }
-      },
-      to () {
-        let highBound = this.from + this.pagination.perPage
-        if (this.total < highBound) {
-          highBound = this.total
-        }
-        return highBound
-      },
-      from () {
-        return this.pagination.perPage * (this.pagination.currentPage - 1)
-      },
-      total () {
-        if (this.tableData) {
-          this.pagination.total = this.tableData.length
-          return this.tableData.length
-        } else {
-          return 0
-        }
-      }
-    },
     data () {
       return {
         pagination: {
-          perPage: 0,
-          currentPage: 0,
-          perPageOptions: [5, 10, 25, 50],
-          total: 0
         },
-        searchQuery: '',
-        propsToSearch: ['name'],
         tableData: []
       }
     },
     methods: {
-      getList() {
-          axios.get(SERVER + `/api/merchants/top`).then(res => {
-                this.tableData = res.data.data
-            }).catch(err => {
-                this.$notify({
-                    component: {
-                        template: `<span>Terjadi kesalahan!</span>`,
-                    },
-                    icon: 'ti-alert',
-                    horizontalAlign: 'right',
-                    verticalAlign: 'top',
-                    type: 'danger'
-                })
-            })
+      page(val) {
+        this.getList({}, this.pagination[val]);
       },
-      createMerchant() {
-        // this.$router.push({ name: 'merchant-create'})
-      },
-      handleTop (index, row) {
-        // this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
+
+      getList(params=null, path=null) {
+        if (path == null) {
+          path = `/api/merchants/top`;
+        }
+        axios.get(path, params).then(res => {
+          this.tableData = res.data.data;
+          this.pagination = res.data.paging;
+        }).catch(err => {
+          console.log(err);
+          this.$notify({
+            component: {
+              template: `<span>Terjadi kesalahan!</span>`,
+            },
+            icon: 'ti-alert',
+            horizontalAlign: 'right',
+            verticalAlign: 'top',
+            type: 'danger'
+          })
+        })
       },
       handleEdit (index, row) {
         // this.$router.push({ name: 'merchant-edit', params: {id: row.id}});
@@ -160,7 +100,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.delete(SERVER+`/api/merchants/top/${row.merchant_id}`).then((res) => {
+                axios.delete(`/api/merchants/top/${row.merchant_id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Data berhasil terhapus.',
@@ -182,7 +122,6 @@
                 })
             })
         }, function (dismiss) {
-          // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
           if (dismiss === 'cancel') {
             swal({
               title: 'Dibatalkan',
@@ -194,10 +133,6 @@
           }
         })
 
-        // let indexToDelete = this.tableData.findIndex((tableRow) => tableRow.id === row.id)
-        // if (indexToDelete >= 0) {
-        //   this.tableData.splice(indexToDelete, 1)
-        // }
       },
       createMerchantTop() {
           this.$router.push({name: 'merchant-top-create'})

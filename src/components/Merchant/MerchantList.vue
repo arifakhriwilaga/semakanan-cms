@@ -53,7 +53,6 @@
   import {Table, TableColumn, Select, Option} from 'element-ui'
   import Pagination from 'src/components/Base/Pagination.vue'
   import swal from 'sweetalert2'
-  let SERVER = process.env.HOST_URL;
 
 
   Vue.use(Table)
@@ -71,8 +70,6 @@
       return {
         pagination: {
         },
-        searchQuery: '',
-        propsToSearch: ['name', 'owner', 'open_time'],
         tableColumns: [
           {
             prop: 'name',
@@ -118,9 +115,11 @@
       createMerchant() {
         this.$router.push({ name: 'merchant-create'})
       },
-      getMerchants(params=null){
-        console.log(params);
-        axios.get(SERVER + '/api/merchants', {params:params} ).then((resp) => {
+      getMerchants(params=null, path=null){
+        if (path==null){
+          path='/api/merchants';
+        }
+        axios.get(path, {params:params} ).then((resp) => {
           if (resp.status == 200) {
             this.tableData = resp.data.data;
             this.pagination  = resp.data.paging;
