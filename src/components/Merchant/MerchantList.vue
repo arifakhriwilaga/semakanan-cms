@@ -15,7 +15,8 @@
         <div class="col-sm-6">
           <div class="pull-right">
             <label>
-              <input type="search" class="form-control input-sm" placeholder="Search records" v-model="searchQuery" aria-controls="datatables">
+              <input @keyup.enter="search" type="search" placeholder="Search records"
+                                              aria-controls="datatables" class="form-control input-sm">
             </label>
           </div>
         </div>
@@ -40,18 +41,7 @@
               </template>
             </el-table-column>
           </el-table>
-        </div>
-        <div class="col-sm-6 pagination-info">
-          <p class="category">Showing {{from}} to {{to}} of {{pagination.total}} entries</p>
-        </div>
-        <div class="col-sm-6">
-          <p-pagination class="pull-right"
-                        v-model="pagination.currentPage"
-                        :per-page="pagination.perPage"
-                        :total="pagination.total"
-                        @paginate="paginate"
-          >
-          </p-pagination>
+          <pagination @paginate="page($event)" :pagination="pagination"></pagination>
         </div>
       </div>
     </div>
@@ -61,8 +51,7 @@
   import Vue from 'vue'
   import axios from 'axios'
   import {Table, TableColumn, Select, Option} from 'element-ui'
-  import PPagination from 'src/components/UIComponents/Pagination.vue'
-  import users from 'src/api/users'
+  import Pagination from 'src/components/Base/Pagination.vue'
   import swal from 'sweetalert2'
   let SERVER = process.env.HOST_URL;
 
@@ -73,30 +62,14 @@
   Vue.use(Option)
   export default{
     components: {
-      PPagination
+      Pagination
     },
     created() {
       this.getMerchants();
     },
-    computed: {
-      from(){
-        return (this.pagination.currentPage * this.pagination.perPage) - this.pagination.perPage + 1;
-      },
-      to(){
-        if ((this.pagination.currentPage * this.pagination.perPage) - this.pagination.perPage <= this.pagination.pageCount ){
-          return this.pagination.pageCount;
-        }else{
-          return this.pagination.perPage;
-        }
-      }
-    },
     data () {
       return {
         pagination: {
-          perPage: 0,
-          currentPage: 0,
-          perPageOptions: [5, 10, 25, 50],
-          total: 0
         },
         searchQuery: '',
         propsToSearch: ['name', 'owner', 'open_time'],
@@ -136,8 +109,11 @@
       }
     },
     methods: {
-      paginate(){
-        this.getMerchants({'page': this.pagination.currentPage})
+      page(val) {
+        this.getMerchants({}, this.pagination[val]);
+      },
+      search(event) {
+        this.getMerchants({'name': event.target.value});
       },
       createMerchant() {
         this.$router.push({ name: 'merchant-create'})
@@ -147,11 +123,7 @@
         axios.get(SERVER + '/api/merchants', {params:params} ).then((resp) => {
           if (resp.status == 200) {
             this.tableData = resp.data.data;
-            let pagination = resp.data.meta.pagination;
-            this.pagination.currentPage = pagination.current_page;
-            this.pagination.perPage = pagination.per_page;
-            this.pagination.total = pagination.total;
-            this.pagination.count = pagination.count;
+            this.pagination  = resp.data.paging;
           }
         })
       },
