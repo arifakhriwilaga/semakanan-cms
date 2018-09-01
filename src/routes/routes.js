@@ -77,7 +77,7 @@ import TransactionList from 'src/components/Transaction/TransactionList.vue'
 import TransactionDetail from 'src/components/Transaction/Show.vue'
 
 // History
-import HistoryList from 'src/components/History/List.vue'
+import HistoryList from 'src/components/History/HistoryList.vue'
 import HistoryDetail from 'src/components/History/Show.vue'
 
 // Users
@@ -387,12 +387,12 @@ const historyMenu = {
   path: '/history',
   children: [
     {
-      path: 'list',
+      path: '',
       name: 'history-list',
       component: HistoryList
     },
     {
-      path: 'detail/:id',
+      path: '/:id',
       name: 'history-detail',
       component: HistoryDetail
     }

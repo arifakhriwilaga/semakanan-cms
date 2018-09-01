@@ -40,7 +40,7 @@
     props: {
       title: {
         type: String,
-        default: 'SeKomunitas Admin'
+        default: 'SeMakanan Admin'
       },
       type: {
         type: String,

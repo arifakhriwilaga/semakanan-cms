@@ -43,17 +43,7 @@ export default [
     children: [
       {
         name: 'Daftar History',
-        path: '/history/list'
-      }
-    ]
-  },
-  {
-    name: 'Users',
-    icon: 'ti-user',
-    children: [
-      {
-        name: 'Daftar Pengguna',
-        path: '/users/list'
+        path: '/history'
       }
     ]
   }
