@@ -68,7 +68,7 @@
           if (path==null){
             path='/api/merchants/pop';
           }
-          axios.get(path).then(res => {
+          axios.get(path, params).then(res => {
                 this.tableData = res.data.data;
                 this.pagination  = res.data.paging;
             }).catch(err => {
