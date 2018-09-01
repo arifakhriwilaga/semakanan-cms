@@ -50,10 +50,21 @@
                              :label="column.label">
             </el-table-column>
             <el-table-column
-              :min-width="120"
+              :min-width="180"
               fixed="right"
               label="Actions">
               <template slot-scope="props">
+                <el-select class="select-primary"
+                           size="small"
+                           placeholder="Confirm"
+                             @change="confirm(props.row)">
+                  <el-option v-for="option in options"
+                             class="select-primary"
+                             :value="option.value"
+                             :label="option.label"
+                             :key="option.label">
+                  </el-option>
+                </el-select>
                 <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
                 <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
               </template>
@@ -69,6 +80,7 @@
   import Vue from 'vue'
   import axios from 'axios'
   import {Table, TableColumn, Select, Option} from 'element-ui'
+
   import Pagination from 'src/components/Base/Pagination.vue'
   import swal from 'sweetalert2'
 
@@ -85,6 +97,9 @@
       this.getMerchants();
     },
     watch:{
+      "switches.defaultOn": function(newVal, oldVal){
+        console.log("Toko", newVal);
+      },
       filterStore: function(newVal, oldVal){
         switch (newVal){
           case "all" : this.getMerchants(); break;
@@ -96,6 +111,9 @@
     },
     data () {
       return {
+        switches: {
+         defaultOn: true,
+       },
         pagination: {
         },
         options: [{
@@ -145,6 +163,9 @@
       }
     },
     methods: {
+      changeState(event){
+        console.log(event);
+      },
       page(val) {
         this.getMerchants({}, this.pagination[val]);
       },
@@ -201,7 +222,38 @@
         this.$router.push({name: 'merchant-edit', params: {
           id: row.id
         }})
-      }
+      },
+      confirm(row){
+        swal({
+          title: 'Apakah anda yakin?',
+          text: 'Toko akan buka / tutup',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonClass: 'btn btn-success btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          confirmButtonText: 'Yes!',
+          buttonsStyling: false
+        }).then(function () {
+          // let service = orderService.changeState(row.id, {
+          //   'order_status': row.order_status
+          // });
+          // service.then(response => {
+          //   if (response.status == 200) {
+          //     swal({
+          //       title: 'Success!',
+          //       text: 'Status Order: ' + row.order_status,
+          //       type: 'success',
+          //       confirmButtonClass: 'btn btn-success btn-fill',
+          //       buttonsStyling: false
+          //     }, function () {
+          //       this.getOrders();
+          //     });
+          //   }
+          // });
+        }).catch(()=>{
+          // this.getOrders();
+        });
+      },
     }
   }
 </script>
