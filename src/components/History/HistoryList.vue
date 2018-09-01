@@ -28,6 +28,8 @@
               </template>
             </el-table-column>
           </el-table>
+          <pagination @paginate="page($event)" :pagination="pagination"></pagination>
+
         </div>
       </div>
     </div>
@@ -79,8 +81,14 @@
       detail(index, row) {
         this.$router.push({name: 'history-detail', params: {id: row.id}})
       },
-      getList() {
-          axios.get(`/api/histories`).then(res => {
+      page(val) {
+        this.getList({}, this.pagination[val]);
+      },
+      getList(params=null, path=null) {
+          if (path==null){
+            path='/api/histories';
+          }
+          axios.get(path, params).then(res => {
               this.tableData = res.data.data;
               this.pagination  = res.data.paging;
           }).catch(err => {
