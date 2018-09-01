@@ -56,7 +56,8 @@
               <template slot-scope="props">
                 <el-select class="select-primary"
                            size="small"
-                           placeholder="Confirm"
+                           placeholder="Buka/Tutup"
+                           disabled
                              @change="confirm(props.row)">
                   <el-option v-for="option in options"
                              class="select-primary"

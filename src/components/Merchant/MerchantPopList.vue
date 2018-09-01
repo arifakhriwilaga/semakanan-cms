@@ -28,6 +28,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <pagination @paginate="page($event)" :pagination="pagination"></pagination>
 
                 </div>
             </div>
@@ -60,6 +61,9 @@
       }
     },
     methods: {
+      page(val) {
+        this.getList({}, this.pagination[val]);
+      },
       getList(params=null, path=null) {
           if (path==null){
             path='/api/merchants/pop';
