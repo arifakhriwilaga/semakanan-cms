@@ -89,9 +89,6 @@
                                     <button type="submit" class="btn btn-fill btn-primary" :disabled="isSubmitted">
                                       {{mode}} Merchant</button>
                                 </div>
-                                <pre>
-                                  {{merchant}}
-                                </Pre>
                             </div>
                         </div>
                     </div>
@@ -105,13 +102,13 @@
                     <div class="card-content">
                         <div class="form-group">
                             <label for="">Alamat</label>
-                            <textarea name="" id="" cols="15" rows="10" class="form-control"
+                            <textarea name="" id="" cols="15" rows="5" class="form-control"
                                       v-model="merchant.address" name="alamat" v-validate="'required'"></textarea>
                             <span>{{ errors.first('alamat') }}</span>
                         </div>
                         <div class="form-group">
                             <label for="">Description</label>
-                            <textarea cols="15" rows="10" class="form-control"
+                            <textarea cols="15" rows="5" class="form-control"
                                       v-model="merchant.description" name="alamat" v-validate="'required'"></textarea>
                             <span>{{ errors.first('alamat') }}</span>
                         </div>
@@ -150,15 +147,15 @@
         data () {
           return {
             merchant: {
-              latitude: 'qweq',
-              longitude: 'qweqw',
-              name: 'qweq',
-              address: 'qweq',
-              owner: 'qwe',
+              latitude: '',
+              longitude: '',
+              name: '',
+              address: '',
+              owner: '',
               image: '',
-              phone: 'qweqwe',
-              open_time: '12312',
-              close_time: '123123',
+              phone: '',
+              open_time: '',
+              close_time: '',
               description: ''
             },
             isSubmitted: false
@@ -251,7 +248,7 @@
                       Vue.delete(this.merchant, 'image');
                     };
                     // if (this.image.spli)
-                    axios.put(SERVER + '/api/merchants/' + this.$router.currentRoute.params.id, this.merchant).then(res => {
+                    axios.put('/api/merchants/' + this.$router.currentRoute.params.id, this.merchant).then(res => {
                       if (res.status == 200) {
                         console.log(res);
                         this.listMerchant();
@@ -278,7 +275,7 @@
                       this.isSubmitted = false;
                     });
                   } else {
-                    axios.post(SERVER + '/api/merchants', this.merchant).then(res => {
+                    axios.post('/api/merchants', this.merchant).then(res => {
                       if (res.status == 201) {
                         this.listMerchant();
                         this.$notify({
@@ -292,9 +289,16 @@
                         })
                       }
                     }).catch(err => {
+                      console.log(err.response.data.errors);
+                      let messages = err.response.data.errors;
+                      let keys = Object.keys(messages);
+                      for (let i = 0; i < keys.length; i++) {
+                        this.errors.add(keys[i], messages[keys[i]][0]);
+                      }
+
                       this.$notify({
                         component: {
-                          template: `<span>` + err.response.data.message + `</span>`
+                          template: `<span>` + err.response.data.message + `<br>Lengkapi semua fields</span>`
                         },
                         icon: 'ti-alert',
                         horizontalAlign: 'right',

@@ -9,10 +9,28 @@
         <div class="category">Daftar Merchant</div>
       </div>
       <div class="card-content row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
           <button class="btn btn-primary btn-fill" @click="createMerchant()">Tambah Merchant</button>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
+          <div class="pull-right">
+          Filter
+              <el-select
+                class="select-primary"
+                size="large"
+                placeholder="Single Select"
+                v-model="filterStore">
+                <el-option
+                  class="select-success"
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+          </div>
+        </div>
+        <div class="col-sm-4">
           <div class="pull-right">
             <label>
               <input @keyup.enter="search" type="search" placeholder="Search records"
@@ -66,10 +84,31 @@
     created() {
       this.getMerchants();
     },
+    watch:{
+      filterStore: function(newVal, oldVal){
+        switch (newVal){
+          case "all" : this.getMerchants(); break;
+          case "opened": this.getMerchants(null, "/api/merchants/opened");break;
+          case "closed": this.getMerchants(null, "/api/merchants/closed");break;
+          default: this.getMerchants(); break;
+        }
+      }
+    },
     data () {
       return {
         pagination: {
         },
+        options: [{
+          value: 'all',
+          label: 'All'
+        }, {
+          value: 'opened',
+          label: 'Opened'
+        }, {
+          value: 'closed',
+          label: 'Closed'
+        }],
+        filterStore: 'all',
         tableColumns: [
           {
             prop: 'name',
@@ -145,8 +184,6 @@
           buttonsStyling: false
         }).then(() => {
           this.$store.dispatch('merchantDrop', row).then((res) => {
-            // this.queriedData;
-            // this.getMerchants();
           }).catch(er => console.log(er))
         }, function (dismiss) {
           if (dismiss === 'cancel') {
@@ -159,11 +196,6 @@
             })
           }
         })
-
-        // let indexToDelete = this.tableData.findIndex((tableRow) => tableRow.id === row.id)
-        // if (indexToDelete >= 0) {
-        //   this.tableData.splice(indexToDelete, 1)
-        // }
       },
       handleShow(index, row) {
         this.$router.push({name: 'merchant-edit', params: {
