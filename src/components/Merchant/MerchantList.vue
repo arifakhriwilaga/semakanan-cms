@@ -183,7 +183,7 @@
         axios.get(path, {params:params} ).then((resp) => {
           if (resp.status == 200) {
             this.tableData = resp.data.data;
-            this.pagination  = resp.data.paging;
+            this.pagination  = resp.data.meta.pagination;
           }
         })
       },
