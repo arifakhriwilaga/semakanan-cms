@@ -54,18 +54,7 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <el-select class="select-primary"
-                           size="small"
-                           placeholder="Buka/Tutup"
-                           disabled
-                             @change="confirm(props.row)">
-                  <el-option v-for="option in options"
-                             class="select-primary"
-                             :value="option.value"
-                             :label="option.label"
-                             :key="option.label">
-                  </el-option>
-                </el-select>
+                <p-checkbox v-model="props.row.info.data.is_open" @change="alert('hi')">Buka</p-checkbox>
                 <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
                 <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
               </template>
@@ -183,7 +172,7 @@
         axios.get(path, {params:params} ).then((resp) => {
           if (resp.status == 200) {
             this.tableData = resp.data.data;
-            this.pagination  = resp.data.meta.pagination;
+            this.pagination  = resp.data.meta.paging;
           }
         })
       },

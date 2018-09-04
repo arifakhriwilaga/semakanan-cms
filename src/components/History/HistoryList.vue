@@ -45,17 +45,16 @@
   Vue.use(TableColumn)
   Vue.use(Select)
   Vue.use(Option)
-  export default{
+  export default {
     components: {
       Pagination
     },
     created() {
       this.getList()
     },
-    data () {
+    data() {
       return {
-        pagination: {
-        },
+        pagination: {},
         tableColumns: [
           {
             prop: 'total_payment',
@@ -84,24 +83,26 @@
       page(val) {
         this.getList({}, this.pagination[val]);
       },
-      getList(params=null, path=null) {
-          if (path==null){
-            path='/api/histories';
-          }
-          axios.get(path, params).then(res => {
-              this.tableData = res.data.data;
-              this.pagination  = res.data.paging;
-          }).catch(err => {
-            this.$notify({
-                component: {
-                    template: `<span>Terjadi kesalahan!</span>`,
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'danger'
-            })
+      getList(params = null, path = null) {
+        if (path == null) {
+          path = '/api/histories';
+        }
+        axios.get(path, params).then(res => {
+          this.tableData = res.data.data;
+          this.pagination = res.data.meta.paging;
+
+
+        }).catch(err => {
+          this.$notify({
+            component: {
+              template: `<span>Terjadi kesalahan!</span>`,
+            },
+            icon: 'ti-alert',
+            horizontalAlign: 'right',
+            verticalAlign: 'top',
+            type: 'danger'
           })
+        })
       }
     }
   }

@@ -70,7 +70,8 @@
         }
         axios.get(path, params).then(res => {
           this.tableData = res.data.data;
-          this.pagination = res.data.paging;
+          this.pagination  = res.data.meta.paging;
+
         }).catch(err => {
           console.log(err);
           this.$notify({

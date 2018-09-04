@@ -62,6 +62,11 @@
         },
         tableColumns: [
           {
+            prop: 'user.name',
+            label: 'User',
+            minWidth: 250
+          },
+          {
             prop: 'total_payment',
             label: 'Total Pembayaran',
             minWidth: 250
@@ -72,8 +77,13 @@
             minWidth: 200
           },
           {
-            prop: 'status.data.status',
+            prop: 'status',
             label: 'Status',
+            minWidth: 200
+          },
+          {
+            prop: 'created_at.date',
+            label: 'Created',
             minWidth: 200
           }
         ],
@@ -92,7 +102,8 @@
       getList() {
           axios.get(`/api/transactions`).then(res => {
               this.tableData = res.data.data;
-              this.pagination  = res.data.paging;
+              this.pagination  = res.data.meta.paging;
+
           }).catch(err => {
             this.$notify({
                 component: {
