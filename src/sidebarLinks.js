@@ -18,6 +18,11 @@ export default [
     ]
   },
   {
+    name: 'Food',
+    icon: 'ti-receipt',
+    path: '/foods/list'
+  },
+  {
     name: 'Slider',
     icon: 'ti-image',
     children: [

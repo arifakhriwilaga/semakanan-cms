@@ -80,6 +80,9 @@ import TransactionDetail from 'src/components/Transaction/Show.vue'
 import HistoryList from 'src/components/History/HistoryList.vue'
 import HistoryDetail from 'src/components/History/Show.vue'
 
+//Food
+import FoodList from 'src/components/Food/FoodList.vue';
+
 // Users
 import UserList from 'src/components/Users/List.vue'
 import UserCreate from 'src/components/Users/Create.vue'
@@ -359,7 +362,7 @@ const sliderMenu = {
       component: SliderForm
     }
   ]
-}
+};
 
 // Transaction
 const transactionMenu = {
@@ -399,15 +402,15 @@ const historyMenu = {
   ]
 }
 
-const usersMenu = {
+const foodMenu = {
   component: DashboardLayout,
-  name: 'users',
-  path: '/users',
+  name: 'foods',
+  path: '/foods',
   children: [
     {
       path: 'list',
-      name: 'user-list',
-      component: UserList
+      name: 'food-list',
+      component: FoodList
     },
     {
       path: 'create',
@@ -441,7 +444,6 @@ const routes = [
     ]
   },
   settingsMenu,
-  usersMenu,
   componentsMenu,
   formsMenu,
   tablesMenu,
@@ -450,6 +452,7 @@ const routes = [
   loginPage,
   registerPage,
   lockPage,
+  foodMenu,
   merchantsMenu,
   sliderMenu,
   transactionMenu,
