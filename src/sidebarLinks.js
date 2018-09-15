@@ -23,6 +23,11 @@ export default [
     path: '/foods/list'
   },
   {
+    name: 'Driver',
+    icon: 'ti-user',
+    path: '/drivers/list'
+  },
+  {
     name: 'Slider',
     icon: 'ti-image',
     children: [

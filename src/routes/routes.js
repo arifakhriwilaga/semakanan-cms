@@ -84,6 +84,10 @@ import HistoryDetail from 'src/components/History/Show.vue'
 import FoodList from 'src/components/Food/FoodList.vue';
 import FoodForm from 'src/components/Food/FoodForm.vue';
 
+//Driver
+import DriverList from 'src/components/Driver/DriverList';
+
+
 // Users
 import UserList from 'src/components/Users/List.vue'
 import UserCreate from 'src/components/Users/Create.vue'
@@ -131,6 +135,7 @@ let componentsMenu = {
 
   ]
 }
+
 let formsMenu = {
   path: '/forms',
   component: DashboardLayout,
@@ -246,22 +251,6 @@ let lockPage = {
   component: Lock
 }
 
-// let usersMenu = {
-//   path: '/users',
-//   name: 'users',
-//   component: DashboardLayout,
-//   children: [{
-//     path: 'list',
-//     name: 'user-list',
-//     component: UserList
-//   },
-//   {
-//     path: 'create',
-//     name: 'user-create',
-//     component: UserCreate
-//   }]
-// }
-
 let settingsMenu = {
   path: '/settings',
   name: 'settings',
@@ -364,7 +353,6 @@ const sliderMenu = {
     }
   ]
 };
-
 // Transaction
 const transactionMenu = {
   component: DashboardLayout,
@@ -383,7 +371,6 @@ const transactionMenu = {
     }
   ]
 }
-
 // History
 const historyMenu = {
   component: DashboardLayout,
@@ -425,7 +412,29 @@ const foodMenu = {
     }
   ]
 }
-
+// Driver
+const driverMenu = {
+  component: DashboardLayout,
+  name: 'drivers',
+  path: '/drivers',
+  children: [
+    {
+      path: 'list',
+      name: 'driver-list',
+      component: DriverList
+    },
+    // {
+    //   path: 'create',
+    //   name: 'driver-create',
+    //   component: DriverForm
+    // },
+    // {
+    //   path: 'driver/:id',
+    //   name: 'driver-edit',
+    //   component: DriverForm
+    // }
+  ]
+}
 const routes = [
   {
     path: '/',
@@ -447,6 +456,7 @@ const routes = [
   settingsMenu,
   componentsMenu,
   formsMenu,
+  driverMenu,
   tablesMenu,
   mapsMenu,
   pagesMenu,
@@ -480,6 +490,7 @@ const routes = [
   },
   {path: '*', component: NotFound}
 ]
+
 
 /**
  * Asynchronously load view (Webpack Lazy loading compatible)

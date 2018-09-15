@@ -88,7 +88,6 @@
     },
     watch:{
       "switches.defaultOn": function(newVal, oldVal){
-        console.log("Toko", newVal);
       },
       filterStore: function(newVal, oldVal){
         switch (newVal){
