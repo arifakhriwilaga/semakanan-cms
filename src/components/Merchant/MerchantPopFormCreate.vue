@@ -132,7 +132,7 @@
                         horizontalAlign: 'right',
                         verticalAlign: 'top',
                         type: 'danger'
-                    })
+                    });
                     })
                 }
             },

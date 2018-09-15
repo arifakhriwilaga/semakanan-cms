@@ -82,6 +82,7 @@ import HistoryDetail from 'src/components/History/Show.vue'
 
 //Food
 import FoodList from 'src/components/Food/FoodList.vue';
+import FoodForm from 'src/components/Food/FoodForm.vue';
 
 // Users
 import UserList from 'src/components/Users/List.vue'
@@ -414,13 +415,13 @@ const foodMenu = {
     },
     {
       path: 'create',
-      name: 'user-create',
-      component: UserCreate
+      name: 'food-create',
+      component: FoodForm
     },
     {
       path: 'edit/:id',
       name: 'user-edit',
-      component: UserCreate
+      component: FoodForm
     }
   ]
 }

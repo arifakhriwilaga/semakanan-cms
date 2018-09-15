@@ -27,6 +27,7 @@
     "vee-validate": "^2.0.0-rc.21",
     "vue": "^2.5.2",
     "vue-clickaway": "^2.1.0",
+    "vue-cropper": "^0.3.8",
     "vue-fetch": "^1.0.6",
     "vue-form-wizard": "^0.7.0",
     "vue-nav-tabs": "^0.5.4",

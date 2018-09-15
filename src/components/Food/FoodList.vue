@@ -1,16 +1,16 @@
 <template>
     <div class="row">
     <div class="col-md-12">
-      <h4 class="title pull-left">Merchant</h4>
+      <h4 class="title pull-left">Makanan</h4>
       <!-- <p class="category"></p> -->
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">Daftar Merchant</div>
+        <div class="category">Daftar Makanan</div>
       </div>
       <div class="card-content row">
         <div class="col-sm-4">
-          <button class="btn btn-primary btn-fill" @click="createMerchant()">Tambah Merchant</button>
+          <button class="btn btn-primary btn-fill" @click="createFood()">Tambah</button>
         </div>
 
         <div class="col-sm-4">
@@ -37,7 +37,6 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <p-checkbox v-model="props.row.info.data.is_open" @change="alert('hi')">Buka</p-checkbox>
                 <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
                 <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
               </template>
@@ -102,10 +101,15 @@
       getFoods(params=null, path=null){
         axios.get('/api/foods').then((resp)=>{
           if (resp.status==200){
+
             this.tableData = resp.data.data;
             this.pagination = resp.data.meta.paging;
+            console.log(this.tableData);
           }
         })
+      },
+      createFood(){
+        this.$router.push({ name: 'food-create'})
       }
     }
   }
