@@ -49,9 +49,10 @@
 <script>
   import axios from 'axios'
   import Pagination from 'src/components/Base/Pagination.vue'
+  import swal from 'sweetalert2'
 
   export default{
-    components: {Pagination},
+    components: {Pagination, swal},
     created(){
       this.getDrivers();
     },
@@ -64,7 +65,36 @@
           }
         });
       },
-      handleDelete(){},
+      handleDelete(index, row){
+        swal({
+          title: 'Apakah anda yakin?',
+          text: 'Driver akan dihapus.',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, hapus!',
+          cancelButtonText: 'Tidak, simpan!',
+          confirmButtonClass: 'btn btn-success btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          buttonsStyling: false
+        }).then(() => {
+          axios.delete('/api/drivers/' + row.id).then((res) => {
+            if (res.status==204){
+              this.getDrivers();
+            }
+
+          }).catch(er => console.log(er))
+        }, function (dismiss) {
+          if (dismiss === 'cancel') {
+            swal({
+              title: 'Dibatalkan',
+              text: 'Menghapus data dibatalkan',
+              type: 'error',
+              confirmButtonClass: 'btn btn-info btn-fill',
+              buttonsStyling: false
+            })
+          }
+        })
+      },
       handleShow(){}
     },
     data(){
