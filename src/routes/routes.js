@@ -87,6 +87,8 @@ import FoodForm from 'src/components/Food/FoodForm.vue';
 //Driver
 import DriverList from 'src/components/Driver/DriverList';
 
+//Helpdesk
+import HelpdeskList from 'src/components/Helpdesk/HelpdeskList';
 
 // Users
 import UserList from 'src/components/Users/List.vue'
@@ -411,7 +413,21 @@ const foodMenu = {
       component: FoodForm
     }
   ]
-}
+};
+//Helpdesk
+const helpdeskMenu = {
+  component: DashboardLayout,
+  name: 'helpdesks',
+  path: '/helpdesks',
+  children: [
+    {
+      path: 'list',
+      name: 'helpdesk-list',
+      component: HelpdeskList
+    }
+  ]
+};
+
 // Driver
 const driverMenu = {
   component: DashboardLayout,
@@ -467,6 +483,7 @@ const routes = [
   merchantsMenu,
   sliderMenu,
   transactionMenu,
+  helpdeskMenu,
   historyMenu,
   {
     path: '/admin',

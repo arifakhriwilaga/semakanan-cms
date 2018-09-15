@@ -28,6 +28,11 @@ export default [
     path: '/drivers/list'
   },
   {
+    name: 'Helpdesk',
+    icon: 'ti-desk',
+    path: '/helpdesks/list'
+  },
+  {
     name: 'Slider',
     icon: 'ti-image',
     children: [
