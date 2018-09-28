@@ -1,11 +1,11 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title pull-left">{{title}}</h4>
+      <h4 class="title pull-left">Histories</h4>
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">History</div>
+        <div class="category">Histories</div>
       </div>
       <div class="card-content row">
         <div class="col-sm-12">
@@ -56,6 +56,14 @@
       return {
         pagination: {},
         tableColumns: [
+          {
+            prop: 'user_id',
+            label: 'user'
+          },
+          {
+            prop: 'type_id',
+            label: 'type'
+          },
           {
             prop: 'total_payment',
             label: 'Total Pembayaran',
