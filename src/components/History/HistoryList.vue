@@ -24,7 +24,7 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <a class="btn btn-simple btn-xs btn-info" @click="detail(props.$index, props.row)">Detail</a>
+                <a class="btn btn-simple btn-xs btn-info" @click="handleShow(props.$index, props.row)">Detail</a>
               </template>
             </el-table-column>
           </el-table>
@@ -77,7 +77,7 @@
       }
     },
     methods: {
-      detail(index, row) {
+      handleShow(index, row) {
         this.$router.push({name: 'history-detail', params: {id: row.id}})
       },
       page(val) {

@@ -104,9 +104,22 @@
         isSubmitted: false
       }
     },
+    created() {
+      let food_id = this.$router.currentRoute.params.id;
+      if (typeof(food_id) != "undefined") {
+        this.getFood(food_id)
+      }
+    },
     methods:{
       setImage(val){
         this.food.image = val;
+      },
+      getFood(food_id){
+        axios.get('/api/foods/' + food_id).then(res=>{
+          console.log('food please');
+          console.log(res);
+          this.food = res.data.data;
+        });
       },
       onSubmit(){
         this.isSubmitted = true;

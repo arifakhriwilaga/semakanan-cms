@@ -409,7 +409,7 @@ const foodMenu = {
     },
     {
       path: 'edit/:id',
-      name: 'user-edit',
+      name: 'food-detail',
       component: FoodForm
     }
   ]

@@ -166,10 +166,7 @@
           let merchant_id = this.$router.currentRoute.params.id;
           console.log(merchant_id);
           if (typeof(merchant_id) != "undefined"){
-                console.log("masuk konidisi");
-                this.getMerchant(merchant_id)
-          }else{
-            console.log("tidak masuk log");
+                this.getMerchant(merchant_id);
           }
         },
         computed: {

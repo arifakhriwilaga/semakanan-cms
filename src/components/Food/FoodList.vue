@@ -32,6 +32,11 @@
                              :prop="column.prop"
                              :label="column.label">
             </el-table-column>
+            <el-table-column>
+              <template slot-scope="props">
+                <img :src="props.row.image">
+              </template>
+            </el-table-column>
             <el-table-column
               :min-width="180"
               fixed="right"
@@ -51,6 +56,7 @@
 <script>
   import axios from 'axios'
   import Pagination from 'src/components/Base/Pagination.vue'
+  import swal from 'sweetalert2'
 
   export default{
     components:{
@@ -88,11 +94,6 @@
             prop: 'type',
             label: 'Type',
             minWidth: 125
-          },
-          {
-            prop: 'image',
-            label: 'Image',
-            minWidth: 125
           }
         ],
       }
@@ -110,7 +111,39 @@
       },
       createFood(){
         this.$router.push({ name: 'food-create'})
-      }
+      },
+      handleShow(index, row){
+         this.$router.push({name: 'food-detail', params: {id: row.id}})
+      },
+       handleDelete (index, row) {
+        swal({
+          title: 'Apakah anda yakin?',
+          text: 'Data tidak akan dapat dikembalikan lagi.',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, hapus!',
+          cancelButtonText: 'Tidak, simpan!',
+          confirmButtonClass: 'btn btn-success btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          buttonsStyling: false
+        }).then(() => {
+          axios.delete('/api/foods/' + row.id).then(res=>{
+            this.getFoods();
+          }).catch(err=>{
+            alert(err);
+          })
+        }, function (dismiss) {
+          if (dismiss === 'cancel') {
+            swal({
+              title: 'Dibatalkan',
+              text: 'Menghapus data dibatalkan',
+              type: 'error',
+              confirmButtonClass: 'btn btn-info btn-fill',
+              buttonsStyling: false
+            })
+          }
+        })
+      },
     }
   }
 </script>
