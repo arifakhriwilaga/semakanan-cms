@@ -73,7 +73,7 @@ import SliderForm from 'src/components/Slider/SliderForm.vue'
 
 // Transaction
 import TransactionList from 'src/components/Transaction/TransactionList.vue'
-import TransactionDetail from 'src/components/Transaction/Show.vue'
+import TransactionDetail from 'src/components/Transaction/TransactionDetail.vue'
 
 // History
 import HistoryList from 'src/components/History/HistoryList.vue'

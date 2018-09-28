@@ -5,62 +5,15 @@
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">Extended tables</div>
+        <div class="category"></div>
       </div>
       <div class="card-content row">
-        <div class="col-sm-6">
-          <el-select
-            class="select-default"
-            v-model="pagination.perPage"
-            placeholder="Per page">
-            <el-option
-              class="select-default"
-              v-for="item in pagination.perPageOptions"
-              :key="item"
-              :label="item"
-              :value="item">
-            </el-option>
-          </el-select>
-        </div>
-        <div class="col-sm-6">
-          <div class="pull-right">
-            <label>
-              <input type="search" class="form-control input-sm" placeholder="Search records" v-model="searchQuery" aria-controls="datatables">
-            </label>
+          <div class="col-md-6">
+            ramdani
           </div>
-        </div>
-        <div class="col-sm-12">
-          <el-table class="table-striped"
-                    :data="queriedData"
-                    border
-                    style="width: 100%">
-            <el-table-column v-for="column in tableColumns"
-                             :key="column.label"
-                             :min-width="column.minWidth"
-                             :prop="column.prop"
-                             :label="column.label">
-            </el-table-column>
-            <el-table-column
-              :min-width="120"
-              fixed="right"
-              label="Actions">
-              <template slot-scope="props">
-                <button class="btn btn-xs btn-info" @click="changeState(props.row)">Ubah Status</button>
-                <button class="btn btn-xs btn-warning" @click="cancel(props.row)">Batalkan</button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-        <div class="col-sm-6 pagination-info">
-          <p class="category">Showing {{from + 1}} to {{to}} of {{total}} entries</p>
-        </div>
-        <div class="col-sm-6">
-          <p-pagination class="pull-right"
-                        v-model="pagination.currentPage"
-                        :per-page="pagination.perPage"
-                        :total="pagination.total">
-          </p-pagination>
-        </div>
+        <div class="col-md-6">
+            kasep
+          </div>
       </div>
     </div>
   </div>

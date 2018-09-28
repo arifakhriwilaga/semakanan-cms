@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title pull-left">{{title}}</h4>
+      <h4 class="title pull-left">Daftar Transaksi</h4>
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
@@ -28,7 +28,8 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <a class="btn btn-simple btn-xs btn-info" @click="detail(props.$index, props.row)">Detail</a>
+                <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
+                <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
               </template>
             </el-table-column>
           </el-table>
@@ -64,27 +65,32 @@
           {
             prop: 'user.name',
             label: 'User',
-            minWidth: 250
+            minWidth: 150
           },
           {
             prop: 'total_payment',
             label: 'Total Pembayaran',
-            minWidth: 250
+            minWidth: 150
           },
           {
             prop: 'cash',
             label: 'Cash',
-            minWidth: 200
+            minWidth: 100
           },
           {
             prop: 'status',
             label: 'Status',
-            minWidth: 200
+            minWidth: 100
           },
           {
             prop: 'created_at.date',
             label: 'Created',
-            minWidth: 200
+            minWidth: 100
+          },
+          {
+            prop: 'driver.name',
+            label: 'Driver',
+            minWidth: 100
           }
         ],
         tableData: [],
@@ -96,7 +102,7 @@
       page(val) {
         this.getList({}, this.pagination[val]);
       },
-      detail(index, row) {
+      handleShow(index, row) {
         this.$router.push({name: 'transaction-detail', params: {id: row.id}})
       },
       getList() {
