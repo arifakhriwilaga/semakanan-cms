@@ -105,7 +105,7 @@
           buttonsStyling: false
         }).then(() => {
             new Promise((resolve, reject) => {
-                axios.delete(`/api/merchants/pop${row.merchant_id}`).then((res) => {
+                axios.delete(`/api/merchants/pop/${row.merchant_id}`).then((res) => {
                     swal({
                     title: 'Terhapus!',
                     text: 'Data berhasil terhapus.',

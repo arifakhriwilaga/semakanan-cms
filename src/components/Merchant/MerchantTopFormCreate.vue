@@ -22,12 +22,12 @@
                         <div class="row">
                             <div class="col-md-offset-2 col-md-8 col-sm-8 col-xs-12">
                                 <div class="form-group">
-                                    <label for="">Prioritas</label>
+                                    <label for="">Merchant</label>
                                     <el-select class="select-primary"
                                             size="large"
-                                            placeholder="Pilih Prioritas"
-                                            v-model="merchant.priority">
-                                        <el-option v-for="option in priority_options"
+                                            placeholder="Pilih merchant"
+                                            v-model="merchant.merchant_id">
+                                        <el-option v-for="option in merchant_options"
                                                     class="select-danger"
                                                     :value="option.value"
                                                     :label="option.label"
@@ -36,12 +36,12 @@
                                     </el-select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Merchant</label>
+                                    <label for="">Prioritas</label>
                                     <el-select class="select-primary"
                                             size="large"
-                                            placeholder="Pilih merchant"
-                                            v-model="merchant.merchant_id">
-                                        <el-option v-for="option in merchant_options"
+                                            placeholder="Pilih Prioritas"
+                                            v-model="merchant.priority">
+                                        <el-option v-for="option in priority_options"
                                                     class="select-danger"
                                                     :value="option.value"
                                                     :label="option.label"

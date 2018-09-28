@@ -54,7 +54,7 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <p-checkbox v-model="props.row.info.data.is_open" @change="alert('hi')">Buka</p-checkbox>
+                <p-checkbox v-model="props.row.info.is_open" @change="alert('hi')">Buka</p-checkbox>
                 <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
                 <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
               </template>
@@ -92,8 +92,8 @@
       filterStore: function(newVal, oldVal){
         switch (newVal){
           case "all" : this.getMerchants(); break;
-          case "opened": this.getMerchants(null, "/api/merchants/opened");break;
-          case "closed": this.getMerchants(null, "/api/merchants/closed");break;
+          case "opened": this.getMerchants(null, "/api/merchants?is_open=true");break;
+          case "closed": this.getMerchants(null, "/api/merchants?is_open=false");break;
           default: this.getMerchants(); break;
         }
       }
