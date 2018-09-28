@@ -4,11 +4,29 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-4 col-sm-4 col-xs-12">
                         <h4 class="title" style="margin: 0">List Slider seMakanan</h4>
                       </div>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-4 col-sm-4 col-xs-12">
                         <button class="btn btn-primary pull-right" @click="createSlider()" style="margin-bottom: 15px">Tambah Slider</button>
+                      </div>
+                      <div class="col-sm-4 col-sm-4 col-xs-12">
+                        <div class="pull-right">
+                          Filter
+                          <el-select
+                            class="select-primary"
+                            size="large"
+                            placeholder="Single Select"
+                            v-model="filterSlide">
+                            <el-option
+                              class="select-success"
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                            </el-option>
+                          </el-select>
+                        </div>
                       </div>
                     </div>
                     <p class="category">{{title}} </p>
@@ -60,10 +78,31 @@
     created() {
         this.getList()
     },
+    watch:{
+      filterSlide: function(newVal, oldVal){
+        switch (newVal){
+          case "all" : this.getList(); break;
+          case "home": this.getList(null, "/api/sliders?type=home");break;
+          case "semakanan": this.getList(null, "/api/sliders?type=semakanan");break;
+          default: this.getList(); break;
+        }
+      }
+    },
     data () {
       return {
         pagination: {
         },
+        filterSlide: 'all',
+        options: [{
+          value: 'all',
+          label: 'All'
+        }, {
+          value: 'semakanan',
+          label: 'semakanan'
+        }, {
+          value: 'home',
+          label: 'home'
+        }],
         tableColumns: [
           {
             prop: 'caption',
