@@ -77,7 +77,7 @@ import TransactionDetail from 'src/components/Transaction/TransactionDetail.vue'
 
 // History
 import HistoryList from 'src/components/History/HistoryList.vue'
-import HistoryDetail from 'src/components/History/Show.vue'
+import HistoryDetail from 'src/components/History/HistoryDetail.vue'
 
 //Food
 import FoodList from 'src/components/Food/FoodList.vue';
