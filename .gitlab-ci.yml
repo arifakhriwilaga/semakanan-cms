@@ -15,16 +15,31 @@ stages:
   - build
   - deploy
 
-build-stage:
+build-prod-stage:
   image: node:6
   stage: build
   only:
     - master
+  script:
+    - npm install --progress=false
+    - mkdir public_html
+    - sed -i "s/..\/public_html/public_html/g" config/index.js
+    - npm run build
+  artifacts:
+    expire_in: 1 hrs
+    paths:
+      - public_html
+      
+build-dev-stage:
+  image: node:6
+  stage: build
+  only:
     - development
   script:
     - npm install --progress=false
     - mkdir public_html
     - sed -i "s/..\/public_html/public_html/g" config/index.js
+    - sed -i "/HOST_URL/c\HOST_URL:\'\"http:\/\/dev.sekampus.id\"\'" config/prod.env.js
     - npm run build
   artifacts:
     expire_in: 1 hrs
