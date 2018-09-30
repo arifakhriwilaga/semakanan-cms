@@ -39,7 +39,7 @@ build-dev-stage:
     - npm install --progress=false
     - mkdir public_html
     - sed -i "s/..\/public_html/public_html/g" config/index.js
-    - sed -i "/HOST_URL/c\HOST_URL:\'\"http:\/\/dev.sekampus.id\"\'" config/prod.env.js
+    - sed -i "/HOST_URL/c\HOST_URL:\'\"http:\/\/apidevadmin.sekampus.id\"\'" config/prod.env.js
     - npm run build
   artifacts:
     expire_in: 1 hrs
