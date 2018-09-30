@@ -87,7 +87,7 @@ import FoodForm from 'src/components/Food/FoodForm.vue';
 import DriverList from 'src/components/Driver/DriverList';
 
 //Helpdesk
-import HelpdeskList from 'src/components/Helpdesk/HelpdeskList';
+import HelpdeskMerchantList from 'src/components/Helpdesk/HelpdeskMerchantList';
 
 // Users
 import UserList from 'src/components/Users/List.vue'
@@ -415,9 +415,9 @@ const helpdeskMenu = {
   path: '/helpdesks',
   children: [
     {
-      path: 'list',
-      name: 'helpdesk-list',
-      component: HelpdeskList
+      path: 'merchants',
+      name: 'helpdesk-merchant-list',
+      component: HelpdeskMerchantList
     }
   ]
 };

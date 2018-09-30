@@ -73,7 +73,13 @@
           {
             prop: 'id',
             label: 'ID',
-            minWidth: 50
+            minWidth: 70
+          },
+          {
+            prop: 'merchant.name',
+            label: 'merchant',
+            minWidth: 200
+
           },
           {
             prop: 'name',

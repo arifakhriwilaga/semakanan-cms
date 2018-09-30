@@ -28,9 +28,15 @@ export default [
     path: '/drivers/list'
   },
   {
-    name: 'Helpdesk',
-    icon: 'ti-desk',
-    path: '/helpdesks/list'
+    name: 'Helpdesks',
+    icon: 'ti-star',
+
+    children: [
+      {
+        name: 'Merchants',
+        path: '/helpdesks/merchants'
+      }
+    ]
   },
   {
     name: 'Slider',

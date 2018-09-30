@@ -83,8 +83,8 @@
             minWidth: 100
           },
           {
-            prop: 'created_at.date',
-            label: 'Created',
+            prop: 'created_at',
+            label: 'Created_at',
             minWidth: 100
           },
           {

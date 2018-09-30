@@ -9,35 +9,6 @@
         <div class="category">Daftar Merchant</div>
       </div>
       <div class="card-content row">
-        <div class="col-sm-4">
-          <button class="btn btn-primary btn-fill" @click="createMerchant()">Tambah Merchant</button>
-        </div>
-        <div class="col-sm-4">
-          <div class="pull-right">
-          Filter
-              <el-select
-                class="select-primary"
-                size="large"
-                placeholder="Single Select"
-                v-model="filterStore">
-                <el-option
-                  class="select-success"
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="pull-right">
-            <label>
-              <input @keyup.enter="search" type="search" placeholder="Search records"
-                                              aria-controls="datatables" class="form-control input-sm">
-            </label>
-          </div>
-        </div>
         <div class="col-sm-12">
           <el-table class="table-striped"
                     :data="tableData"
@@ -54,9 +25,8 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <p-checkbox v-model="props.row.info.data.is_open" @change="alert('hi')">Buka</p-checkbox>
-                <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
-                <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
+                {{props.row.info.description}}
+                <p-checkbox v-model="props.row.info.is_open" disabled>Buka</p-checkbox>
               </template>
             </el-table-column>
           </el-table>
