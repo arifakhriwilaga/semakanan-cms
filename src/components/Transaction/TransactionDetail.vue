@@ -22,15 +22,15 @@
         <div class="col-md-6">
           <div class="form-group">
             <h6>Tanggal Order</h6>
-            {{transaction.created_at}}
+            {{transaction.created_at | moment("DD-MM-YYYY")}}
           </div>
           <div class="form-group">
             <h6>Pembayaran</h6>
-            {{transaction.cash}}
+            {{ formatPrice('id', transaction.cash) }}
           </div>
           <div class="form-group">
             <h6>Total Pembayaran</h6>
-            {{transaction.total_payment}}
+            {{ formatPrice('id', transaction.total_payment) }}
           </div>
         </div>
         <div class="col-md-12">        
@@ -55,7 +55,7 @@
                   </div>
                   <div class="form-group">
                     <h6>Waktu Kirim</h6>
-                    {{chart.waktu_kirim || '-'}}
+                    {{ chart.waktu_kirim | '-' }}
                   </div>
                   <div class="form-group">
                     <h6>Alamat User</h6>
@@ -74,11 +74,11 @@
                   </div>
                   <div class="form-group">
                     <h6>Total M Harga</h6>
-                    {{chart.total_m_price || '-'}}
+                    {{ formatPrice('id', chart.total_m_price) || '-'}}
                   </div>
                   <div class="form-group">
                     <h6>Total Harga</h6>
-                    {{chart.total_price || '-'}}
+                    {{ formatPrice('id', chart.total_price) || '-'}}
                   </div>
                 </div>
 
@@ -113,12 +113,18 @@
   import users from 'src/api/users'
   import swal from 'sweetalert2'
   import axios from 'axios'
+  import * as moment from 'moment';
+  // import VueMoment from 'vue-moment'
+  // import moment from 'moment-timezone'
 
   Vue.use(Table)
   Vue.use(TableColumn)
   Vue.use(Select)
   Vue.use(Option)
   Vue.use(Button);
+  // Vue.use(VueMoment)
+  Vue.use(require('vue-moment'));
+  Vue.use(moment);
   export default{
     components: {
       PPagination
@@ -130,7 +136,8 @@
     data () {
       return {
         title: '',
-        transaction: {}
+        transaction: {},
+        moment: moment
       }
     },
     methods: {
@@ -138,6 +145,7 @@
       getTransaction() {
         axios.get(`/api/transactions/${this.$router.currentRoute.params.id}`).then(res => {
             this.transaction = res.data.data;
+
             this.meta_pagination = res.data.meta.pagination;
         }).catch(err => {
           this.$notify({
@@ -160,21 +168,90 @@
         alert('under construction');
         // this.$router.push({name: 'transaction-edit', params: {id: this.transaction.id}})
       },
+      formatPrice(type, value) {
+        var format = '';
+
+        switch(type) {
+          case 'id':
+              format = 'Rp. '
+              break;
+          case 'en':
+              format = '$ '
+              break;
+          default:
+              format = ''
+        }
+        let val = (value/1).toFixed(2).replace('.', ',')
+        return format + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      },
 
       // action
       processAllMerchant(){
         console.log(this.transaction);
       },
       cancelAllMerchant(){
-        console.log(this.transaction);        
+        axios.patch(`/api/transactions/${this.$router.currentRoute.params.id}/cancel`).then(res => {
+            this.$notify({
+              component: {
+                  template: `<span>Transaksi berhasil dibatalkan!</span>`,
+              },
+              icon: 'ti-alert',
+              horizontalAlign: 'right',
+              verticalAlign: 'top',
+              type: 'success'
+          });
+          this.$router.reload();
+          // this.getTransaction();
+
+            // this.transaction = res.data.data;
+            // this.meta_pagination = res.data.meta.pagination;
+        }).catch(err => {
+          this.$notify({
+              component: {
+                  template: `<span>Terjadi kesalahan, Transaksi gagal dibatalkan!</span>`,
+              },
+              icon: 'ti-alert',
+              horizontalAlign: 'right',
+              verticalAlign: 'top',
+              type: 'danger'
+          })
+          this.$router.reload();
+          // this.getTransaction();
+        })      
       },
       processMerchant(index, chart) {
-        console.log('index',index);
-        console.log('chart',chart);
+        // console.log('index',index);
+        // console.log('chart',chart);
       },
       cancelMerchant(index, chart) {
-        console.log('index',index);
-        console.log('chart',chart);
+        axios.patch(`/api/transactions/${this.$router.currentRoute.params.id}/cart/${chart.id}/cancel`).then(res => {
+            this.$notify({
+              component: {
+                  template: `<span>Chart berhasil dibatalkan!</span>`,
+              },
+              icon: 'ti-alert',
+              horizontalAlign: 'right',
+              verticalAlign: 'top',
+              type: 'success'
+          });
+          // this.$router.reload();
+          this.getTransaction();
+
+            // this.transaction = res.data.data;
+            // this.meta_pagination = res.data.meta.pagination;
+        }).catch(err => {
+          this.$notify({
+              component: {
+                  template: `<span>Terjadi kesalahan, Chart gagal dibatalkan!</span>`,
+              },
+              icon: 'ti-alert',
+              horizontalAlign: 'right',
+              verticalAlign: 'top',
+              type: 'danger'
+          })
+          // this.$router.reload();
+          this.getTransaction();
+        })
       }
     }
   }

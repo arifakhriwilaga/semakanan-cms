@@ -162,7 +162,6 @@
         this.getMerchants({'name': event.target.value});
       },
       createMerchant() {
-        alert('hi');
         this.$router.push({ name: 'merchant-create'})
       },
       getMerchants(params=null, path=null){

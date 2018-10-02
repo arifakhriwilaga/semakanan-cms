@@ -248,7 +248,8 @@
                     axios.put('/api/merchants/' + this.$router.currentRoute.params.id, this.merchant).then(res => {
                       if (res.status == 200) {
                         console.log(res);
-                        this.listMerchant();
+                        this.getMerchant(this.$router.currentRoute.params.id);
+                        // this.listMerchant();
                         this.$notify({
                           component: {
                             template: `<span>`+ res.data.meta.message +`</span>`
@@ -258,6 +259,7 @@
                           verticalAlign: 'top',
                           type: 'success'
                         })
+                        this.$router.reload()
                       }
                     }).catch(err => {
                       this.$notify({
