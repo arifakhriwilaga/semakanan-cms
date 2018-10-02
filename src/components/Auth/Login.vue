@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-transparent navbar-absolute">
+    <!-- <nav class="navbar navbar-transparent navbar-absolute">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle"
@@ -15,7 +15,7 @@
         </div>
 
       </div>
-    </nav>
+    </nav> -->
 
     <div class="wrapper wrapper-full-page">
       <div class="full-page login-page" data-color=""
@@ -43,9 +43,11 @@
                     <div class="card-footer text-center">
                       <button type="submit" class="btn btn-fill btn-wd ">Let's go</button>
                       <div class="forgot">
-                        <router-link to="/register">
+                        <!-- <router-link to="/register"> -->
+                        <a class="cursor-pointer" @click="toRegister()">
                           Forgot your password?
-                        </router-link>
+                        </a>
+                        <!-- </router-link> -->
                       </div>
                     </div>
                   </div>
@@ -78,7 +80,6 @@
       }
     },
     created() {
-      console.log('kesini');
       this.$store.dispatch('emptyMerchant')
     },
     methods: {
@@ -107,7 +108,14 @@
             type: 'danger'
           })
         })
-      }
+      },
+      toRegister: function () {
+        alert('Under construction');
+        // this.href = '';
+        // let src = this.href;
+        // let file = null;
+        // this.$emit('loaded', {src, file});
+      },
     },
     beforeDestroy () {
       this.closeMenu()

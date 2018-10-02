@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
     <div class="container-fluid">
-      <nav class="pull-left">
+      <!-- <nav class="pull-left">
         <ul>
           <li>
             <a href="http://www.creative-tim.com">
@@ -19,12 +19,14 @@
             </a>
           </li>
         </ul>
-      </nav>
-      <div class="copyright pull-right">
-        &copy; Coded with
+      </nav> -->
+      <div class="copyright pull-left">
+        &copy; Copy Right
         <i class="fa fa-heart heart"></i> by
+        seKampus
+        <!-- <i class="fa fa-heart heart"></i> by
         <a href="https://github.com/cristijora" target="_blank">Cristi Jora</a>.
-        <span>Designed by <a href="https://www.creative-tim.com/?ref=pdf-vuejs" target="_blank">Creative Tim</a>.</span>
+        <span>Designed by <a href="https://www.creative-tim.com/?ref=pdf-vuejs" target="_blank">Creative Tim</a>.</span> -->
       </div>
     </div>
   </footer>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--Stats cards-->
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
         <stats-card>
           <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
@@ -16,117 +16,25 @@
           </div>
         </stats-card>
       </div>
-    </div>
+    </div> -->
 
     <div class="row">
-        <div class="col-lg-8 col-sm-12">
+        <div class="col-lg-12 col-sm-12">
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">Global Sales by Top Locations</h4>
-              <p class="category">All products that were shipped</p>
+              <h4 class="card-title"><b>SeMakan Admin Panel</b><p>Selamat datang di dashboard SeMakan</p></h4>
+              <p class="category"></p>
             </div>
             <div class="card-content">
               <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-12">
                   <world-map></world-map>
-                </div>
-                <div class="col-md-5">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <tbody>
-                      <tr>
-                        <td>
-                          <div class="flag">
-                            <img src="static/img/flags/US.png">
-                          </div>
-                        </td>
-                        <td>USA</td>
-                        <td class="text-right">
-                          2.920
-                        </td>
-                        <td class="text-right">
-                          53.23%
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="flag">
-                            <img src="static/img/flags/DE.png">
-                          </div>
-                        </td>
-                        <td>Germany</td>
-                        <td class="text-right">
-                          1.300
-                        </td>
-                        <td class="text-right">
-                          20.43%
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="flag">
-                            <img src="static/img/flags/AU.png">
-                          </div>
-                        </td>
-                        <td>Australia</td>
-                        <td class="text-right">
-                          760
-                        </td>
-                        <td class="text-right">
-                          10.35%
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="flag">
-                            <img src="static/img/flags/GB.png">
-                          </div>
-                        </td>
-                        <td>United Kingdom</td>
-                        <td class="text-right">
-                          690
-                        </td>
-                        <td class="text-right">
-                          7.87%
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="flag">
-                            <img src="static/img/flags/RO.png">
-                          </div>
-                        </td>
-                        <td>Romania</td>
-                        <td class="text-right">
-                          600
-                        </td>
-                        <td class="text-right">
-                          5.94%
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="flag">
-                            <img src="static/img/flags/BR.png">
-                          </div>
-                        </td>
-                        <td>Brasil</td>
-                        <td class="text-right">
-                          550
-                        </td>
-                        <td class="text-right">
-                          4.34%
-                        </td>
-                      </tr>
-                      </tbody>
-                    </table>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-sm-6">
+        <!-- <div class="col-lg-4 col-sm-6">
           <chart-card :chart-data="earningsChart.data" :chart-options="earningsChart.options">
             <span slot="title">$34,657</span>
             <span slot="title-label" class="label label-success">
@@ -142,10 +50,10 @@
               <i class="ti-plus"></i>
             </button>
           </chart-card>
-        </div>
+        </div> -->
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-lg-3 col-sm-6">
         <circle-chart-card :percentage="70"
                            title="Dashboard"
@@ -177,7 +85,7 @@
                            color="brown">
         </circle-chart-card>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </template>

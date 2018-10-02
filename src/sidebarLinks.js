@@ -35,6 +35,10 @@ export default [
       {
         name: 'Merchants',
         path: '/helpdesks/merchants'
+      },
+      {
+        name: 'Kost',
+        path: '/helpdesks/kosts'
       }
     ]
   },

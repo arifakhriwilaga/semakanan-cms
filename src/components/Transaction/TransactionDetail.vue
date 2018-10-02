@@ -2,215 +2,179 @@
   <div class="row">
     <div class="col-md-12">
       <h4 class="title pull-left">{{title}}</h4>
+      <button class="btn btn-primary pull-right" @click="toListTransaction()" style="margin-bottom: 15px">List</button>
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category"></div>
+        <h4><b>Order <span class="badge badge-secondary">{{transaction.status}}</span></b> <el-button type="primary" icon="el-icon-edit" class="pull-right" circle @click="toEditTransaction()"></el-button></h4>
       </div>
       <div class="card-content row">
-          <div class="col-md-6">
-            ramdani
-          </div>
         <div class="col-md-6">
-            kasep
+          <h5><b>Customer </b></h5>
+          <div class="form-group">
+            {{ (transaction.user) ? transaction.user.name : '-'  || '-'}}
           </div>
+          <h5><b>Driver </b></h5>
+          <div class="form-group">
+            {{ (transaction.driver) ? transaction.driver.name : '-'  || '-'}}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <h6>Tanggal Order</h6>
+            {{transaction.created_at}}
+          </div>
+          <div class="form-group">
+            <h6>Pembayaran</h6>
+            {{transaction.cash}}
+          </div>
+          <div class="form-group">
+            <h6>Total Pembayaran</h6>
+            {{transaction.total_payment}}
+          </div>
+        </div>
+        <div class="col-md-12">        
+          <hr>
+          <div class="row" style="margin:0px">
+            <h5 class="pull-left">Daftar Merchant :</h5>
+            <el-button type="success" class="pull-right" :name="'process-all'" @click="processAllMerchant()">Process Semua</el-button>
+            <el-button type="danger" class="pull-right" :name="'cancel-all'" style="margin-right:5px" @click="cancelAllMerchant()">Cancel Semua</el-button>
+          </div>
+          <el-collapse class="panel-group">
+            <el-collapse-item v-for="(chart, index) in transaction.carts" :key="index" :title="chart.merchant.name" :name="index">
+              <div class="card-content">
+                <div class="row">
+                <div class="col-md-12" style="margin-bottom: 15px">
+                  <el-button type="success" class="pull-right" :name="'process'+index" :id="'process'+index" @click="processMerchant(index, chart)">Process</el-button>
+                  <el-button type="danger" class="pull-right" :name="'cancel'+index" :id="'process'+index" style="margin-right:5px" @click="cancelMerchant(index, chart)">Cancel</el-button>
+                </div>
+                <div class="col-md-8 card">
+                  <div class="form-group">
+                    <h6>Tanggal Kirim</h6>
+                    {{chart.tanggal_kirim || '-'}}
+                  </div>
+                  <div class="form-group">
+                    <h6>Waktu Kirim</h6>
+                    {{chart.waktu_kirim || '-'}}
+                  </div>
+                  <div class="form-group">
+                    <h6>Alamat User</h6>
+                    {{chart.user_address || '-'}}
+                  </div>
+                  <div class="form-group">
+                    <h6>Message</h6>
+                    {{chart.message || '-'}}
+                  </div>
+                </div>
+                
+                <div class="col-md-3 card pull-right">
+                  <div class="form-group">
+                    <h6>Status</h6>
+                    <span class="badge badge-secondary">{{chart.status}}</span>
+                  </div>
+                  <div class="form-group">
+                    <h6>Total M Harga</h6>
+                    {{chart.total_m_price || '-'}}
+                  </div>
+                  <div class="form-group">
+                    <h6>Total Harga</h6>
+                    {{chart.total_price || '-'}}
+                  </div>
+                </div>
+
+                <div class="col-md-12 card">
+                  <h5><b>Menu Makanan :</b></h5>
+                  <el-table :data="chart.foods" height="250" style="width: 100%">
+                    <el-table-column prop="name" label="Nama" width="280">
+                    </el-table-column>
+                    <el-table-column prop="qty" label="Quantity" width="90">
+                    </el-table-column>
+                    <el-table-column prop="m_price" label="M Harga" width="120">
+                    </el-table-column>
+                    <el-table-column prop="price" label="Harga" width="120">
+                    </el-table-column>
+                    <el-table-column prop="note" label="Catatan">
+                    </el-table-column>
+                  </el-table>
+                </div>
+                </div>
+              </div>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
       </div>
-    </div>
+   </div>
   </div>
 </template>
 <script>
   import Vue from 'vue'
-  import {Table, TableColumn, Select, Option} from 'element-ui'
+  import {Table, TableColumn, Select, Option, Button} from 'element-ui'
   import PPagination from 'src/components/UIComponents/Pagination.vue'
   import users from 'src/api/users'
   import swal from 'sweetalert2'
   import axios from 'axios'
+
   Vue.use(Table)
   Vue.use(TableColumn)
   Vue.use(Select)
   Vue.use(Option)
+  Vue.use(Button);
   export default{
     components: {
       PPagination
     },
     created() {
-      this.getList()
-    },
-    computed: {
-      pagedData () {
-        return this.tableData.slice(this.from, this.to)
-      },
-      /***
-       * Searches through table data and returns a paginated array.
-       * Note that this should not be used for table with a lot of data as it might be slow!
-       * Do the search and the pagination on the server and display the data retrieved from server instead.
-       * @returns {computed.pagedData}
-       */
-      queriedData () {
-        if (this.tableData) {
-          this.pagination.currentPage = this.meta_pagination.current_page;
-          this.pagination.perPage = this.meta_pagination.per_page;
-          this.pagination.total = this.meta_pagination.total;
-          if (!this.searchQuery) {
-            this.pagination.total = this.tableData.length
-            return this.pagedData
-          }
-          let result = this.tableData
-            .filter((row) => {
-              let isIncluded = false
-              for (let key of this.propsToSearch) {
-                let rowValue = row[key].toString()
-                if (rowValue.includes && rowValue.includes(this.searchQuery)) {
-                  isIncluded = true
-                }
-              }
-              return isIncluded
-            })
-          this.pagination.total = result.length
-          return result.slice(this.from, this.to)
-        }
-      },
-      to () {
-        let highBound = this.from + this.pagination.perPage
-        if (this.total < highBound) {
-          highBound = this.total
-        }
-        return highBound
-      },
-      from () {
-        return this.pagination.perPage * (this.pagination.currentPage - 1)
-      },
-      total () {
-        if (this.tableData) {
-          this.pagination.total = this.tableData.length
-          return this.tableData.length
-        } else {
-          return 0
-        }
-      }
+      this.title = 'Detil Transaksi';
+      this.getTransaction()
     },
     data () {
       return {
-        pagination: {
-          perPage: 0,
-          currentPage: 0,
-          perPageOptions: [5, 10, 25, 50],
-          total: 0
-        },
-        searchQuery: '',
-        propsToSearch: ['total_payment'],
-        tableColumns: [
-          {
-            prop: 'address.data.address',
-            label: 'Alamat',
-            minWidth: 250
-          },
-          {
-            prop: 'waktu_kirim',
-            label: 'Waktu Kirim',
-            minWidth: 100
-          },
-          {
-            prop: 'tanggal_kirim',
-            label: 'Tanggal Kirim',
-            minWidth: 100
-          },
-          {
-            prop: 'total_price',
-            label: 'Total Harga',
-            minWidth: 100
-          },
-          {
-            prop: 'total_m_price',
-            label: 'Total M Harga',
-            minWidth: 100
-          },
-          {
-            prop: 'status.data.status',
-            label: 'Status',
-            minWidth: 100
-          },
-          {
-            prop: 'rating',
-            label: 'Rating',
-            minWidth: 100
-          },
-          {
-            prop: 'message',
-            label: 'Pesan',
-            minWidth: 200
-          }
-        ],
-        tableData: [],
         title: '',
-        meta_pagination: ''
+        transaction: {}
       }
     },
     methods: {
-      changeState(row) {
-        axios.put(`/api/transactions/${this.$router.currentRoute.params.id}/${row.id}`).then(res => {
-            this.$notify({
-                component: {
-                    template: `<span>${res.data.meta.message}</span>`
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'success'
-            })
-            this.getList()
+      // get related data
+      getTransaction() {
+        axios.get(`/api/transactions/${this.$router.currentRoute.params.id}`).then(res => {
+            this.transaction = res.data.data;
+            this.meta_pagination = res.data.meta.pagination;
         }).catch(err => {
-            this.$notify({
-                component: {
-                    template: `<span>Terjadi kesalahan!</span>`,
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'danger'
-            })
-        })
-      },
-      cancel(row) {
-        axios.put(`/api/transactions/${row.id}/cancel`).then(res => {
-            this.$notify({
-                component: {
-                    template: `<span>${res.data.meta.message}</span>`
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'success'
-            })
-            this.getList()
-        }).catch(err => {
-            this.$notify({
-                component: {
-                    template: `<span>Terjadi kesalahan!</span>`,
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'danger'
-            })
-        })
-      },
-      getList() {
-          axios.get(`/api/transactions/${this.$router.currentRoute.params.id}`).then(res => {
-              this.title = res.data.meta.message;
-              this.tableData = res.data.data;
-              this.meta_pagination = res.data.meta.pagination;
-          }).catch(err => {
-            this.$notify({
-                component: {
-                    template: `<span>Terjadi kesalahan!</span>`,
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'danger'
-            })
+          this.$notify({
+              component: {
+                  template: `<span>Terjadi kesalahan!</span>`,
+              },
+              icon: 'ti-alert',
+              horizontalAlign: 'right',
+              verticalAlign: 'top',
+              type: 'danger'
           })
+        })
+      },
+
+      // others
+      toListTransaction() {
+        this.$router.push({name: 'transaction-list'})
+      },
+      toEditTransaction() {
+        alert('under construction');
+        // this.$router.push({name: 'transaction-edit', params: {id: this.transaction.id}})
+      },
+
+      // action
+      processAllMerchant(){
+        console.log(this.transaction);
+      },
+      cancelAllMerchant(){
+        console.log(this.transaction);        
+      },
+      processMerchant(index, chart) {
+        console.log('index',index);
+        console.log('chart',chart);
+      },
+      cancelMerchant(index, chart) {
+        console.log('index',index);
+        console.log('chart',chart);
       }
     }
   }

@@ -74,6 +74,7 @@ import SliderForm from 'src/components/Slider/SliderForm.vue'
 // Transaction
 import TransactionList from 'src/components/Transaction/TransactionList.vue'
 import TransactionDetail from 'src/components/Transaction/TransactionDetail.vue'
+import TransactionForm from 'src/components/Transaction/TransactionForm.vue'
 
 // History
 import HistoryList from 'src/components/History/HistoryList.vue'
@@ -88,6 +89,8 @@ import DriverList from 'src/components/Driver/DriverList';
 
 //Helpdesk
 import HelpdeskMerchantList from 'src/components/Helpdesk/HelpdeskMerchantList';
+import HelpdeskKostList from 'src/components/Helpdesk/HelpdeskKostList';
+import HelpdeskKostCreate from 'src/components/Helpdesk/HelpdeskKostFormCreate'
 
 // Users
 import UserList from 'src/components/Users/List.vue'
@@ -364,6 +367,11 @@ const transactionMenu = {
       path: 'detail/:id',
       name: 'transaction-detail',
       component: TransactionDetail
+    },
+    {
+      path: 'edit/:id',
+      name: 'transaction-edit',
+      component: TransactionForm
     }
   ]
 }
@@ -418,6 +426,21 @@ const helpdeskMenu = {
       path: 'merchants',
       name: 'helpdesk-merchant-list',
       component: HelpdeskMerchantList
+    },
+    {
+      path: 'kosts',
+      name: 'helpdesk-kost-list',
+      component: HelpdeskKostList,
+    },
+    {
+      path: 'kosts/create',
+      name: 'helpdesk-kost-create',
+      component: HelpdeskKostCreate
+    },
+    {
+      path: 'kosts/:id',
+      name: 'helpdesk-kost-edit',
+      component: HelpdeskKostCreate
     }
   ]
 };

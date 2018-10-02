@@ -1,69 +1,45 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title pull-left">Merchant</h4>
-      <!-- <p class="category"></p> -->
+      <h4 class="title pull-left">Kost</h4>
     </div>
+
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">Daftar Merchant</div>
+        <div class="category">Daftar Kost</div>
       </div>
       <div class="card-content row">
-        <div class="col-sm-4">
-          <button class="btn btn-primary btn-fill" @click="createMerchant()">Tambah Merchant</button>
+        <div class="col-sm-4" style="margin-bottom: 15px">
+          <button class="btn btn-primary btn-fill" @click="createKost()">Tambah Kost</button>
         </div>
-        <div class="col-sm-4">
-          <div class="pull-right">
-          Filter
-              <el-select
-                class="select-primary"
-                size="large"
-                placeholder="Single Select"
-                v-model="filterStore">
-                <el-option
-                  class="select-success"
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="pull-right">
-            <label>
-              <input @keyup.enter="search" type="search" placeholder="Search records"
-                                              aria-controls="datatables" class="form-control input-sm">
-            </label>
-          </div>
-        </div>
+        
         <div class="col-sm-12">
           <el-table class="table-striped"
                     :data="tableData"
                     border
                     style="">
             <el-table-column v-for="column in tableColumns"
-                             :key="column.label"
-                             :min-width="column.minWidth"
-                             :prop="column.prop"
-                             :label="column.label">
+                            :key="column.label"
+                            :min-width="column.minWidth"
+                            :prop="column.prop"
+                            :label="column.label">
             </el-table-column>
             <el-table-column
-              :min-width="180"
+              :min-width="80"
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <p-checkbox v-model="props.row.info.is_open" @change="alert('hi')">Buka</p-checkbox>
-                <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
-                <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
+                {{props.row.info.description}}
+                <p-checkbox v-model="props.row.info.is_open" disabled>Buka</p-checkbox>
               </template>
             </el-table-column>
           </el-table>
+
           <pagination @paginate="page($event)" :pagination="pagination"></pagination>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 <script>
@@ -84,17 +60,17 @@
       Pagination
     },
     created() {
-      this.getMerchants();
+      this.getKost();
     },
     watch:{
       "switches.defaultOn": function(newVal, oldVal){
       },
       filterStore: function(newVal, oldVal){
         switch (newVal){
-          case "all" : this.getMerchants(); break;
-          case "opened": this.getMerchants(null, "/api/merchants?is_open=true");break;
-          case "closed": this.getMerchants(null, "/api/merchants?is_open=false");break;
-          default: this.getMerchants(); break;
+          case "all" : this.getKost(); break;
+          // case "opened": this.getKost(null, "/api/merchants/opened");break;
+          // case "closed": this.getKost(null, "/api/merchants/closed");break;
+          default: this.getKost(); break;
         }
       }
     },
@@ -108,12 +84,6 @@
         options: [{
           value: 'all',
           label: 'All'
-        }, {
-          value: 'opened',
-          label: 'Opened'
-        }, {
-          value: 'closed',
-          label: 'Closed'
         }],
         filterStore: 'all',
         tableColumns: [
@@ -123,29 +93,9 @@
             minWidth: 200
           },
           {
-            prop: 'owner',
-            label: 'Pemilik',
-            minWidth: 200
-          },
-          {
             prop: 'address',
             label: 'Alamat',
             minWidth: 200
-          },
-          {
-            prop: 'phone',
-            label: 'No. Telepon',
-            minWidth: 150
-          },
-          {
-            prop: 'open_time',
-            label: 'Waktu Buka',
-            minWidth: 125
-          },
-          {
-            prop: 'close_time',
-            label: 'Waktu Tutup',
-            minWidth: 125
           }
         ],
         tableData: []
@@ -156,18 +106,18 @@
         console.log(event);
       },
       page(val) {
-        this.getMerchants({}, this.pagination[val]);
+        this.getKost({}, this.pagination[val]);
       },
       search(event) {
-        this.getMerchants({'name': event.target.value});
+        this.getKost({'name': event.target.value});
       },
-      createMerchant() {
-        alert('hi');
-        this.$router.push({ name: 'merchant-create'})
+      createKost() {
+        // alert('hallo guys')
+        this.$router.push({ name: 'helpdesk-kost-create'})
       },
-      getMerchants(params=null, path=null){
+      getKost(params=null, path=null){
         if (path==null){
-          path='/api/merchants';
+          path='/api/kosts';
         }
         axios.get(path, {params:params} ).then((resp) => {
           if (resp.status == 200) {
@@ -176,12 +126,12 @@
           }
         })
       },
-      handleTop (index, row) {
-        this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
-      },
-      handleEdit (index, row) {
-        this.$router.push({ name: 'merchant-edit', params: {id: row.id}});
-      },
+      // handleTop (index, row) {
+      //   this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
+      // },
+      // handleEdit (index, row) {
+      //   this.$router.push({ name: 'merchant-edit', params: {id: row.id}});
+      // },
       handleDelete (index, row) {
         swal({
           title: 'Apakah anda yakin?',
@@ -209,7 +159,7 @@
         })
       },
       handleShow(index, row) {
-        this.$router.push({name: 'merchant-edit', params: {
+        this.$router.push({name: 'kost-edit', params: {
           id: row.id
         }})
       },

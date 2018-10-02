@@ -13,9 +13,9 @@
           <span class="icon-bar bar2"></span>
           <span class="icon-bar bar3"></span>
         </button>
-        <a class="navbar-brand">{{this.$route.name}}</a>
+        <!-- <a class="navbar-brand">{{this.$route.name}}</a> -->
       </div>
-      <div class="collapse navbar-collapse">
+      <!-- <div class="collapse navbar-collapse">
         <form class="navbar-form navbar-left navbar-search-form" role="search">
           <div class="input-group">
             <input type="text" value="" class="form-control" placeholder="Search...">
@@ -42,7 +42,7 @@
             </router-link>
           </li>
         </ul>
-      </div>
+      </div> -->
     </div>
   </nav>
 </template>

@@ -62,8 +62,8 @@
       filterStore: function(newVal, oldVal){
         switch (newVal){
           case "all" : this.getMerchants(); break;
-          case "opened": this.getMerchants(null, "/api/merchants/opened");break;
-          case "closed": this.getMerchants(null, "/api/merchants/closed");break;
+          case "opened": this.getMerchants(null, "/api/helpdesk/merchants/opened");break;
+          case "closed": this.getMerchants(null, "/api/helpdesk/merchants/closed");break;
           default: this.getMerchants(); break;
         }
       }
@@ -136,7 +136,7 @@
       },
       getMerchants(params=null, path=null){
         if (path==null){
-          path='/api/merchants';
+          path='/api/helpdesk/merchants';
         }
         axios.get(path, {params:params} ).then((resp) => {
           if (resp.status == 200) {
