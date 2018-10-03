@@ -6,7 +6,7 @@
     <div class="info">
       <a data-toggle="collapse" @click="toggleMenu" href="javascript:void(0)">
            <span>
-             Chet Faker
+             Admin Ganteng
              <b class="caret"></b>
           </span>
       </a>
@@ -15,21 +15,21 @@
         <el-collapse-transition>
           <ul class="nav" v-show="!isClosed">
             <li>
-              <a href="javascript:void(0)">
-                <span class="sidebar-mini">Mp</span>
-                <span class="sidebar-normal">My Profile</span>
+              <a href="javascript:void(0)" @click="underConstruction()">
+                <span class="sidebar-mini">P</span>
+                <span class="sidebar-normal">Profil</span>
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
-                <span class="sidebar-mini">Ep</span>
-                <span class="sidebar-normal">Edit Profile</span>
+              <a href="javascript:void(0)" @click="underConstruction()">
+                <span class="sidebar-mini">Up</span>
+                <span class="sidebar-normal">Ubah Profil</span>
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
-                <span class="sidebar-mini">S</span>
-                <span class="sidebar-normal">Settings</span>
+              <a href="javascript:void(0)" @click="underConstruction()">
+                <span class="sidebar-mini">P</span>
+                <span class="sidebar-normal">Pengaturan</span>
               </a>
             </li>
             <li>
@@ -59,6 +59,10 @@
       toggleMenu () {
         this.isClosed = !this.isClosed
       },
+      underConstruction() {
+        alert('under construction');
+      }
+      ,
       logout() {
         this.$store.dispatch("logout", localStorage.getItem('login_id')).then(() => this.$router.push('/login')).catch(() => alert('asd'))
       }

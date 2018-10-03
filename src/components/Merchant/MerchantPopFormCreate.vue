@@ -1,62 +1,61 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <h4 class="title pull-left">Form Tambah Merchant Populer</h4>
-            <button class="btn btn-primary pull-right" style="margin-bottom: 15px" @click="toList">List Merchant Populer </button>
+            <h4 class="title pull-left">Merchant Populer</h4>
+            <button class="btn btn-primary pull-right" style="margin-bottom: 15px" @click="toList()">List</button>
         </div>
 
         <!-- Form Input -->
-        <div class="col-md-6">
-            <div class="card">
-                <form action="">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-offset-2 col-md-8 col-sm-8 col-xs-12">
-                                <h4 class="card-title">
-                                    {{name}}
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="row">
-                            <div class="col-md-offset-2 col-md-8 col-sm-8 col-xs-12">
-                                <div class="form-group">
-                                    <label for="">Merchant</label>
-                                    <el-select class="select-primary"
-                                            size="large"
-                                            placeholder="Pilih Merchant"
-                                            v-model="merchant_id">
-                                        <el-option v-for="option in merchant_options"
-                                                    class="select-danger"
-                                                    :value="option.value"
-                                                    :label="option.label"
-                                                    :key="option.label">
-                                        </el-option>
-                                    </el-select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Prioritas</label>
-                                    <el-select class="select-primary"
-                                            size="large"
-                                            placeholder="Pilih Prioritas"
-                                            v-model="priority">
-                                        <el-option v-for="option in priority_options"
-                                                    class="select-danger"
-                                                    :value="option.value"
-                                                    :label="option.label"
-                                                    :key="option.label">
-                                        </el-option>
-                                    </el-select>
-                                </div>
-                                <div class="form-group" v-if="!error">
-                                  <button class="btn btn-primary btn-fill" @click="save">Tambah Merchant</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+        <div class="col-md-6 card">
+            <div class="card-header">
+                <div class="card-title"><h4 style="margin-top:10px;">{{mode == 'Add' ? 'Tambah' : 'Ubah'}} Merchant Populer</h4></div>
+                <hr>
             </div>
+            <form action="">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col-md-offset-2 col-md-8 col-sm-8 col-xs-12">
+                            <div class="form-group">
+                                <label for="">Merchant</label>
+                                <el-select class="select-primary"
+                                        size="large"
+                                        placeholder="Pilih Merchant"
+                                        v-model="merchant_id">
+                                    <el-option v-for="option in merchant_options"
+                                                class="select-danger"
+                                                :value="option.value"
+                                                :label="option.label"
+                                                :key="option.label">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Prioritas</label>
+                                <el-select class="select-primary"
+                                        size="large"
+                                        placeholder="Pilih Prioritas"
+                                        v-model="priority">
+                                    <el-option v-for="option in priority_options"
+                                                class="select-danger"
+                                                :value="option.value"
+                                                :label="option.label"
+                                                :key="option.label">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div class="form-group" v-if="!error">
+                                <button class="btn btn-primary btn-fill" @click="save">Tambah Merchant</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <hr>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-fill btn-primary pull-right" style="margin-bottom:25px;" :disabled="isSubmitted" @click="underConstruction()"> {{mode == 'Add' ? 'Simpan' : 'Update'}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </template>
@@ -92,8 +91,18 @@
                 ],
                 merchant_options: [],
                 merchant_id: '',
-                error: true
+                error: true,
+                isSubmitted: false
             }
+        },
+        computed: {
+          mode(){
+            if (this.$router.currentRoute.params.id){
+              return "Update"
+            }else{
+              return "Add"
+            }
+          }
         },
         methods: {
             save() {
@@ -138,6 +147,9 @@
             },
             toList() {
                 this.$router.push({name: 'merchant-pop-list'})
+            },
+            underConstruction() {
+                alert('under construction');
             }
         },
         mounted () {

@@ -6,13 +6,12 @@
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">Daftar Merchant</div>
+        <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar Merchant</h4></div>
       </div>
       <div class="card-content row">
-        <div class="col-sm-4">
-          <button class="btn btn-primary btn-fill" @click="createMerchant()">Tambah Merchant</button>
-        </div>
-        <div class="col-sm-4">
+        <div class="col-sm-12">
+          <hr>
+          <button class="btn btn-primary" @click="createMerchant()">Tambah</button>
           <div class="pull-right">
           Filter
               <el-select
@@ -29,13 +28,8 @@
                 </el-option>
               </el-select>
           </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="pull-right">
-            <label>
-              <input @keyup.enter="search" type="search" placeholder="Search records"
-                                              aria-controls="datatables" class="form-control input-sm">
-            </label>
+          <div class="pull-right" style="margin-right:5px;margin-bottom:15px">
+              <input @keyup.enter="search" type="search" placeholder="Search records" aria-controls="datatables" class="form-control input-sm">
           </div>
         </div>
         <div class="col-sm-12">

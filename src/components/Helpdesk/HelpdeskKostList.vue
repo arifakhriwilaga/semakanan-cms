@@ -1,16 +1,17 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title pull-left">Kost</h4>
+      <h4 class="title pull-left">Helpdesk Kost</h4>
     </div>
 
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">Daftar Kost</div>
+        <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar Kost</h4></div>
       </div>
       <div class="card-content row">
-        <div class="col-sm-4" style="margin-bottom: 15px">
-          <button class="btn btn-primary btn-fill" @click="createKost()">Tambah Kost</button>
+        <div class="col-sm-12">
+          <hr>
+          <button class="btn btn-primary" @click="createKost()" style="margin-bottom:15px">Tambah</button>
         </div>
         
         <div class="col-sm-12">

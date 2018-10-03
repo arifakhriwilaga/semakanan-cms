@@ -1,125 +1,127 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <h4 class="title pull-left">Form {{mode}} Merchant</h4>
+            <h4 class="title pull-left">Merchant</h4>
             <button class="btn btn-primary pull-right" @click="listMerchant()" style="margin-bottom: 15px">List</button>
         </div>
 
         <!-- Form Input -->
-        <form v-on:submit.prevent="saveForm">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <h4 class="card-title">
-                                    Form {{mode}}
-                                </h4>
-                            </div>
-                        </div>
+        <div class="col-md-12 card">
+            <div class="card-header">
+                <div class="card-title"><h4 style="margin-top:10px;">{{mode == 'Add' ? 'Tambah' : 'Ubah'}} Merchant</h4></div>
+                <hr>
+            </div>
+            <form v-on:submit.prevent="saveForm">
+                <div class="card-content">
+                    <div class="col-sm-6">
+                        <!-- <div class="card"> -->
+                            <!-- <div class="card-content"> -->
+                                <!-- <div class="row">
+                                    <div class="col-md-12"> -->
+                                        <div class="form-group">
+                                            <label>Nama</label>
+                                            <input type="text" class="form-control" v-model="merchant.name" v-validate="'required'"
+                                                name="nama">
+                                            <span>{{ errors.first('nama') }}</span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Gambar</label>
+                                            <input type="file" class="form-control" @change="onFileChanged"
+                                            name="image"
+                                            >
+                                            <img :src="merchant.image" v-if="merchant.image!=''">
+                                            <span>{{ errors.first('image') }}</span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="">Nama Pemilik</label>
+                                            <input type="text" class="form-control" v-model="merchant.owner" v-validate="'required'"
+                                            name="pemilik"
+                                            >
+                                            <span>{{ errors.first('pemilik') }}</span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="">No. Telepon</label>
+                                            <input type="text" class="form-control" v-model="merchant.phone"  v-validate="'required'"
+                                            name="telepon"
+                                            >
+                                            <span>{{ errors.first('telepon') }}</span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="">Waktu Buka</label>
+                                            <div class="form-group">
+                                                <el-time-select
+                                                        v-model="merchant.open_time"
+                                                        :picker-options="{
+                                                    start: '00:00',
+                                                    step: '00:15',
+                                                    end: '23:59'
+                                                    }"
+                                                        name="jam_buka"
+                                                        v-validate="'required'"
+                                                        placeholder="Pilih Waktu Buka">
+                                                </el-time-select>
+                                                <span>{{ errors.first('jam_buka') }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="">Waktu Tutup</label>
+                                            <div class="form-group">
+                                                <el-time-select
+                                                        v-model="merchant.close_time"
+                                                        :picker-options="{
+                                                    start: '00:00',
+                                                    step: '00:15',
+                                                    end: '23:59'
+                                                    }"
+                                                        name="jam_tutup"
+                                                        v-validate="'required'"
+                                                        placeholder="Pilih Waktu Tutup">
+                                                </el-time-select>
+                                                <span>{{ errors.first('jam_tutup') }}</span>
+                                            </div>
+                                        </div>
+
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
+                        <!-- </div> -->
                     </div>
-                    <div class="card-content">
-                        <div class="row">
-                            <div class="col-md-12">
+                    <div class="col-sm-6">
+                        <!-- <div class="card"> -->
+                            <!-- <div class="card-content"> -->
                                 <div class="form-group">
-                                    <label>Nama</label>
-                                    <input type="text" class="form-control" v-model="merchant.name" v-validate="'required'"
-                                           name="nama">
-                                    <span>{{ errors.first('nama') }}</span>
-                                </div>
-                              <div class="form-group">
-                                    <label>Gambar</label>
-                                    <input type="file" class="form-control" @change="onFileChanged"
-                                    name="image"
-                                    >
-                                    <img :src="merchant.image" v-if="merchant.image!=''">
-                                    <span>{{ errors.first('image') }}</span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="">Pemilik</label>
-                                    <input type="text" class="form-control" v-model="merchant.owner" v-validate="'required'"
-                                    name="pemilik"
-                                    >
-                                    <span>{{ errors.first('pemilik') }}</span>
+                                    <label for="">Alamat</label>
+                                    <textarea name="" id="" cols="15" rows="5" class="form-control"
+                                            v-model="merchant.address" name="address" v-validate="'required'"></textarea>
+                                    <span>{{ errors.first('address') }}</span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="">No. Telepon</label>
-                                    <input type="text" class="form-control" v-model="merchant.phone"  v-validate="'required'"
-                                    name="telepon"
-                                    >
-                                    <span>{{ errors.first('telepon') }}</span>
+                                    <label for="">Deskripsi</label>
+                                    <textarea cols="15" rows="5" class="form-control"
+                                            v-model="merchant.description" name="description" v-validate="'required'"></textarea>
+                                    <span>{{ errors.first('description') }}</span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Waktu Buka</label>
-                                    <div class="form-group">
-                                        <el-time-select
-                                                v-model="merchant.open_time"
-                                                :picker-options="{
-                                            start: '00:00',
-                                            step: '00:15',
-                                            end: '23:59'
-                                            }"
-                                                name="jam_buka"
-                                                v-validate="'required'"
-                                                placeholder="Pilih Waktu Buka">
-                                        </el-time-select>
-                                        <span>{{ errors.first('jam_buka') }}</span>
-                                    </div>
-
+                                    <label for="">Lokasi</label>
+                                    <div id="regularMap" class="map"></div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="">Waktu Tutup</label>
-                                    <div class="form-group">
-                                        <el-time-select
-                                                v-model="merchant.close_time"
-                                                :picker-options="{
-                                            start: '00:00',
-                                            step: '00:15',
-                                            end: '23:59'
-                                            }"
-                                                name="jam_tutup"
-                                                v-validate="'required'"
-                                                placeholder="Pilih Waktu Tutup">
-                                        </el-time-select>
-                                        <span>{{ errors.first('jam_tutup') }}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-fill btn-primary" :disabled="isSubmitted">
-                                      {{mode}} Merchant</button>
-                                </div>
-                            </div>
+                            <!-- </div> -->
+                        <!-- </div> -->
+                    </div>
+                    <div class="col-sm-12">
+                        <hr>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-fill btn-primary pull-right" style="margin-bottom:25px;" :disabled="isSubmitted">{{mode == 'Add' ? 'Simpan' : 'Update'}}</button>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-
-                    </div>
-                    <div class="card-content">
-                        <div class="form-group">
-                            <label for="">Alamat</label>
-                            <textarea name="" id="" cols="15" rows="5" class="form-control"
-                                      v-model="merchant.address" name="alamat" v-validate="'required'"></textarea>
-                            <span>{{ errors.first('alamat') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Description</label>
-                            <textarea cols="15" rows="5" class="form-control"
-                                      v-model="merchant.description" name="alamat" v-validate="'required'"></textarea>
-                            <span>{{ errors.first('alamat') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Lokasi</label>
-                            <div id="regularMap" class="map"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </template>
 

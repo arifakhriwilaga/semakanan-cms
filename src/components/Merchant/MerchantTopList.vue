@@ -1,39 +1,39 @@
 <template>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-6 col-xs-12">
-                        <h4 class="title" style="margin: 0">List Merchant Top List</h4>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <button class="btn btn-primary pull-right" @click="createMerchantTop">Tambah Merchant Populer</button>
-                    </div>
-                    </div>
-                    <p class="category">Daftar Top Merchant </p>
-                </div>
-                <div class="card-content table-responsive table-full-width">
-                <el-table class="table-striped" :data="tableData">
-                    <el-table-column label="Name" property="name"></el-table-column>
-                    <el-table-column label="Priority" property="priority"></el-table-column>
-                    <el-table-column
-                        :min-width="120"
-                        fixed="right"
-                        label="Actions">
-                        <template slot-scope="props">
-                            <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a>
-                            <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a> -->
-                            <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <pagination @paginate="page($event)" :pagination="pagination"></pagination>
-                </div>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4 class="title pull-left">Merchant Teratas</h4>
+      <!-- <p class="category"></p> -->
     </div>
+    <div class="col-md-12 card">
+      <div class="card-header">
+        <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar Merchant Teratas</h4></div>
+      </div>
+      <div class="card-content row">
+        <div class="col-sm-12">
+          <hr>
+          <button class="btn btn-primary" @click="createMerchantTop()" style="margin-bottom:15px">Tambah</button>
+        </div>
 
+        <div class="col-sm-12">
+          <el-table class="table-striped" :data="tableData" border>
+              <el-table-column label="Name" property="name"></el-table-column>
+              <el-table-column label="Priority" property="priority"></el-table-column>
+              <el-table-column
+                  :min-width="120"
+                  fixed="right"
+                  label="Actions">
+                  <template slot-scope="props">
+                      <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a>
+                      <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a> -->
+                      <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
+                  </template>
+              </el-table-column>
+          </el-table>
+          <pagination @paginate="page($event)" :pagination="pagination"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
   import Vue from 'vue'

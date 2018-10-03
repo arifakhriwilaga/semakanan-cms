@@ -1,25 +1,25 @@
 export default [
   {
     name: 'Merchants',
-    icon: 'ti-star',
+    icon: 'ti-home',
     children: [
       {
-        name: 'Daftar Merchants',
+        name: 'Merchant',
         path: '/merchants/list'
       },
       {
-        name: 'Daftar Merchant Teratas',
+        name: 'Merchant Teratas',
         path: '/merchants/top/list'
       },
       {
-        name: 'Daftar Merchant Populer',
+        name: 'Merchant Populer',
         path: '/merchants/pop/list'
       }
     ]
   },
   {
     name: 'Food',
-    icon: 'ti-receipt',
+    icon: 'ti-clipboard',
     path: '/foods/list'
   },
   {
@@ -29,7 +29,7 @@ export default [
   },
   {
     name: 'Helpdesks',
-    icon: 'ti-star',
+    icon: 'el-icon-service',
 
     children: [
       {
@@ -44,32 +44,35 @@ export default [
   },
   {
     name: 'Slider',
-    icon: 'ti-image',
-    children: [
-      {
-        name: 'Slider',
-        path: '/slider/semakanan/list'
-      }
-    ]
+    icon: 'el-icon-picture',
+    path: '/slider/semakanan/list'
+    // children: [
+    //   {
+    //     name: 'Slider',
+    //     path: '/slider/semakanan/list'
+    //   }
+    // ]
   },
   {
     name: 'Transaksi',
-    icon: 'ti-shopping-cart',
-    children: [
-      {
-        name: 'Daftar Transaksi',
-        path: '/transaction/list'
-      }
-    ]
+    icon: 'el-icon-goods',
+    path: '/transaction/list'
+    // children: [
+    //   {
+    //     name: 'Daftar Transaksi',
+    //     path: '/transaction/list'
+    //   }
+    // ]
   },
   {
     name: 'History',
-    icon: 'ti-menu-alt',
-    children: [
-      {
-        name: 'Daftar History',
-        path: '/history'
-      }
-    ]
+    icon: 'ti-agenda',
+    path: '/history'
+    // children: [
+    //   {
+    //     name: 'Daftar History',
+    //     path: '/history'
+    //   }
+    // ]
   }
 ]

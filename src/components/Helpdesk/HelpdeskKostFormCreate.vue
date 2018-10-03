@@ -1,60 +1,56 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <h4 class="title pull-left">Form {{mode}} Kost</h4>
+            <h4 class="title pull-left">Helpdesk Kost</h4>
             <button class="btn btn-primary pull-right" @click="listKost()" style="margin-bottom: 15px">List</button>
         </div>
 
         <!-- Form Input -->
-        <form v-on:submit.prevent="saveForm">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <h4 class="card-title">
-                                    Form {{mode}}
-                                </h4>
-                            </div>
+        <div class="col-md-6 card">
+            <div class="card-header">
+                <div class="card-title"><h4 style="margin-top:10px;">{{mode == 'Add' ? 'Tambah' : 'Ubah'}} Kost</h4></div>
+                <hr>
+            </div>
+            <form v-on:submit.prevent="saveForm">
+                <div class="card-content">
+                    <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Nama</label>
+                            <input type="text" class="form-control" v-model="kost.name" v-validate="'required'"
+                                name="nama">
+                            <span>{{ errors.first('nama') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Gambar</label>
+                            <input type="file" class="form-control" @change="onFileChanged"
+                            name="image"
+                            >
+                            <img :src="kost.image" v-if="kost.image!=''">
+                            <span>{{ errors.first('image') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Alamat</label>
+                            <textarea id="" cols="15" rows="5" class="form-control"
+                                    v-model="kost.address" name="alamat" v-validate="'required'"></textarea>
+                            <span>{{ errors.first('alamat') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Lokasi</label>
+                            <div id="regularMap" class="map"></div>
                         </div>
                     </div>
-                    <div class="card-content">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Nama</label>
-                                    <input type="text" class="form-control" v-model="kost.name" v-validate="'required'"
-                                           name="nama">
-                                    <span>{{ errors.first('nama') }}</span>
-                                </div>
-                                <div class="form-group">
-                                    <label>Gambar</label>
-                                    <input type="file" class="form-control" @change="onFileChanged"
-                                    name="image"
-                                    >
-                                    <img :src="kost.image" v-if="kost.image!=''">
-                                    <span>{{ errors.first('image') }}</span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Alamat</label>
-                                    <textarea id="" cols="15" rows="5" class="form-control"
-                                            v-model="kost.address" name="alamat" v-validate="'required'"></textarea>
-                                    <span>{{ errors.first('alamat') }}</span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Lokasi</label>
-                                    <div id="regularMap" class="map"></div>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-fill btn-primary" :disabled="isSubmitted">
-                                      {{mode}} Kost</button>
-                                </div>
-                            </div>
+                    <div class="col-sm-12">
+                        <hr>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-fill btn-primary pull-right" style="margin-bottom:25px;" :disabled="isSubmitted">{{mode == 'Add' ? 'Simpan' : 'Update'}}</button>
                         </div>
+                    </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </template>
 

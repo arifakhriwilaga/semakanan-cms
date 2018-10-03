@@ -1,18 +1,17 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title pull-left">Merchant</h4>
+      <h4 class="title pull-left">History</h4>
       <!-- <p class="category"></p> -->
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">Daftar Merchant</div>
+        <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar History</h4></div>
       </div>
       <div class="card-content row">
-        <div class="col-sm-4">
-          <button class="btn btn-primary btn-fill" @click="createMerchant()">Tambah Merchant</button>
-        </div>
-        <div class="col-sm-4">
+        <!-- <div class="col-sm-12">
+          <hr>
+          <button class="btn btn-primary" @click="createMerchant()">Tambah</button>
           <div class="pull-right">
           Filter
               <el-select
@@ -29,16 +28,12 @@
                 </el-option>
               </el-select>
           </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="pull-right">
-            <label>
-              <input @keyup.enter="search" type="search" placeholder="Search records"
-                                              aria-controls="datatables" class="form-control input-sm">
-            </label>
+          <div class="pull-right" style="margin-right:5px;margin-bottom:15px">
+              <input @keyup.enter="search" type="search" placeholder="Search records" aria-controls="datatables" class="form-control input-sm">
           </div>
-        </div>
+        </div> -->
         <div class="col-sm-12">
+          <hr>
           <el-table class="table-striped"
                     :data="tableData"
                     border
@@ -54,8 +49,8 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <p-checkbox v-model="props.row.info.is_open" @change="alert('hi')">Buka</p-checkbox>
-                <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
+                <!-- <p-checkbox v-model="props.row.info.is_open" @change="alert('hi')">Buka</p-checkbox> -->
+                <!-- <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a> -->
                 <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
               </template>
             </el-table-column>
@@ -84,17 +79,17 @@
       Pagination
     },
     created() {
-      this.getMerchants();
+      this.getHistories();
     },
     watch:{
       "switches.defaultOn": function(newVal, oldVal){
       },
       filterStore: function(newVal, oldVal){
         switch (newVal){
-          case "all" : this.getMerchants(); break;
-          case "opened": this.getMerchants(null, "/api/merchants?is_open=true");break;
-          case "closed": this.getMerchants(null, "/api/merchants?is_open=false");break;
-          default: this.getMerchants(); break;
+          case "all" : this.getHistories(); break;
+          case "opened": this.getHistories(null, "/api/merchants?is_open=true");break;
+          case "closed": this.getHistories(null, "/api/merchants?is_open=false");break;
+          default: this.getHistories(); break;
         }
       }
     },
@@ -118,34 +113,19 @@
         filterStore: 'all',
         tableColumns: [
           {
-            prop: 'name',
-            label: 'Nama',
+            prop: 'total_pembayaran',
+            label: 'Total Pembayaran',
             minWidth: 200
           },
           {
-            prop: 'owner',
-            label: 'Pemilik',
+            prop: 'cash',
+            label: 'Cash',
             minWidth: 200
           },
           {
-            prop: 'address',
-            label: 'Alamat',
+            prop: 'status',
+            label: 'Status',
             minWidth: 200
-          },
-          {
-            prop: 'phone',
-            label: 'No. Telepon',
-            minWidth: 150
-          },
-          {
-            prop: 'open_time',
-            label: 'Waktu Buka',
-            minWidth: 125
-          },
-          {
-            prop: 'close_time',
-            label: 'Waktu Tutup',
-            minWidth: 125
           }
         ],
         tableData: []
@@ -156,17 +136,14 @@
         console.log(event);
       },
       page(val) {
-        this.getMerchants({}, this.pagination[val]);
+        this.getHistories({}, this.pagination[val]);
       },
       search(event) {
-        this.getMerchants({'name': event.target.value});
+        this.getHistories({'name': event.target.value});
       },
-      createMerchant() {
-        this.$router.push({ name: 'merchant-create'})
-      },
-      getMerchants(params=null, path=null){
+      getHistories(params=null, path=null){
         if (path==null){
-          path='/api/helpdesk/merchants';
+          path='/api/histories';
         }
         axios.get(path, {params:params} ).then((resp) => {
           if (resp.status == 200) {
@@ -175,73 +152,10 @@
           }
         })
       },
-      handleTop (index, row) {
-        this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
-      },
-      handleEdit (index, row) {
-        this.$router.push({ name: 'merchant-edit', params: {id: row.id}});
-      },
-      handleDelete (index, row) {
-        swal({
-          title: 'Apakah anda yakin?',
-          text: 'Data tidak akan dapat dikembalikan lagi.',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Ya, hapus!',
-          cancelButtonText: 'Tidak, simpan!',
-          confirmButtonClass: 'btn btn-success btn-fill',
-          cancelButtonClass: 'btn btn-danger btn-fill',
-          buttonsStyling: false
-        }).then(() => {
-          this.$store.dispatch('merchantDrop', row).then((res) => {
-          }).catch(er => console.log(er))
-        }, function (dismiss) {
-          if (dismiss === 'cancel') {
-            swal({
-              title: 'Dibatalkan',
-              text: 'Menghapus data dibatalkan',
-              type: 'error',
-              confirmButtonClass: 'btn btn-info btn-fill',
-              buttonsStyling: false
-            })
-          }
-        })
-      },
       handleShow(index, row) {
-        this.$router.push({name: 'merchant-edit', params: {
+        this.$router.push({name: 'history-detail', params: {
           id: row.id
         }})
-      },
-      confirm(row){
-        swal({
-          title: 'Apakah anda yakin?',
-          text: 'Toko akan buka / tutup',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonClass: 'btn btn-success btn-fill',
-          cancelButtonClass: 'btn btn-danger btn-fill',
-          confirmButtonText: 'Yes!',
-          buttonsStyling: false
-        }).then(function () {
-          // let service = orderService.changeState(row.id, {
-          //   'order_status': row.order_status
-          // });
-          // service.then(response => {
-          //   if (response.status == 200) {
-          //     swal({
-          //       title: 'Success!',
-          //       text: 'Status Order: ' + row.order_status,
-          //       type: 'success',
-          //       confirmButtonClass: 'btn btn-success btn-fill',
-          //       buttonsStyling: false
-          //     }, function () {
-          //       this.getOrders();
-          //     });
-          //   }
-          // });
-        }).catch(()=>{
-          // this.getOrders();
-        });
       },
     }
   }

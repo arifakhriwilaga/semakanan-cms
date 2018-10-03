@@ -1,48 +1,55 @@
 <template>
-  <div class="row card">
-    <div class="card-header">
-
+  <div class="row">
+    <div class="col-md-12">
+      <h4 class="title pull-left">Driver</h4>
+      <!-- <p class="category"></p> -->
     </div>
-    <div class="card-content">
-        <div class="col-sm-12">
-          <el-table class="table-striped"
-                    :data="tableData"
-                    border
-                    style="">
-            <el-table-column v-for="column in tableColumns"
-                             :key="column.label"
-                             :min-width="column.minWidth"
-                             :prop="column.prop"
-                             :label="column.label">
-            </el-table-column>
-            <el-table-column
-              :min-width="180"
-              label="ID Image">
-              <template slot-scope="props">
-                <img :src="props.row.id_image">
-              </template>
-            </el-table-column>
+    <div class="col-md-12 card">
+      <div class="card-header">
+        <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar Driver</h4></div>
+      </div>
+      <div class="card-content row">
+          <div class="col-sm-12">
+            <hr>
+            <el-table class="table-striped"
+                      :data="tableData"
+                      border
+                      style="">
+              <el-table-column v-for="column in tableColumns"
+                              :key="column.label"
+                              :min-width="column.minWidth"
+                              :prop="column.prop"
+                              :label="column.label">
+              </el-table-column>
+              <el-table-column
+                :min-width="180"
+                label="ID Image">
+                <template slot-scope="props">
+                  <img :src="props.row.id_image">
+                </template>
+              </el-table-column>
 
-            <el-table-column
-              :min-width="180"
-              label="Image">
-              <template slot-scope="props">
-                <img :src="props.row.image">
-              </template>
-            </el-table-column>
-            <el-table-column
-              :min-width="180"
-              fixed="right"
-              label="Actions">
-              <template slot-scope="props">
-                <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
-                <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
-              </template>
-            </el-table-column>
+              <el-table-column
+                :min-width="180"
+                label="Image">
+                <template slot-scope="props">
+                  <img :src="props.row.image">
+                </template>
+              </el-table-column>
+              <el-table-column
+                :min-width="180"
+                fixed="right"
+                label="Actions">
+                <template slot-scope="props">
+                  <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
+                  <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
+                </template>
+              </el-table-column>
 
-          </el-table>
-          <pagination @paginate="page($event)" :pagination="pagination"></pagination>
-        </div>
+            </el-table>
+            <pagination @paginate="page($event)" :pagination="pagination"></pagination>
+          </div>
+      </div>
     </div>
   </div>
 </template>

@@ -1,15 +1,16 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title pull-left">Merchant</h4>
+      <h4 class="title pull-left">Helpdesk Merchant</h4>
       <!-- <p class="category"></p> -->
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">Daftar Merchant</div>
+        <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar Merchant</h4></div>
       </div>
       <div class="card-content row">
         <div class="col-sm-12">
+          <hr>
           <el-table class="table-striped"
                     :data="tableData"
                     border
