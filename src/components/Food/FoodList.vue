@@ -6,14 +6,15 @@
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">Daftar Makanan</div>
+        <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar Makanan</h4></div>
       </div>
       <div class="card-content row">
-        <div class="col-sm-4">
-          <button class="btn btn-primary btn-fill" @click="createFood()">Tambah</button>
-        </div>
+        <div class="col-sm-12">
+          <hr>
+          <button class="btn btn-primary" @click="createFood()">Tambah</button>
+        <!-- </div> -->
 
-        <div class="col-sm-4">
+        <!-- <div class="col-sm-4"> -->
           <div class="pull-right">
             <label>
               <input @keyup.enter="search" type="search" placeholder="Search records"
@@ -68,13 +69,13 @@
     data(){
       return{
         tableData: [],
-        pagination: null,
+        pagination: {},
         tableColumns: [
-          {
-            prop: 'id',
-            label: 'ID',
-            minWidth: 70
-          },
+          // {
+          //   prop: 'id',
+          //   label: 'ID',
+          //   minWidth: 70
+          // },
           {
             prop: 'merchant.name',
             label: 'merchant',
@@ -105,13 +106,18 @@
       }
     },
     methods:{
+      search(event) {
+        this.getFoods({'name': event.target.value});
+      },
       getFoods(params=null, path=null){
-        axios.get('/api/foods').then((resp)=>{
+        if (path==null){
+          path='/api/foods';
+        }
+        axios.get(path, {params:params} ).then((resp)=>{
           if (resp.status==200){
 
             this.tableData = resp.data.data;
             this.pagination = resp.data.meta.paging;
-            console.log(this.tableData);
           }
         })
       },

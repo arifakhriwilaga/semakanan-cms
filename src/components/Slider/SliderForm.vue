@@ -1,60 +1,53 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <h4 class="title pull-left">Form Slider</h4>
-            <button class="btn btn-success btn-fill pull-right" style="margin-bottom: 15px" @click="toList">List Slider </button>
+            <h4 class="title pull-left">Slider</h4>
+            <button class="btn btn-success btn-fill pull-right" style="margin-bottom: 15px" @click="listSlider()">List </button>
         </div>
 
         <!-- Form Input -->
-        <div class="col-md-12">
-            <div class="card">
-                <form action="">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-offset-2 col-md-8 col-sm-8 col-xs-12">
-                                <h4 class="card-title">
+        <div class="col-md-6 card">      
+          <div class="card-header">
+              <div class="card-title"><h4 style="margin-top:10px;">{{!slider_id ? 'Tambah' : 'Ubah'}} Slider</h4></div>
+            <hr>
+          </div>
+          <form>
+          <!-- <form v-on:submit.prevent="saveForm"> -->
+            <div class="card-content">
+              <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="">Caption</label>
+                    <input type="text" v-model="slider.caption" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">Tipe</label> <br />
+                    <el-select class="select-primary"
+                            size="large"
+                            placeholder="Pilih Tipe"
+                            v-model="slider.type">
+                        <el-option v-for="option in type_options"
+                                    class="select-primary"
+                                    :value="option.value"
+                                    :label="option.label"
+                                    :key="option.label">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div class="form-group">
+                    <label>Gambar</label>
+                    <input type="file" class="form-control" @change="onFileChanged" accept="image/jpeg">
+                    <img :src="slider.image" v-if="slider.image!=''" />
+                </div>
+              </div>
 
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="row">
-                            <div class="col-md-offset-2 col-md-8 col-sm-8 col-xs-12">
-                                <div class="form-group">
-                                    <label for="">Caption</label>
-                                    <input type="text" v-model="slider.caption" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Tipe</label> <br />
-                                    <el-select class="select-primary"
-                                            size="large"
-                                            placeholder="Pilih Tipe"
-                                            v-model="slider.type">
-                                        <el-option v-for="option in type_options"
-                                                    class="select-primary"
-                                                    :value="option.value"
-                                                    :label="option.label"
-                                                    :key="option.label">
-                                        </el-option>
-                                    </el-select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Gambar</label>
-                                    <input type="file" class="form-control" @change="onFileChanged" accept="image/jpeg">
-                                    <img :src="slider.image" v-if="slider.image!=''" />
-                                </div>
-
-                                <div class="form-group">
-                                    <a href="javascript:;"   class="btn btn-primary btn-fill" @click="save"
-                                    :disabled="isSubmitted"
-                                    >{{label}}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+              <div class="col-sm-12">
+                <hr>
+                  <div class="form-group">
+                      <button type="submit" class="btn btn-fill btn-primary pull-right" style="margin-bottom:25px;" :disabled="isSubmitted">{{mode == 'Add' ? 'Simpan' : 'Update'}}</button>
+                  </div>
+              </div>
             </div>
+          </form>
         </div>
     </div>
 </template>
@@ -190,7 +183,7 @@
           }
 
         },
-        toList() {
+        listSlider() {
           this.$router.push({name: 'slider-list-semakanan'})
         },
         onFileChanged(e) {

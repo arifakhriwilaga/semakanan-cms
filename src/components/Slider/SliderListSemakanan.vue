@@ -1,62 +1,61 @@
 <template>
     <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                      <div class="col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="title" style="margin: 0">List Slider seMakanan</h4>
-                      </div>
-                      <div class="col-md-4 col-sm-4 col-xs-12">
-                        <button class="btn btn-primary pull-right" @click="createSlider()" style="margin-bottom: 15px">Tambah Slider</button>
-                      </div>
-                      <div class="col-sm-4 col-sm-4 col-xs-12">
-                        <div class="pull-right">
-                          Filter
-                          <el-select
-                            class="select-primary"
-                            size="large"
-                            placeholder="Single Select"
-                            v-model="filterSlide">
-                            <el-option
-                              class="select-success"
-                              v-for="item in options"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                    </div>
-                    <p class="category">{{title}} </p>
-                </div>
-                <div class="card-content table-responsive table-full-width">
-                <el-table class="table-striped" :data="tableData">
-                    <el-table-column label="Caption" property="caption"></el-table-column>
-                    <el-table-column label="Image">
-                      <template slot-scope="props">
-                        <div class="img-container">
-                          <img :src="props.row.image" alt="Agenda" height="50">
-                        </div>
-                      </template>
-                    </el-table-column>
-                    <el-table-column label="Type" property="type"></el-table-column>
-                    <el-table-column
-                        :min-width="120"
-                        fixed="right"
-                        label="Actions">
-                        <template slot-scope="props">
-                            <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a> -->
-                            <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a>
-                            <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <pagination @paginate="page($event)" :pagination="pagination"></pagination>
+      <div class="col-md-12">
+        <h4 class="title pull-left">Slider</h4>
+        <button class="btn btn-primary pull-right" @click="createSlider()" style="margin-bottom: 15px">List</button>
 
-                </div>
+        <!-- <p class="category"></p> -->
+      </div>
+        <div class="col-md-12 card">
+          <div class="card-header">
+            <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar Slider</h4></div>
+          </div>
+          <div class="card-content row">
+            <div class="col-md-12">
+              <hr>
+              <button class="btn btn-primary" @click="createSlider()" style="margin-bottom: 15px">Tambah Slider</button>
+              <div class="pull-right">
+                Filter
+                <el-select
+                  class="select-primary"
+                  size="large"
+                  placeholder="Single Select"
+                  v-model="filterSlide">
+                  <el-option
+                    class="select-success"
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
             </div>
+            <div class="col-md-12">
+              <el-table class="table-striped" :data="tableData">
+                  <el-table-column label="Caption" property="caption"></el-table-column>
+                  <el-table-column label="Image">
+                    <template slot-scope="props">
+                      <div class="img-container">
+                        <img :src="props.row.image" alt="Agenda" height="50">
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="Type" property="type"></el-table-column>
+                  <el-table-column
+                      :min-width="120"
+                      fixed="right"
+                      label="Actions">
+                      <template slot-scope="props">
+                          <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a> -->
+                          <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a>
+                          <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
+                      </template>
+                  </el-table-column>
+              </el-table>
+              <pagination @paginate="page($event)" :pagination="pagination"></pagination>
+            </div>
+          </div>
         </div>
     </div>
 
@@ -208,7 +207,7 @@
         // if (indexToDelete >= 0) {
         //   this.tableData.splice(indexToDelete, 1)
         // }
-      },
+      }
     }
   }
 </script>

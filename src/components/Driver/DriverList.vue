@@ -118,11 +118,13 @@
           on_progress: null
         },
         pagination: {},
-        tableColumns: [{
-          prop: 'id',
-          label: 'ID',
-          minWidth: 50,
-        },{
+        tableColumns: [
+        // {
+        //   prop: 'id',
+        //   label: 'ID',
+        //   minWidth: 50,
+        // },
+        {
           prop: 'name',
           label: 'Name',
           minWidth: 75,

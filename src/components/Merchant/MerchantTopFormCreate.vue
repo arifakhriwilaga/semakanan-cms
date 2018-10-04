@@ -6,7 +6,7 @@
         </div>
 
         <!-- Form Input -->
-        <div class="col-md-6 card">
+        <div class="col-md-4 card">
             <div class="card-header">
                 <div class="card-title"><h4 style="margin-top:10px;">{{mode == 'Add' ? 'Tambah' : 'Ubah'}} Merchant Teratas</h4></div>
                 <hr>
@@ -14,10 +14,10 @@
             <form action="">
                 <div class="card-content">
                     <div class="row">
-                        <div class="col-md-offset-2 col-md-8 col-sm-8 col-xs-12">
+                        <div class="col-xs-12">
                             <div class="form-group">
                                 <label for="">Merchant</label>
-                                <el-select class="select-primary"
+                                <el-select style="padding-right:0px;padding-left:0px;width:100%" class="select-primary"
                                         size="large"
                                         placeholder="Pilih merchant"
                                         v-model="merchant.merchant_id">
@@ -31,7 +31,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Prioritas</label>
-                                <el-select class="select-primary"
+                                <el-select style="padding-right:0px;padding-left:0px;width:100%" class="select-primary col-md-12"
                                         size="large"
                                         placeholder="Pilih Prioritas"
                                         v-model="merchant.priority">
@@ -43,14 +43,11 @@
                                     </el-option>
                                 </el-select>
                             </div>
-                            <div class="form-group" v-if="!error">
-                                <button  class="btn btn-primary btn-fill" @click="save">Tambah Merchant Teratas</button>
-                            </div>
                         </div>
                         <div class="col-sm-12">
                             <hr>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-fill btn-primary pull-right" style="margin-bottom:25px;" :disabled="isSubmitted" @click="underConstruction()"> {{mode == 'Add' ? 'Simpan' : 'Update'}}</button>
+                                <button  class="btn btn-primary btn-fill pull-right" style="margin-bottom:25px;" @click="save" :disabled="isSubmitted">{{mode == 'Add' ? 'Simpan' : 'Update'}}</button>
                             </div>
                         </div>
                     </div>

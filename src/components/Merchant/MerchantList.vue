@@ -187,18 +187,31 @@
           cancelButtonClass: 'btn btn-danger btn-fill',
           buttonsStyling: false
         }).then(() => {
-          this.$store.dispatch('merchantDrop', row).then((res) => {
-          }).catch(er => console.log(er))
-        }, function (dismiss) {
-          if (dismiss === 'cancel') {
-            swal({
-              title: 'Dibatalkan',
-              text: 'Menghapus data dibatalkan',
-              type: 'error',
-              confirmButtonClass: 'btn btn-info btn-fill',
-              buttonsStyling: false
+          new Promise((resolve, reject) => {
+                // axios.delete(`merchants/${row.id}`).then((res) => {
+                axios.delete(`/api/merchants/${row.id}`).then((res) => {
+                    swal({
+                    title: 'Terhapus!',
+                    text: 'Data berhasil terhapus.',
+                    type: 'success',
+                    confirmButtonClass: 'btn btn-success btn-fill',
+                    buttonsStyling: false
+                    })
+                    this.getMerchants()
+                    // resolve();
+                }).catch((err) => {
+                  console.log(err);
+                    swal({
+                    title: 'Terjadi kesalahan',
+                    text: 'Menghapus data dibatalkan',
+                    type: 'error',
+                    confirmButtonClass: 'btn btn-info btn-fill',
+                    buttonsStyling: false
+                    })
+                    reject();
+                })
             })
-          }
+        }, function (dismiss) {
         })
       },
       handleShow(index, row) {

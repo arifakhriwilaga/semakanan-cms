@@ -1,18 +1,15 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title pull-left">Daftar Transaksi</h4>
+      <h4 class="title pull-left">Transaksi</h4>
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">Daftar Transaksi</div>
+        <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar Transaksi</h4></div>
       </div>
       <div class="card-content row">
-        <div class="col-sm-6">
-          <div class="pull-right">
-          </div>
-        </div>
         <div class="col-sm-12">
+          <hr>
           <el-table class="table-striped"
                     :data="tableData"
                     border
