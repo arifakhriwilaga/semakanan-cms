@@ -32,10 +32,10 @@ export default [
     icon: 'el-icon-service',
 
     children: [
-      {
-        name: 'Merchants',
-        path: '/helpdesks/merchants'
-      },
+      // {
+      //   name: 'Merchants',
+      //   path: '/helpdesks/merchants'
+      // },
       {
         name: 'Kost',
         path: '/helpdesks/kosts'
