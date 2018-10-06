@@ -22,7 +22,7 @@
         <div class="col-lg-12 col-sm-12">
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title"><b>SeMakan Admin Panel</b><p>Selamat datang di dashboard SeMakan</p></h4>
+              <h4 class="card-title"><b>seMakanan Admin Panel</b><p>Selamat datang di dashboard seKampus Makanan</p></h4>
               <p class="category"></p>
             </div>
             <div class="card-content">

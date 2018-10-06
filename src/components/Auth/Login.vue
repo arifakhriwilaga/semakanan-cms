@@ -25,33 +25,37 @@
           <div class="container">
             <div class="row">
               <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                
                 <form @submit.prevent="login()">
                   <div class="card" data-background="color" data-color="blue">
+
                     <div class="card-header">
-                      <h3 class="card-title">Login</h3>
+                      <h3 class="card-title" style="text-align:center">SeMakanan Admin</h3>
                     </div>
+
                     <div class="card-content">
                       <div class="form-group">
-                        <label>Email address</label>
-                        <input type="email" placeholder="Enter email" class="form-control input-no-border" v-model="email">
+                        <input type="email" placeholder="Email" class="form-control input-no-border" v-model="email" v-validate="'required'" name="email">
+                        <span>{{ errors.first('email') }}</span>
                       </div>
                       <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" placeholder="Password" class="form-control input-no-border" v-model="password">
+                        <input type="password" placeholder="Password" class="form-control input-no-border" v-model="password" v-validate="'required'" name="password">
+                        <span>{{ errors.first('password') }}</span>                      
                       </div>
                     </div>
+
                     <div class="card-footer text-center">
-                      <button type="submit" class="btn btn-fill btn-wd ">Let's go</button>
+                      <button type="submit" class="btn btn-fill btn-wd ">Login</button>
                       <div class="forgot">
-                        <!-- <router-link to="/register"> -->
                         <a class="cursor-pointer" @click="toRegister()">
                           Forgot your password?
                         </a>
-                        <!-- </router-link> -->
                       </div>
                     </div>
+
                   </div>
                 </form>
+
               </div>
             </div>
           </div>
@@ -60,15 +64,15 @@
         <footer class="footer footer-transparent">
           <div class="container">
             <div class="copyright">
-              &copy; Copy Right
-              <i class="fa fa-heart heart"></i> by
-              seKampus
+              &copy; Copy Right <i class="fa fa-heart heart"></i> by seKampus
             </div>
           </div>
         </footer>
-        <div class="full-page-background" style="background-image: url(static/img/background/background-2.jpg) "></div>
+        <div class="full-page-background" style="background-image: url(static/img/background/background6.png) "></div>
       </div>
+      <spinner :showSpinner="statusSpinner"></spinner>
     </div>
+    
   </div>
 </template>
 <script>
@@ -76,7 +80,8 @@
     data() {
       return {
         email: "",
-        password: ""
+        password: "",
+        statusSpinner: false
       }
     },
     created() {
@@ -91,22 +96,30 @@
         document.body.classList.remove('off-canvas-sidebar')
       },
       login () {
-        this.$store.dispatch('login', {
-          email: this.email,
-          password: this.password
-        }).then(() => {
-          this.$router.push('/');
-        }).catch(() => {
-          this.$notify(
-          {
-            component: {
-              template: `<span><b>Email</b> atau <b>Password</b> salah!</span>`
-            },
-            icon: 'ti-warning',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'danger'
-          })
+        this.$validator.validateAll().then(() => {
+          if (!this.errors.any()) {
+            this.statusSpinner = true;
+
+            this.$store.dispatch('login', {
+              email: this.email,
+              password: this.password
+            }).then(() => {
+              this.$router.push('/');
+
+            }).catch(() => {
+              this.statusSpinner = false;
+              this.$notify(
+              {
+                component: {
+                  template: `<span><b>Email</b> atau <b>Password</b> salah!</span>`
+                },
+                icon: 'ti-warning',
+                horizontalAlign: 'right',
+                verticalAlign: 'top',
+                type: 'danger'
+              })
+            })
+          }
         })
       },
       toRegister: function () {
@@ -118,6 +131,7 @@
       },
     },
     beforeDestroy () {
+      this.statusSpinner = false;
       this.closeMenu()
     }
   }

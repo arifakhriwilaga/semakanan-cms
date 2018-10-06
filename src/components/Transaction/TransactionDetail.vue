@@ -4,6 +4,7 @@
       <h4 class="title pull-left">{{title}}</h4>
       <button class="btn btn-primary pull-right" @click="toListTransaction()" style="margin-bottom: 15px">List</button>
     </div>
+
     <div class="col-md-12 card">
       <div class="card-header">
         <h4><b>Order <span class="badge badge-secondary">{{transaction.status}}</span></b> <el-button type="primary" icon="el-icon-edit" class="pull-right" circle @click="toEditTransaction()"></el-button></h4>
@@ -12,11 +13,11 @@
         <div class="col-md-6">
           <h5><b>Customer </b></h5>
           <div class="form-group">
-            {{ (transaction.user) ? transaction.user.name : '-'  || '-'}}
+            {{ (transaction.user) ? transaction.user.name : '-' }}
           </div>
           <h5><b>Driver </b></h5>
           <div class="form-group">
-            {{ (transaction.driver) ? transaction.driver.name : '-'  || '-'}}
+            {{ (transaction.driver) ? transaction.driver.name : '-' }}
           </div>
         </div>
         <div class="col-md-6">
@@ -37,16 +38,16 @@
           <hr>
           <div class="row" style="margin:0px">
             <h5 class="pull-left">Daftar Merchant :</h5>
-            <el-button type="success" class="pull-right" :name="'process-all'" @click="processAllMerchant()">Process Semua</el-button>
-            <el-button type="danger" class="pull-right" :name="'cancel-all'" style="margin-right:5px" @click="cancelAllMerchant()">Cancel Semua</el-button>
+            <!-- <el-button type="success" class="pull-right" :name="'process-all'" @click="processAllMerchant()">Process Semua</el-button> -->
+            <el-button type="danger" class="pull-right" :name="'cancel-all'" style="margin-right:5px" @click="cancelAllMerchant()" v-if="(transaction.status == 'Waiting')">Cancel Semua</el-button>
           </div>
           <el-collapse class="panel-group">
             <el-collapse-item v-for="(chart, index) in transaction.carts" :key="index" :title="chart.merchant.name" :name="index">
               <div class="card-content">
                 <div class="row">
                 <div class="col-md-12" style="margin-bottom: 15px">
-                  <el-button type="success" class="pull-right" :name="'process'+index" :id="'process'+index" @click="processMerchant(index, chart)">Process</el-button>
-                  <el-button type="danger" class="pull-right" :name="'cancel'+index" :id="'process'+index" style="margin-right:5px" @click="cancelMerchant(index, chart)">Cancel</el-button>
+                  <el-button type="success" class="pull-right" :name="'process'+index" :id="'process'+index" @click="processMerchant(chart)" v-if="(chart.status == 'Waiting')">Process</el-button>
+                  <el-button type="danger" class="pull-right" :name="'cancel'+index" :id="'process'+index" style="margin-right:5px" @click="cancelMerchant(chart)" v-if="(chart.status == 'Waiting')">Cancel</el-button>
                 </div>
                 <div class="col-md-8 card">
                   <div class="form-group">
@@ -55,7 +56,7 @@
                   </div>
                   <div class="form-group">
                     <h6>Waktu Kirim</h6>
-                    {{ chart.waktu_kirim | '-' }}
+                    {{ chart.waktu_kirim || '-' }}
                   </div>
                   <div class="form-group">
                     <h6>Alamat User</h6>
@@ -74,11 +75,11 @@
                   </div>
                   <div class="form-group">
                     <h6>Total M Harga</h6>
-                    {{ formatPrice('id', chart.total_m_price) || '-'}}
+                    {{ formatPrice('id', chart.total_m_price)}}
                   </div>
                   <div class="form-group">
                     <h6>Total Harga</h6>
-                    {{ formatPrice('id', chart.total_price) || '-'}}
+                    {{ formatPrice('id', chart.total_price)}}
                   </div>
                 </div>
 
@@ -104,6 +105,8 @@
         </div>
       </div>
    </div>
+
+    <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
   </div>
 </template>
 <script>
@@ -137,16 +140,19 @@
       return {
         title: '',
         transaction: {},
-        moment: moment
+        moment: moment,
+        statusSpinner: false
       }
     },
     methods: {
       // get related data
       getTransaction() {
+        this.statusSpinner = true;
         axios.get(`/api/transactions/${this.$router.currentRoute.params.id}`).then(res => {
+            this.statusSpinner = false;
             this.transaction = res.data.data;
 
-            this.meta_pagination = res.data.meta.pagination;
+            // this.meta_pagination = res.data.meta.pagination;
         }).catch(err => {
           this.$notify({
               component: {
@@ -186,11 +192,52 @@
       },
 
       // action
-      processAllMerchant(){
-        console.log(this.transaction);
+      processMerchant(row){
+        swal({
+          title: 'Informasi',
+          text: 'Anda ingin memproses merchant ini?',
+          type: 'info',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'close',
+        }).then(() => {
+          this.statusSpinner = true;
+          axios.patch(`/api/transactions/${this.$router.currentRoute.params.id}/cart/${row.id}`).then((resp) => {
+            if (resp.status == 200) {
+              this.statusSpinner = false;
+              this.$notify({
+              component: {
+                  template: `<span>`+ resp.data.meta.message +`</span>`
+              },
+              icon: 'ti-alert',
+              horizontalAlign: 'right',
+              verticalAlign: 'top',
+              type: 'success'
+              });
+            }
+            this.getTransaction();
+
+          }).catch((err) => { this.statusSpinner = false; this.showModalError()});
+        });
       },
       cancelAllMerchant(){
-        axios.patch(`/api/transactions/${this.$router.currentRoute.params.id}/cancel`).then(res => {
+        swal({
+          title: 'Perhatian!',
+          text: 'Semua merchant akan dibatalkan!',
+          type: 'warning',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'close',
+        }).then(() => {
+          this.statusSpinner = true;
+          axios.patch(`/api/transactions/${this.$router.currentRoute.params.id}/cancel`).then(res => {
+            this.statusSpinner = false;
             this.$notify({
               component: {
                   template: `<span>Transaksi berhasil dibatalkan!</span>`,
@@ -199,59 +246,63 @@
               horizontalAlign: 'right',
               verticalAlign: 'top',
               type: 'success'
-          });
-          this.$router.reload();
-          // this.getTransaction();
+            });
+            this.toListTransaction();
 
-            // this.transaction = res.data.data;
-            // this.meta_pagination = res.data.meta.pagination;
-        }).catch(err => {
-          this.$notify({
-              component: {
-                  template: `<span>Terjadi kesalahan, Transaksi gagal dibatalkan!</span>`,
-              },
-              icon: 'ti-alert',
-              horizontalAlign: 'right',
-              verticalAlign: 'top',
-              type: 'danger'
-          })
-          this.$router.reload();
-          // this.getTransaction();
-        })      
+          }).catch((err) => {this.statusSpinner = false; this.showModalError()});
+        }); 
       },
-      processMerchant(index, chart) {
-        // console.log('index',index);
-        // console.log('chart',chart);
-      },
-      cancelMerchant(index, chart) {
-        axios.patch(`/api/transactions/${this.$router.currentRoute.params.id}/cart/${chart.id}/cancel`).then(res => {
+      cancelMerchant(chart) {
+        swal({
+          title: 'Perhatian!',
+          text: 'Anda ingin membatalkan merchant ini?',
+          type: 'warning',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'close',
+        }).then(() => {
+          this.statusSpinner = true;
+          axios.patch(`/api/transactions/${this.$router.currentRoute.params.id}/cart/${chart.id}/cancel`).then(res => {
+            this.statusSpinner = false;
             this.$notify({
-              component: {
-                  template: `<span>Chart berhasil dibatalkan!</span>`,
-              },
-              icon: 'ti-alert',
-              horizontalAlign: 'right',
-              verticalAlign: 'top',
-              type: 'success'
-          });
-          // this.$router.reload();
-          this.getTransaction();
+                component: {
+                    template: `<span>Chart berhasil dibatalkan!</span>`,
+                },
+                icon: 'ti-alert',
+                horizontalAlign: 'right',
+                verticalAlign: 'top',
+                type: 'success'
+            });
+            // this.$router.reload();
+            this.toListTransaction();
 
-            // this.transaction = res.data.data;
-            // this.meta_pagination = res.data.meta.pagination;
-        }).catch(err => {
-          this.$notify({
-              component: {
-                  template: `<span>Terjadi kesalahan, Chart gagal dibatalkan!</span>`,
-              },
-              icon: 'ti-alert',
-              horizontalAlign: 'right',
-              verticalAlign: 'top',
-              type: 'danger'
-          })
-          // this.$router.reload();
+              // this.transaction = res.data.data;
+              // this.meta_pagination = res.data.meta.pagination;
+          }).catch((err) => {this.statusSpinner = false; this.showModalError()});
+        });
+      },
+
+      showModalError(){
+        swal({
+          title: 'Terjadi kesalahan',
+          text: 'Retry request',
+          type: 'error',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'Cancel',
+        }).then(() => {
+        
           this.getTransaction();
-        })
+        
+        }, function (dismiss) {
+          // this code dismiss condition
+        });
       }
     }
   }

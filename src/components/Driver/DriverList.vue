@@ -41,8 +41,8 @@
                 fixed="right"
                 label="Actions">
                 <template slot-scope="props">
-                  <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
-                  <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
+                  <i style="padding-left: 0px;padding-right: 10px;font-size: 22px;margin-top: 1px;" class="el-icon-delete btn btn-simple btn-lg btn-danger btn-icon remove" @click="handleDelete(props.$index, props.row)"></i>
+                  <i style="padding-left:0px;padding-right:0px;font-size: 22px;margin-top: 1px;" class="el-icon-edit-outline btn btn-simple btn-lg btn-info btn-icon"  @click="handleShow(props.$index, props.row)"></i>
                 </template>
               </el-table-column>
 
@@ -51,6 +51,8 @@
           </div>
       </div>
     </div>
+
+    <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
   </div>
 </template>
 <script>
@@ -60,52 +62,9 @@
 
   export default{
     components: {Pagination, swal},
-    created(){
-      this.getDrivers();
-    },
-    methods: {
-      getDrivers(){
-        axios.get('/api/drivers').then(resp=>{
-           if (resp.status==200){
-            this.tableData = resp.data.data;
-            this.pagination = resp.data.meta.paging;
-          }
-        });
-      },
-      handleDelete(index, row){
-        swal({
-          title: 'Apakah anda yakin?',
-          text: 'Driver akan dihapus.',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Ya, hapus!',
-          cancelButtonText: 'Tidak, simpan!',
-          confirmButtonClass: 'btn btn-success btn-fill',
-          cancelButtonClass: 'btn btn-danger btn-fill',
-          buttonsStyling: false
-        }).then(() => {
-          axios.delete('/api/drivers/' + row.id).then((res) => {
-            if (res.status==204){
-              this.getDrivers();
-            }
-
-          }).catch(er => console.log(er))
-        }, function (dismiss) {
-          if (dismiss === 'cancel') {
-            swal({
-              title: 'Dibatalkan',
-              text: 'Menghapus data dibatalkan',
-              type: 'error',
-              confirmButtonClass: 'btn btn-info btn-fill',
-              buttonsStyling: false
-            })
-          }
-        })
-      },
-      handleShow(){}
-    },
     data(){
       return {
+        statusSpinner: false,
         tableData: [],
         driver: {
           id: null,
@@ -142,6 +101,71 @@
           minWidth: 75,
         }],
       }
+    },
+    created(){
+      this.getDrivers();
+    },
+    methods: {
+      getDrivers(){
+        this.statusSpinner = true;
+        this.tableData = [];
+        axios.get('/api/drivers').then(resp=>{
+          if (resp.status==200){
+            this.statusSpinner = false;
+            this.tableData = resp.data.data;
+            this.pagination = resp.data.meta.paging;
+          }
+        }).catch(err => {
+          this.statusSpinner = false;
+          this.showModalError();
+        });
+      },
+      handleDelete(index, row){
+        swal({
+          title: 'Apakah anda yakin?',
+          text: 'Driver akan dihapus.',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, hapus!',
+          cancelButtonText: 'Tidak, simpan!',
+          confirmButtonClass: 'btn btn-success btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          buttonsStyling: false
+        }).then(() => {
+          axios.delete('/api/drivers/' + row.id).then((res) => {
+            if (res.status==204){
+              this.getDrivers();
+            }
+
+          }).catch(err => {
+            this.statusSpinner = false;
+            this.showModalError();
+          })
+        }, function (dismiss) {
+          // this code dismiss condition          
+        })
+      },
+      handleShow(){},
+      showModalError(){
+        swal({
+          title: 'Terjadi kesalahan',
+          text: 'Retry request',
+          type: 'error',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'Cancel',
+        }).then(() => {
+        
+          this.getDrivers();
+        
+        }, function (dismiss) {
+          // this code dismiss condition
+        });
+      }
     }
+    
   }
 </script>

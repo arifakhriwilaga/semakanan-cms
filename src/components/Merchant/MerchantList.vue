@@ -4,6 +4,7 @@
       <h4 class="title pull-left">Merchant</h4>
       <!-- <p class="category"></p> -->
     </div>
+
     <div class="col-md-12 card">
       <div class="card-header">
         <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar Merchant</h4></div>
@@ -44,13 +45,24 @@
                              :label="column.label">
             </el-table-column>
             <el-table-column
-              :min-width="180"
+              :min-width="210"
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <p-checkbox v-model="props.row.info.is_open" @change="alert('hi')">Buka</p-checkbox>
-                <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
-                <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
+                <div class="col-md-6" style="padding-left:8px;padding-right:0px;padding-top:8px">
+                  <el-switch
+                    v-model="props.row.info.is_open"
+                    active-text=""
+                    inactive-text="Buka" @change="openMerchant(props.row)">
+                  </el-switch>
+                  
+                  <!-- <p-switch v-model="props.row.info.is_open" type="primary" on-text="Buka" off-text="Tutup"></p-switch> -->
+                  <!-- <el-tooltip effect="dark" :content="'Buka'" placement="top">
+                    <p-checkbox v-model="props.row.info.is_open" @change="openMerchant(props.row)"></p-checkbox>
+                  </el-tooltip> -->
+                </div>
+                  <i style="padding-left: 10px;padding-right: 10px;font-size: 22px;margin-top: 1px;" class="el-icon-delete btn btn-simple btn-lg btn-danger btn-icon remove" @click="handleDelete(props.$index, props.row)"></i>
+                  <i style="padding-left:0px;padding-right:0px;font-size: 22px;margin-top: 1px;" class="el-icon-edit-outline btn btn-simple btn-lg btn-info btn-icon"  @click="handleShow(props.$index, props.row)"></i>
               </template>
             </el-table-column>
           </el-table>
@@ -58,12 +70,14 @@
         </div>
       </div>
     </div>
+
+    <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import axios from 'axios'
-  import {Table, TableColumn, Select, Option} from 'element-ui'
+  import {Table, TableColumn, Select, Option, Tooltip, Switch} from 'element-ui'
 
   import Pagination from 'src/components/Base/Pagination.vue'
   import swal from 'sweetalert2'
@@ -73,17 +87,21 @@
   Vue.use(TableColumn)
   Vue.use(Select)
   Vue.use(Option)
+  Vue.use(Tooltip)
+  Vue.use(Switch)
   export default{
     components: {
       Pagination
     },
     created() {
+      this.statusSpinner = true;
       this.getMerchants();
     },
     watch:{
       "switches.defaultOn": function(newVal, oldVal){
       },
       filterStore: function(newVal, oldVal){
+        this.tempFilterStore = newVal;
         switch (newVal){
           case "all" : this.getMerchants(); break;
           case "opened": this.getMerchants(null, "/api/merchants?is_open=true");break;
@@ -94,9 +112,11 @@
     },
     data () {
       return {
+        tempFilterStore: '',
+        statusSpinner: true,
         switches: {
          defaultOn: true,
-       },
+        },
         pagination: {
         },
         options: [{
@@ -146,8 +166,33 @@
       }
     },
     methods: {
-      changeState(event){
-        console.log(event);
+      // changeState(event){
+      //   console.log(event);
+      // },
+      openMerchant(row){
+        this.statusSpinner = true;
+        axios.patch(`/api/merchants/${row.id}/state`).then((resp) => {
+          if (resp.status == 200) {
+            this.statusSpinner = false;
+            this.$notify({
+            component: {
+                template: `<span>`+ resp.data.meta.message +`</span>`
+            },
+            icon: 'ti-alert',
+            horizontalAlign: 'right',
+            verticalAlign: 'top',
+            type: 'success'
+            });
+          }
+          switch (this.tempFilterStore){
+            case "all" : this.getMerchants(); break;
+            case "opened": this.getMerchants(null, "/api/merchants?is_open=true");break;
+            case "closed": this.getMerchants(null, "/api/merchants?is_open=false");break;
+            default: this.getMerchants(); break;
+          }
+          // this.getMerchants();
+
+        }).catch((err) => { this.statusSpinner = false; this.showModalError()});
       },
       page(val) {
         this.getMerchants({}, this.pagination[val]);
@@ -159,15 +204,19 @@
         this.$router.push({ name: 'merchant-create'})
       },
       getMerchants(params=null, path=null){
+        this.tableData = [];
         if (path==null){
           path='/api/merchants';
         }
+        this.statusSpinner = true;        
         axios.get(path, {params:params} ).then((resp) => {
           if (resp.status == 200) {
             this.tableData = resp.data.data;
             this.pagination  = resp.data.meta.paging;
+            this.statusSpinner = false;
           }
-        })
+
+        }).catch((err) => {this.statusSpinner = false; this.showModalError()});
       },
       handleTop (index, row) {
         this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
@@ -187,31 +236,33 @@
           cancelButtonClass: 'btn btn-danger btn-fill',
           buttonsStyling: false
         }).then(() => {
+          this.statusSpinner = true;
           new Promise((resolve, reject) => {
-                // axios.delete(`merchants/${row.id}`).then((res) => {
-                axios.delete(`/api/merchants/${row.id}`).then((res) => {
-                    swal({
-                    title: 'Terhapus!',
-                    text: 'Data berhasil terhapus.',
-                    type: 'success',
-                    confirmButtonClass: 'btn btn-success btn-fill',
-                    buttonsStyling: false
-                    })
-                    this.getMerchants()
-                    // resolve();
-                }).catch((err) => {
-                  console.log(err);
-                    swal({
-                    title: 'Terjadi kesalahan',
-                    text: 'Menghapus data dibatalkan',
-                    type: 'error',
-                    confirmButtonClass: 'btn btn-info btn-fill',
-                    buttonsStyling: false
-                    })
-                    reject();
+            axios.delete(`/api/merchants/${row.id}`).then((res) => {
+                this.statusSpinner = false;
+                swal({
+                title: 'Terhapus!',
+                text: 'Data berhasil terhapus.',
+                type: 'success',
+                confirmButtonClass: 'btn btn-success btn-fill',
+                buttonsStyling: false
                 })
+                this.getMerchants()
+                // resolve();
+            }).catch((err) => {
+              this.statusSpinner = false;
+              swal({
+                title: 'Terjadi kesalahan',
+                text: 'Menghapus data dibatalkan',
+                type: 'error',
+                confirmButtonClass: 'btn btn-info btn-fill',
+                buttonsStyling: false
+              })
+              reject();
             })
+          })
         }, function (dismiss) {
+          // this code dismiss condition
         })
       },
       handleShow(index, row) {
@@ -230,11 +281,14 @@
           confirmButtonText: 'Yes!',
           buttonsStyling: false
         }).then(function () {
+          this.statusSpinner = false;
+
           // let service = orderService.changeState(row.id, {
           //   'order_status': row.order_status
           // });
           // service.then(response => {
           //   if (response.status == 200) {
+                    // this.statusSpinner = false;
           //     swal({
           //       title: 'Success!',
           //       text: 'Status Order: ' + row.order_status,
@@ -242,14 +296,36 @@
           //       confirmButtonClass: 'btn btn-success btn-fill',
           //       buttonsStyling: false
           //     }, function () {
+                    // this.statusSpinner = true;
           //       this.getOrders();
           //     });
           //   }
           // });
-        }).catch(()=>{
+        }).catch((err)=>{
+          this.statusSpinner = false;
           // this.getOrders();
         });
       },
+      showModalError(){
+        swal({
+          title: 'Terjadi kesalahan',
+          text: 'Retry request',
+          type: 'error',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'Cancel',
+        }).then(() => {
+        
+          this.getMerchants();
+        
+        }, function (dismiss) {
+          // this code dismiss condition
+        });
+        
+      }
     }
   }
 </script>

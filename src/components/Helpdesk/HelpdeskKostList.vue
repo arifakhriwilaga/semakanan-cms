@@ -41,6 +41,7 @@
       </div>
     </div>
 
+    <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
   </div>
 </template>
 <script>
@@ -77,6 +78,7 @@
     },
     data () {
       return {
+        statusSpinner: false,
         switches: {
          defaultOn: true,
        },
@@ -120,12 +122,18 @@
         if (path==null){
           path='/api/kosts';
         }
+        this.statusSpinner = true;
+        this.tableData = [];
         axios.get(path, {params:params} ).then((resp) => {
           if (resp.status == 200) {
+            this.statusSpinner = false;
             this.tableData = resp.data.data;
             this.pagination  = resp.data.meta.paging;
           }
-        })
+        }).catch(err => {
+          this.statusSpinner = false;
+          this.showModalError();
+        });
       },
       // handleTop (index, row) {
       //   this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
@@ -148,15 +156,7 @@
           this.$store.dispatch('merchantDrop', row).then((res) => {
           }).catch(er => console.log(er))
         }, function (dismiss) {
-          if (dismiss === 'cancel') {
-            swal({
-              title: 'Dibatalkan',
-              text: 'Menghapus data dibatalkan',
-              type: 'error',
-              confirmButtonClass: 'btn btn-info btn-fill',
-              buttonsStyling: false
-            })
-          }
+          
         })
       },
       handleShow(index, row) {
@@ -195,6 +195,26 @@
           // this.getOrders();
         });
       },
+      showModalError(){
+        swal({
+          title: 'Terjadi kesalahan',
+          text: 'Retry request',
+          type: 'error',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'Cancel',
+        }).then(() => {
+        
+          this.getKost();
+        
+        }, function (dismiss) {
+          // this code dismiss condition
+        });
+        
+      }
     }
   }
 </script>

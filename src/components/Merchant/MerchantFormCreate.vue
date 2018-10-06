@@ -250,7 +250,7 @@
             saveForm () {
 
               this.$validator.validateAll().then(() => {
-                console.log(this.errors.any());
+                // console.log(this.errors.any());
                 if (!this.errors.any()) {
 
                   this.isSubmitted = true;

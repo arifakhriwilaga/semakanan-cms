@@ -51,7 +51,7 @@
               <template slot-scope="props">
                 <!-- <p-checkbox v-model="props.row.info.is_open" @change="alert('hi')">Buka</p-checkbox> -->
                 <!-- <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a> -->
-                <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
+                <i style="padding-left:0px;padding-right:0px;font-size: 22px;margin-top: 1px;" class="el-icon-edit-outline btn btn-simple btn-lg btn-info btn-icon"  @click="handleShow(props.$index, props.row)"></i>
               </template>
             </el-table-column>
           </el-table>
@@ -59,6 +59,8 @@
         </div>
       </div>
     </div>
+
+    <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
   </div>
 </template>
 <script>
@@ -95,9 +97,10 @@
     },
     data () {
       return {
+        statusSpinner: false,
         switches: {
          defaultOn: true,
-       },
+        },
         pagination: {
         },
         options: [{
@@ -113,7 +116,7 @@
         filterStore: 'all',
         tableColumns: [
           {
-            prop: 'total_pembayaran',
+            prop: 'total_payment',
             label: 'Total Pembayaran',
             minWidth: 200
           },
@@ -145,18 +148,46 @@
         if (path==null){
           path='/api/histories';
         }
+
+        this.tableData = [];
+        this.statusSpinner = true;
+
         axios.get(path, {params:params} ).then((resp) => {
           if (resp.status == 200) {
+            this.statusSpinner = false;
             this.tableData = resp.data.data;
             this.pagination  = resp.data.meta.paging;
           }
-        })
+        }).catch(err => {
+          this.statusSpinner = false;
+          this.showModalError();
+        });
       },
       handleShow(index, row) {
         this.$router.push({name: 'history-detail', params: {
           id: row.id
         }})
       },
+      showModalError(){
+        swal({
+          title: 'Terjadi kesalahan',
+          text: 'Retry request',
+          type: 'error',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'Cancel',
+        }).then(() => {
+        
+          this.getHistories();
+        
+        }, function (dismiss) {
+          // this code dismiss condition
+        });
+        
+      }
     }
   }
 </script>

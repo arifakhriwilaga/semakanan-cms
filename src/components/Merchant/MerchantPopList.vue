@@ -24,7 +24,7 @@
                             <template slot-scope="props">
                                 <!-- <a class="btn btn-simple btn-xs btn-info btn-icon like" @click="handleTop(props.$index, props.row)"><i class="ti-heart"></i></a>
                                 <a class="btn btn-simple btn-xs btn-warning btn-icon edit" @click="handleEdit(props.$index, props.row)"><i class="ti-pencil-alt"></i></a> -->
-                                <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
+                                <i style="padding-left: 0px;padding-right: 10px;font-size: 22px;margin-top: 1px;" class="el-icon-delete btn btn-simple btn-lg btn-danger btn-icon remove" @click="handleDelete(props.$index, props.row)"></i>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -32,6 +32,8 @@
                 </div>
             </div>
         </div>
+
+        <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
     </div>
 
 </template>
@@ -54,6 +56,7 @@
     },
     data () {
       return {
+        statusSpinner: false,
         pagination: {
         },
         tableData: []
@@ -64,33 +67,37 @@
         this.getList({}, this.pagination[val]);
       },
       getList(params=null, path=null) {
-          if (path==null){
-            path='/api/merchants/pop';
-          }
-          axios.get(path, params).then(res => {
-                this.tableData = res.data.data;
-                this.pagination  = res.data.meta.paging;
-            }).catch(err => {
-                this.$notify({
-                    component: {
-                        template: `<span>Terjadi kesalahan!</span>`,
-                    },
-                    icon: 'ti-alert',
-                    horizontalAlign: 'right',
-                    verticalAlign: 'top',
-                    type: 'danger'
-                })
-            })
+        if (path==null){
+        path='/api/merchants/pop';
+        }
+        
+        this.tableData = [];
+        this.statusSpinner = true,
+        axios.get(path, params).then(res => {
+            this.statusSpinner = false,
+
+            this.tableData = res.data.data;
+            this.pagination  = res.data.meta.paging;
+        }).catch(err => {
+            this.statusSpinner = false,
+            this.showModalError();
+            // this.$notify({
+            //     component: {
+            //         template: `<span>Terjadi kesalahan!</span>`,
+            //     },
+            //     icon: 'ti-alert',
+            //     horizontalAlign: 'right',
+            //     verticalAlign: 'top',
+            //     type: 'danger'
+            // })
+        })
       },
-      createMerchant() {
-        // this.$router.push({ name: 'merchant-create'})
-      },
-      handleTop (index, row) {
-        // this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
-      },
-      handleEdit (index, row) {
-        // this.$router.push({ name: 'merchant-edit', params: {id: row.id}});
-      },
+    //   handleTop (index, row) {
+    //     this.$router.push({ name: 'merchant-top-create', params: {id: row.id}});
+    //   },
+    //   handleEdit (index, row) {
+    //     this.$router.push({ name: 'merchant-edit', params: {id: row.id}});
+    //   },
       handleDelete (index, row) {
         swal({
           title: 'Apakah anda yakin?',
@@ -140,6 +147,26 @@
       },
       createMerchantPop() {
           this.$router.push({name: 'merchant-pop-create'})
+      },
+      showModalError(){
+        swal({
+          title: 'Terjadi kesalahan',
+          text: 'Retry request',
+          type: 'error',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'Cancel',
+        }).then(() => {
+        
+          this.getList();
+        
+        }, function (dismiss) {
+          // this code dismiss condition
+        });
+        
       }
     }
   }

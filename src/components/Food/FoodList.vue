@@ -12,9 +12,7 @@
         <div class="col-sm-12">
           <hr>
           <button class="btn btn-primary" @click="createFood()">Tambah</button>
-        <!-- </div> -->
 
-        <!-- <div class="col-sm-4"> -->
           <div class="pull-right">
             <label>
               <input @keyup.enter="search" type="search" placeholder="Search records"
@@ -43,8 +41,8 @@
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a>
-                <a class="btn btn-simple btn-xs btn-info btn-icon"  @click="handleShow(props.$index, props.row)"><i class="ti-arrow-right"></i></a>
+                <i style="padding-left: 0px;padding-right: 10px;font-size: 22px;margin-top: 1px;" class="el-icon-delete btn btn-simple btn-lg btn-danger btn-icon remove" @click="handleDelete(props.$index, props.row)"></i>
+                <i style="padding-left:0px;padding-right:0px;font-size: 22px;margin-top: 1px;" class="el-icon-edit-outline btn btn-simple btn-lg btn-info btn-icon"  @click="handleShow(props.$index, props.row)"></i>
               </template>
             </el-table-column>
           </el-table>
@@ -52,6 +50,8 @@
         </div>
       </div>
     </div>
+
+    <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
   </div>
 </template>
 <script>
@@ -68,6 +68,7 @@
     },
     data(){
       return{
+        statusSpinner: false,
         tableData: [],
         pagination: {},
         tableColumns: [
@@ -113,13 +114,19 @@
         if (path==null){
           path='/api/foods';
         }
+        this.tableData = [];
+        this.statusSpinner = true;
         axios.get(path, {params:params} ).then((resp)=>{
           if (resp.status==200){
+            this.statusSpinner = false;
 
             this.tableData = resp.data.data;
             this.pagination = resp.data.meta.paging;
           }
-        })
+        }).catch(err => {
+          this.statusSpinner = false;
+          this.showModalError();
+        });
       },
       createFood(){
         this.$router.push({ name: 'food-create'})
@@ -127,7 +134,7 @@
       handleShow(index, row){
          this.$router.push({name: 'food-detail', params: {id: row.id}})
       },
-       handleDelete (index, row) {
+      handleDelete (index, row) {
         swal({
           title: 'Apakah anda yakin?',
           text: 'Data tidak akan dapat dikembalikan lagi.',
@@ -139,23 +146,62 @@
           cancelButtonClass: 'btn btn-danger btn-fill',
           buttonsStyling: false
         }).then(() => {
+          
           axios.delete('/api/foods/' + row.id).then(res=>{
-            this.getFoods();
-          }).catch(err=>{
-            alert(err);
-          })
-        }, function (dismiss) {
-          if (dismiss === 'cancel') {
             swal({
-              title: 'Dibatalkan',
+              title: 'Terhapus!',
+              text: 'Data berhasil terhapus.',
+              type: 'success',
+              confirmButtonClass: 'btn btn-success btn-fill',
+              buttonsStyling: false
+            });
+            this.getFoods();
+          
+          }).catch(err=>{
+            
+            swal({
+              title: 'Terjadi kesalahan',
               text: 'Menghapus data dibatalkan',
               type: 'error',
               confirmButtonClass: 'btn btn-info btn-fill',
               buttonsStyling: false
             })
-          }
+            reject();
+            
+          })
+        }, function (dismiss) {
+          // this code dismiss condition
+          // if (dismiss === 'cancel') {
+          //   swal({
+          //     title: 'Dibatalkan',
+          //     text: 'Menghapus data dibatalkan',
+          //     type: 'error',
+          //     confirmButtonClass: 'btn btn-info btn-fill',
+          //     buttonsStyling: false
+          //   })
+          // }
         })
       },
+      
+      showModalError(){
+        swal({
+          title: 'Terjadi kesalahan',
+          text: 'Retry request',
+          type: 'error',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'Cancel',
+        }).then(() => {
+        
+          this.getFoods();
+        
+        }, function (dismiss) {
+          // this code dismiss condition
+        });
+      }
     }
   }
 </script>

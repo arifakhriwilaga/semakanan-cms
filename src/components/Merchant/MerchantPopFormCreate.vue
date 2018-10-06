@@ -25,7 +25,7 @@
                                                 class="select-danger"
                                                 :value="option.value"
                                                 :label="option.label"
-                                                :key="option.label">
+                                                :key="option.value">
                                     </el-option>
                                 </el-select>
                             </div>
@@ -39,7 +39,7 @@
                                                 class="select-danger"
                                                 :value="option.value"
                                                 :label="option.label"
-                                                :key="option.label">
+                                                :key="option.value">
                                     </el-option>
                                 </el-select>
                             </div>
@@ -152,7 +152,6 @@
         mounted () {
             axios.get(`/api/merchants`).then(res => {
                 for (let index = 0; index < res.data.data.length; index++) {
-                    console.log(res.data.data[index])
                     this.merchant_options.push({
                         value: res.data.data[index].id,
                         label: res.data.data[index].name
