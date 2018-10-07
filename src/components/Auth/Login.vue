@@ -18,8 +18,7 @@
     </nav> -->
 
     <div class="wrapper wrapper-full-page">
-      <div class="full-page login-page" data-color=""
-           data-image="static/img/background/background-2.jpg">
+      <div class="full-page login-page" data-color="" data-image="">
         <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
         <div class="content">
           <div class="container">
@@ -30,24 +29,24 @@
                   <div class="card" data-background="color" data-color="blue">
 
                     <div class="card-header">
-                      <h3 class="card-title" style="text-align:center">SeMakanan Admin</h3>
+                      <h3 class="card-title" style="text-align:center">seMakanan Admin</h3>
                     </div>
 
                     <div class="card-content">
                       <div class="form-group">
-                        <input type="email" placeholder="Email" class="form-control input-no-border" v-model="email" v-validate="'required'" name="email">
-                        <span>{{ errors.first('email') }}</span>
+                        <input type="email" placeholder="Email" class="form-control border-input" v-model="form.field.email" v-validate="'required|email'" name="email" autocomplete="off">
+                        <span class="msg-error">{{ errors.first('email') }}</span>
                       </div>
                       <div class="form-group">
-                        <input type="password" placeholder="Password" class="form-control input-no-border" v-model="password" v-validate="'required'" name="password">
-                        <span>{{ errors.first('password') }}</span>                      
+                        <input type="password" placeholder="Password" class="form-control border-input" v-model="form.field.password" v-validate="'required'" data-vv-as="Password" name="password" autocomplete="off">
+                        <span class="msg-error">{{ errors.first('password') }}</span>                      
                       </div>
                     </div>
 
                     <div class="card-footer text-center">
                       <button type="submit" class="btn btn-fill btn-wd ">Login</button>
                       <div class="forgot">
-                        <a class="cursor-pointer" @click="toRegister()">
+                        <a class="cursor-pointer" @click="toForgotPassword()">
                           Forgot your password?
                         </a>
                       </div>
@@ -64,7 +63,7 @@
         <footer class="footer footer-transparent">
           <div class="container">
             <div class="copyright">
-              &copy; Copy Right <i class="fa fa-heart heart"></i> by seKampus
+              &copy; by seKampus <i class="fa fa-heart heart"></i> 
             </div>
           </div>
         </footer>
@@ -79,31 +78,58 @@
   export default {
     data() {
       return {
-        email: "",
-        password: "",
-        statusSpinner: false
+        statusSpinner: false,
+        form: {
+          field: {
+            email: "",
+            password: "",
+          },
+          validation: {
+            messages : {
+              custom: {
+                email: {
+                  required: 'Email tidak boleh kosong',
+                  email: 'Email tidak valid'
+                },
+                password: {
+                  required: 'Password tidak boleh kosong',
+                }
+              }
+            }
+          }
+        }
       }
     },
     created() {
+      this.$validator.localize('id', this.form.validation.messages); // set custom messages
       this.$store.dispatch('emptyMerchant')
     },
     methods: {
-      toggleNavbar () {
-        document.body.classList.toggle('nav-open')
+      
+      // OTHERS
+      // toggleNavbar () {
+      //   document.body.classList.toggle('nav-open')
+      // },
+      // closeMenu () {
+      //   document.body.classList.remove('nav-open')
+      //   document.body.classList.remove('off-canvas-sidebar')
+      // },
+      toForgotPassword: function () {
+        alert('Under construction');
+        // this.href = '';
+        // let src = this.href;
+        // let file = null;
+        // this.$emit('loaded', {src, file});
       },
-      closeMenu () {
-        document.body.classList.remove('nav-open')
-        document.body.classList.remove('off-canvas-sidebar')
-      },
+
+      // ACTION
       login () {
-        this.$validator.validateAll().then(() => {
-          if (!this.errors.any()) {
+        this.$validator.validateAll().then((result) => {
+
+          if (result) {
             this.statusSpinner = true;
 
-            this.$store.dispatch('login', {
-              email: this.email,
-              password: this.password
-            }).then(() => {
+            this.$store.dispatch('login', this.form.field).then(() => {
               this.$router.push('/');
 
             }).catch(() => {
@@ -122,17 +148,11 @@
           }
         })
       },
-      toRegister: function () {
-        alert('Under construction');
-        // this.href = '';
-        // let src = this.href;
-        // let file = null;
-        // this.$emit('loaded', {src, file});
-      },
+
     },
     beforeDestroy () {
       this.statusSpinner = false;
-      this.closeMenu()
+      // this.closeMenu()
     }
   }
 </script>

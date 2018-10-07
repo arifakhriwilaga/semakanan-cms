@@ -94,7 +94,6 @@
       Pagination
     },
     created() {
-      this.statusSpinner = true;
       this.getMerchants();
     },
     watch:{

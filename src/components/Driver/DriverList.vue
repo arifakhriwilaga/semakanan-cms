@@ -37,12 +37,13 @@
                 </template>
               </el-table-column>
               <el-table-column
-                :min-width="180"
+                :min-width="65"
                 fixed="right"
                 label="Actions">
                 <template slot-scope="props">
                   <i style="padding-left: 0px;padding-right: 10px;font-size: 22px;margin-top: 1px;" class="el-icon-delete btn btn-simple btn-lg btn-danger btn-icon remove" @click="handleDelete(props.$index, props.row)"></i>
-                  <i style="padding-left:0px;padding-right:0px;font-size: 22px;margin-top: 1px;" class="el-icon-edit-outline btn btn-simple btn-lg btn-info btn-icon"  @click="handleShow(props.$index, props.row)"></i>
+                  <!-- <i style="padding-left:0px;padding-right:0px;font-size: 22px;margin-top: 1px;" class="el-icon-edit-outline btn btn-simple btn-lg btn-info btn-icon"  @click="handleShow(props.$index, props.row)"></i> -->
+                  <i style="padding-left:0px;padding-right:0px;font-size: 22px;margin-top: 1px;" class="el-icon-edit-outline btn btn-simple btn-lg btn-info btn-icon"  @click="underConstruction()"></i>
                 </template>
               </el-table-column>
 
@@ -164,6 +165,9 @@
         }, function (dismiss) {
           // this code dismiss condition
         });
+      },
+      underConstruction() {
+        alert('under construction')
       }
     }
     

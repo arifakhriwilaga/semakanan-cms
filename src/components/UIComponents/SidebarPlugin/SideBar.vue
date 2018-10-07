@@ -3,14 +3,14 @@
        :data-background-color="backgroundColor"
        :data-active-color="activeColor">
     <div class="logo">
-      <a class="simple-text logo-mini"
-         href="https://www.creative-tim.com/product/vue-paper-dashboard-pro">
+      <a class="simple-text logo-mini cursor-pointer"
+         @click="toAdminOverview()">
           <div class="logo-img">
               <img :src="logo" alt="">
           </div>
       </a>
-      <a class="simple-text logo-normal"
-         href="https://www.creative-tim.com/vue-paper-dashboard-pro">
+      <a class="simple-text logo-normal cursor-pointer"
+         @click="toAdminOverview()">
           {{ title }}
       </a>
     </div>
@@ -96,6 +96,9 @@
         await import('perfect-scrollbar/dist/css/perfect-scrollbar.css')
         const PerfectScroll = await import('perfect-scrollbar')
         PerfectScroll.initialize(this.$refs.sidebarScrollArea)
+      },
+      toAdminOverview() {
+        this.$router.push({ name: 'Overview' });
       }
     },
     mounted () {

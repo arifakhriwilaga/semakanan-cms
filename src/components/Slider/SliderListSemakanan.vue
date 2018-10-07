@@ -44,7 +44,7 @@
               </el-table-column>
               <el-table-column label="Type" property="type"></el-table-column>
               <el-table-column
-                  :min-width="120"
+                  :min-width="25"
                   fixed="right"
                   label="Actions">
                   <template slot-scope="props">
@@ -139,7 +139,7 @@
           this.statusSpinner = false;
           this.tableData = res.data.data
           this.pagination  = res.data.meta.paging;
-
+  
         }).catch(err => {
           this.statusSpinner = false;
           this.showModalError();

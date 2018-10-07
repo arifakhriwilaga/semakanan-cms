@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal">
+  <div name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
@@ -8,7 +8,7 @@
             <slot name="header">
               <div class="test-button" style="margin-bottom: 10px">
                   <label class="btn" for="uploads">upload</label>
-                  <input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);"
+                  <input type="file" id="uploads" style="clip:rect(0 0 0 0);"
                          accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
                   <button @click="finish('base64')" type="button" class="btn">Crop</button>
                   <button @click="changeScale(1)" class="btn">+</button>
@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 <script>
   import VueCropper from 'vue-cropper';

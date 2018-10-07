@@ -31,13 +31,37 @@
                              :prop="column.prop"
                              :label="column.label">
             </el-table-column>
-            <el-table-column>
+            <el-table-column
+              :min-width="120"
+              prop="total_payment"
+              label="Total Pembayaran">
+              <template slot-scope="props">
+                {{ formatPrice('id', props.row.price) }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              :min-width="120"
+              prop="cash"
+              label="Cash">
+              <template slot-scope="props">
+                {{ formatPrice('id', props.row.m_price) }}
+              </template>
+            </el-table-column>
+            <el-table-column :min-width="55"
+              prop="type"
+              label="Tipe">
+              <template slot-scope="props">
+                {{ props.row.type }}
+                <!-- <img :src="props.row.image"> -->
+              </template>
+            </el-table-column>
+            <el-table-column :min-width="50">
               <template slot-scope="props">
                 <img :src="props.row.image">
               </template>
             </el-table-column>
             <el-table-column
-              :min-width="180"
+              :min-width="65"
               fixed="right"
               label="Actions">
               <template slot-scope="props">
@@ -79,7 +103,7 @@
           // },
           {
             prop: 'merchant.name',
-            label: 'merchant',
+            label: 'Merchant',
             minWidth: 200
 
           },
@@ -88,21 +112,21 @@
             label: 'Name',
             minWidth: 200
           },
-          {
-            prop: 'price',
-            label: 'Price',
-            minWidth: 200
-          },
-          {
-            prop: 'm_price',
-            label: 'M Price',
-            minWidth: 150
-          },
-          {
-            prop: 'type',
-            label: 'Type',
-            minWidth: 125
-          }
+          // {
+          //   prop: 'price',
+          //   label: 'Price',
+          //   minWidth: 200
+          // },
+          // {
+          //   prop: 'm_price',
+          //   label: 'M Price',
+          //   minWidth: 150
+          // },
+          // {
+          //   prop: 'type',
+          //   label: 'Type',
+          //   minWidth: 125
+          // }
         ],
       }
     },
@@ -201,7 +225,23 @@
         }, function (dismiss) {
           // this code dismiss condition
         });
-      }
+      },
+      formatPrice(type, value) {
+        var format = '';
+
+        switch(type) {
+          case 'id':
+              format = 'Rp. '
+              break;
+          case 'en':
+              format = '$ '
+              break;
+          default:
+              format = ''
+        }
+        let val = (value/1).toFixed(2).replace('.', ',')
+        return format + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      },
     }
   }
 </script>

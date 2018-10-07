@@ -74,6 +74,24 @@
 body.nude{
   background-color: #f4f3ef;
 }
+
+.has-success .form-control:focus, .form-control.valid:focus, .form-control[aria-invalid="false"]:focus {
+  background-color: #F3F2EE;
+  border-color: transparent;
+}
+.form-group {
+  .has-error .form-control, .form-control.error, .form-control[aria-invalid='true'] {
+    background-color: #F3F2EE;
+    border-color: transparent;
+    color: #66615b;
+    // #EB5E28
+    // border: 1px
+  }
+  &
+  .msg-error {
+    color: #e74c3c!important;
+  }
+}
 .overlay {
   left: 0;
   top: 0;
@@ -119,7 +137,10 @@ body.nude{
   margin-right: 10px;
   color: #fff;
 }
-
+.has-success .form-control:focus, .form-control.valid:focus, .form-control:focus {
+  background-color: rgb(230, 229, 228);
+  border-color: rgb(212, 212, 212)!important;
+}
 @keyframes spin {
 100% {
   transform: rotate(360deg);

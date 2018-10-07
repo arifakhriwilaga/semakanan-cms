@@ -38,14 +38,32 @@
                     :data="tableData"
                     border
                     style="">
-            <el-table-column v-for="column in tableColumns"
-                             :key="column.label"
-                             :min-width="column.minWidth"
-                             :prop="column.prop"
-                             :label="column.label">
+            <el-table-column
+              :min-width="110"
+              prop="total_payment"
+              label="Total Pembayaran">
+              <template slot-scope="props">
+                {{ formatPrice('id', props.row.total_payment) }}
+              </template>
             </el-table-column>
             <el-table-column
-              :min-width="180"
+              :min-width="100"
+              prop="cash"
+              label="Cash">
+              <template slot-scope="props">
+                {{ formatPrice('id', props.row.cash) }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              :min-width="100"
+              prop="status"
+              label="Status">
+              <template slot-scope="props">
+                {{ props.row.status }}
+              </template>
+            </el-table-column>          
+            <el-table-column
+              :min-width="45"
               fixed="right"
               label="Actions">
               <template slot-scope="props">
@@ -187,7 +205,23 @@
           // this code dismiss condition
         });
         
-      }
+      },
+      formatPrice(type, value) {
+        var format = '';
+
+        switch(type) {
+          case 'id':
+              format = 'Rp. '
+              break;
+          case 'en':
+              format = '$ '
+              break;
+          default:
+              format = ''
+        }
+        let val = (value/1).toFixed(2).replace('.', ',')
+        return format + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      },
     }
   }
 </script>

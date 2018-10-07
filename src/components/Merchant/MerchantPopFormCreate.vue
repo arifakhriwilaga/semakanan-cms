@@ -11,7 +11,7 @@
                 <div class="card-title"><h4 style="margin-top:10px;">{{mode == 'Add' ? 'Tambah' : 'Ubah'}} Merchant Populer</h4></div>
                 <hr>
             </div>
-            <form action="">
+            <form v-on:submit.prevent="saveForm">
                 <div class="card-content">
                     <div class="row">
                         <div class="col-xs-12">
@@ -20,7 +20,7 @@
                                 <el-select style="padding-right:0px;padding-left:0px;width:100%" class="select-primary"
                                         size="large"
                                         placeholder="Pilih Merchant"
-                                        v-model="merchant_id">
+                                        v-model="form.field.merchant_id" name="merchant_id" v-validate="'required'">
                                     <el-option v-for="option in merchant_options"
                                                 class="select-danger"
                                                 :value="option.value"
@@ -28,13 +28,14 @@
                                                 :key="option.value">
                                     </el-option>
                                 </el-select>
+                                <span class="msg-error">{{ errors.first('merchant_id') }}</span>
                             </div>
                             <div class="form-group">
                                 <label for="">Prioritas</label>
                                 <el-select style="padding-right:0px;padding-left:0px;width:100%" class="select-primary"
                                         size="large"
                                         placeholder="Pilih Prioritas"
-                                        v-model="priority">
+                                        v-model="form.field.priority" v-validate="'required'" name="priority">
                                     <el-option v-for="option in priority_options"
                                                 class="select-danger"
                                                 :value="option.value"
@@ -42,18 +43,21 @@
                                                 :key="option.value">
                                     </el-option>
                                 </el-select>
+                                <span class="msg-error">{{ errors.first('priority') }}</span>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <hr>
                             <div class="form-group">
-                                <button class="btn btn-primary btn-fill pull-right" style="margin-bottom:25px;" @click="save" :disabled="isSubmitted">{{mode == 'Add' ? 'Simpan' : 'Update'}}</button>
+                                <button class="btn btn-primary btn-fill pull-right" style="margin-bottom:25px;" :disabled="isSubmitted">{{mode == 'Add' ? 'Simpan' : 'Update'}}</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
+
+        <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
     </div>
 </template>
 
@@ -67,8 +71,27 @@
         },
         data () {
             return {
-                name: '',
-                priority: '',
+                isSubmitted: false,
+                statusSpinner: false,
+                form: {
+                    field: {
+                        merchant_id: '',
+                        priority: ''
+                    },
+                    validation: {
+                        messages: {
+                            custom: {
+                                merchant_id: {
+                                    required: 'Merchant tidak boleh kosong'
+                                },
+                                priority: {
+                                    required: 'Prioritas tidak boleh kosong'
+                                }
+                            }
+                        }
+                    }
+                
+                },
                 priority_options: [
                     {
                         value: 1, label: 1
@@ -87,7 +110,6 @@
                     }
                 ],
                 merchant_options: [],
-                merchant_id: '',
                 error: true,
                 isSubmitted: false
             }
@@ -102,63 +124,85 @@
           }
         },
         methods: {
-            save() {
-                if (!this.priority) {
-                    this.$notify({
-                        component: {
-                            template: `<span>Prioritas belum dipilih</span>`
-                        },
-                        icon: 'ti-alert',
-                        horizontalAlign: 'right',
-                        verticalAlign: 'top',
-                        type: 'danger'
-                    })
-                } else {
-                    const formData = new FormData();
-                    formData.append('merchant_id', this.merchant_id);
-                    formData.append('priority', this.priority);
-
-                    axios.post(`/api/merchants/pop`, formData).then(res => {
-                        this.$notify({
-                            component: {
-                                template: `<span>Data berhasil disimpan</span>`
-                            },
-                            icon: 'ti-alert',
-                            verticalAlign: 'top',
-                            horizontalAlign: 'right',
-                            type: 'success'
-                        })
-                        this.$router.push({ name: 'merchant-pop-list'})
-                    }).catch(err => {
-                         this.$notify({
-                        component: {
-                            template: `<span>Terjadi kesalahan</span>`
-                        },
-                        icon: 'ti-alert',
-                        horizontalAlign: 'right',
-                        verticalAlign: 'top',
-                        type: 'danger'
-                    });
-                    })
-                }
+            // GET RELATED DATA
+            getRelatedData() {
+                this.statusSpinner = true;
+                axios.get(`/api/merchants`).then(res => {
+                    for (let index = 0; index < res.data.data.length; index++) {
+                        this.merchant_options.push({
+                            value: res.data.data[index].id,
+                            label: res.data.data[index].name
+                        });
+                    }
+                    this.statusSpinner = false;
+                    this.error = false;
+                }).catch((err) => {this.statusSpinner = false; this.showModalError()});
             },
+
+            // ACTION
+            saveForm() {
+                this.$validator.validateAll().then((result) => {
+                    if (result) {
+                        this.statusSpinner = true;
+                        axios.post(`/api/merchants/pop`, this.form.field).then(res => {
+                            this.toList();
+                            this.$notify({
+                                component: {
+                                    template: `<span>Data berhasil disimpan</span>`
+                                },
+                                icon: 'ti-alert',
+                                verticalAlign: 'top',
+                                horizontalAlign: 'right',
+                                type: 'success'
+                            })
+                        }).catch(err => {
+                            this.$notify({
+                                component: {
+                                    template: `<span>Terjadi kesalahan</span>`
+                                },
+                                icon: 'ti-alert',
+                                horizontalAlign: 'right',
+                                verticalAlign: 'top',
+                                type: 'danger'
+                            });
+                            this.isSubmitted = false;
+                            this.statusSpinner = false; 
+                        });
+                    }
+                })
+            },
+
+            // OTHERS
             toList() {
                 this.$router.push({name: 'merchant-pop-list'})
             },
             underConstruction() {
                 alert('under construction');
-            }
+            },
+            showModalError(){
+                swal({
+                title: 'Terjadi kesalahan',
+                text: 'Retry request',
+                type: 'error',
+                confirmButtonClass: 'btn btn-info btn-fill',
+                cancelButtonClass: 'btn btn-danger btn-fill',
+                showCancelButton: true,
+                buttonsStyling: true,
+                confirmButtonText: 'Ok',
+                cancelButtonText: 'Cancel',
+                }).then(() => {
+                
+                    this.getMerchant();
+                
+                }, function (dismiss) {
+                    // this code dismiss condition
+                });
+                
+            },
         },
-        mounted () {
-            axios.get(`/api/merchants`).then(res => {
-                for (let index = 0; index < res.data.data.length; index++) {
-                    this.merchant_options.push({
-                        value: res.data.data[index].id,
-                        label: res.data.data[index].name
-                    });
-                }
-                this.error = false;
-            })
+        created () {
+            this.$validator.localize('id', this.form.validation.messages); // set custom messages
+            this.getRelatedData();
         }
     }
 </script>

@@ -21,9 +21,7 @@
         </ul>
       </nav> -->
       <div class="copyright pull-left">
-        &copy; Copy Right
-        <i class="fa fa-heart heart"></i> by
-        seKampus
+        &copy; by seKampus <i class="fa fa-heart heart"></i>
         <!-- <i class="fa fa-heart heart"></i> by
         <a href="https://github.com/cristijora" target="_blank">Cristi Jora</a>.
         <span>Designed by <a href="https://www.creative-tim.com/?ref=pdf-vuejs" target="_blank">Creative Tim</a>.</span> -->

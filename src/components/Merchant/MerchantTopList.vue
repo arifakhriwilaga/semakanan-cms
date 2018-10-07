@@ -19,7 +19,7 @@
               <el-table-column label="Name" property="name"></el-table-column>
               <el-table-column label="Priority" property="priority"></el-table-column>
               <el-table-column
-                  :min-width="120"
+                  :min-width="15"
                   fixed="right"
                   label="Actions">
                   <template slot-scope="props">
@@ -124,15 +124,15 @@
                 })
             })
         }, function (dismiss) {
-          if (dismiss === 'cancel') {
-            swal({
-              title: 'Dibatalkan',
-              text: 'Menghapus data dibatalkan',
-              type: 'error',
-              confirmButtonClass: 'btn btn-info btn-fill',
-              buttonsStyling: false
-            })
-          }
+          // if (dismiss === 'cancel') {
+          //   swal({
+          //     title: 'Dibatalkan',
+          //     text: 'Menghapus data dibatalkan',
+          //     type: 'error',
+          //     confirmButtonClass: 'btn btn-info btn-fill',
+          //     buttonsStyling: false
+          //   })
+          // }
         })
 
       },

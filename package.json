@@ -25,7 +25,7 @@
     "npm": "^6.1.0",
     "perfect-scrollbar": "0.7.1",
     "sweetalert2": "^6.11.4",
-    "vee-validate": "^2.0.0-rc.21",
+    "vee-validate": "^2.0.9",
     "vue": "^2.5.2",
     "vue-clickaway": "^2.1.0",
     "vue-cropper": "^0.3.8",
