@@ -134,6 +134,9 @@
       search(event) {
         this.getFoods({'name': event.target.value});
       },
+      page(val) {
+        this.getFoods({}, this.pagination[val]);
+      },
       getFoods(params=null, path=null){
         if (path==null){
           path='/api/foods';
