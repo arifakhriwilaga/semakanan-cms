@@ -91,12 +91,13 @@
                 
                 <div class="form-group">
                     <label>Gambar</label>
-                    <button type="button" class="btn btn-fill btn-primary" v-if="(!form.field.image)" @click="showModal=true; $sidebar.toggleMinimize()" name="image" v-validate="'required'">Upload</button>
+                    <button type="button" class="btn btn-fill btn-primary" v-if="(!form.field.image)" @click="showModal=true" name="image" v-validate="'required'">Upload</button>
                     <!-- <input type="file" v-if="(!form.field.image)" class="form-control" @change="onFileChanged" name="image" v-validate="'required'"> -->
                     <el-button v-if="(form.field.image)" type="info" class="pull-right" circle style="position: absolute;right: 5px;top: 27px;width:30px;height:30px" @click="form.field.image = ''"> <i class="el-icon-edit" style="left: 8px;top: 8px;position: absolute;"></i></el-button>
                     <img :src="form.field.image" v-if="(form.field.image)">
                     <span class="msg-error">{{ errors.first('image') }}</span>
-                    <image-sekampus-cropper :width="980" :height="290" v-if="showModal" @close="showModal = false" @img="setImage($event)"></image-sekampus-cropper>
+                    <!-- <image-cropper :widthModal="'1150px'" :statusModal="showModal"   @updateImg="getImage($event)"></image-cropper> -->
+                    <image-sekampus-cropper :width="980" :height="290" :widthModal="'1150px'" :statusModal="showModal" @close="getStatusClose($event)" @img="setImage($event)"></image-sekampus-cropper>
                 </div>
               </div>
               <div class="col-sm-12">
@@ -118,11 +119,13 @@
 
   import FormGroupInput from 'src/components/Base/FormGroupInput';
   import ImageSekampusCropper from 'src/components/Base/ImageSekampusCropper';
-
+  import ImageCropper from 'src/components/Base/ImageCropper';
+  
   export default {
     components: {
       FormGroupInput,
-      ImageSekampusCropper
+      ImageSekampusCropper,
+      ImageCropper
     },
     data(){
       return{
@@ -310,7 +313,9 @@
 
       // OTHERS
       setImage(val){
-        this.form.field.image = val;
+        // if(val) {
+          this.form.field.image = val;
+        // }
       },
       listFood() {
         this.$router.push({ name: 'food-list' })
@@ -335,6 +340,12 @@
           });
           
       },
+      getStatusClose($event){
+        this.showModal = false
+      },
+      getImage() {
+        this.showModal = false
+      }
     },
     // mounted() {
     //   this.getRelatedData();
