@@ -38,16 +38,17 @@
           <hr>
           <div class="row" style="margin:0px">
             <h5 class="pull-left">Daftar Merchant :</h5>
+            <div class="col-md-12" v-if="transaction.carts.length < 1" style="text-align:center"><br>Merchant tidak tersedia</div>
             <!-- <el-button type="success" class="pull-right" :name="'process-all'" @click="processAllMerchant()">Process Semua</el-button> -->
-            <el-button type="danger" class="pull-right" :name="'cancel-all'" style="margin-right:5px" @click="cancelAllMerchant()" v-if="(transaction.status == 'Waiting')">Cancel Semua</el-button>
+            <el-button type="danger" class="pull-right" :name="'cancel-all'" style="margin-right:5px" @click="cancelAllMerchant()" v-if="(transaction.status !== 'Done' && transaction.status !== 'Canceled' && transaction.carts.length > 1)">Cancel Semua</el-button>
           </div>
           <el-collapse class="panel-group">
             <el-collapse-item v-for="(chart, index) in transaction.carts" :key="index" :title="chart.merchant.name" :name="index">
               <div class="card-content">
                 <div class="row">
                 <div class="col-md-12" style="margin-bottom: 15px">
-                  <el-button type="success" class="pull-right" :name="'process'+index" :id="'process'+index" @click="processMerchant(chart)" v-if="(chart.status == 'Waiting')">Process</el-button>
-                  <el-button type="danger" class="pull-right" :name="'cancel'+index" :id="'process'+index" style="margin-right:5px" @click="cancelMerchant(chart)" v-if="(chart.status == 'Waiting')">Cancel</el-button>
+                  <el-button type="success" class="pull-right" :name="'process'+index" :id="'process'+index" @click="processMerchant(chart)" v-if="(chart.status !== 'Done' && chart.status !== 'Canceled')">Process</el-button>
+                  <el-button type="danger" class="pull-right" :name="'cancel'+index" :id="'process'+index" style="margin-right:5px" @click="cancelMerchant(chart)" v-if="(chart.status !== 'Done' && chart.status !== 'Canceled')">Cancel</el-button>
                 </div>
                 <div class="col-md-8 card">
                   <div class="form-group">
@@ -85,6 +86,7 @@
 
                 <div class="col-md-12 card">
                   <h5><b>Menu Makanan :</b></h5>
+                  <!-- <div class="col-md-12" v-if="chart.foods.length < 1" style="text-align:center"><br>Makanan tidak tersedia</div> -->
                   <el-table :data="chart.foods" height="250" style="width: 100%">
                     <el-table-column prop="name" label="Nama" width="280">
                     </el-table-column>
@@ -139,7 +141,9 @@
     data () {
       return {
         title: '',
-        transaction: {},
+        transaction: {
+          carts: []
+        },
         moment: moment,
         statusSpinner: false
       }
