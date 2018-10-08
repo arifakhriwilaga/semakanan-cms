@@ -39,6 +39,22 @@
                   </el-select>
                   <span class="msg-error">{{ errors.first('merchant_id') }}</span>
                 </div>
+
+                <div class="form-group">
+                  <label for="">Tipe</label>
+                  <el-select style="padding-right:0px;padding-left:0px;width:100%" class="select-primary"
+                          size="large"
+                          placeholder="Pilih Tipe Makanan"
+                          v-model="form.field.type_id" name="type_id" v-validate="'required'">
+                      <el-option v-for="option in food_type_options"
+                                  class="select-danger"
+                                  :value="option.id"
+                                  :label="option.type"
+                                  :key="option.id">
+                      </el-option>
+                  </el-select>
+                  <span class="msg-error">{{ errors.first('type_id') }}</span>
+                </div>
                 <!-- <div :class="{'form-group': true, 'has-error': errors.first('merchant_id') }"><label
                   class="col-md-3 control-label">Merchant</label>
                     <el-select class="select-primary"
@@ -133,19 +149,22 @@
         form: {
           field: {
               merchant_id: '',
+              type_id: '',
               name: '',
               description: '',
               price: '',
               m_price: '',
-              type_id: 1,
               image: '',
-              id: ''
+              // id: ''
           },
           validation: {
               messages: {
                   custom: {
                       merchant_id: {
                           required: 'Merchant tidak boleh kosong'
+                      },
+                      type_id: {
+                          required: 'Tipe tidak boleh kosong'
                       },
                       name: {
                           required: 'Nama tidak boleh kosong'
@@ -159,9 +178,6 @@
                       m_price: {
                           required: 'M Harga tidak boleh kosong'
                       },
-                      type_id: {
-                          required: 'Tipe Buka tidak boleh kosong'
-                      },
                       image: {
                           required: 'Image tidak boleh kosong'
                       }
@@ -173,6 +189,11 @@
           }
         },
         merchant_options: [],
+        food_type_options: [
+          {id: 1, type:'Food'},
+          {id: 2, type:'Drink'},
+          {id: 3, type:'Snack'}
+        ],
         isSubmitted: false
       }
     },
@@ -214,9 +235,9 @@
             description: '',
             price: '',
             m_price: '',
-            type_id: 1,
+            type_id: '',
             image: '',
-            id: ''
+            // id: ''
           }
         }
         axios.get('/api/foods/' + this.$router.currentRoute.params.id).then(res=>{
@@ -227,6 +248,11 @@
           this.form.field.price = res.data.data.price;
           this.form.field.image = res.data.data.image;
           this.form.field.merchant_id = res.data.data.merchant.id;
+          for (let index = 0; index < this.food_type_options.length; index++) {
+            if(this.food_type_options[index].type ==  res.data.data.type)
+            this.form.field.type_id = this.food_type_options[index].id;
+          }
+          
           this.statusSpinner = false
 
         }).catch((err) => {this.statusSpinner = false; this.showModalError()});
