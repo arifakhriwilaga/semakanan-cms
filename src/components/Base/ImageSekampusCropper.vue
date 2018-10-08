@@ -1,72 +1,89 @@
 <template>
-  <div name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
+  <div>
+    <el-dialog title="Upload Image Makanan" :visible.sync="statusModal" :width="widthModal" :append-to-body="true" :lock-scroll="true" :before-close="beforeClose">
+      <div class="row">
+        <div class="col-md-6">
+            <div  class="col-md-8">
+            <!-- if the image null -->
+            
+            <label class="col-md-5" style="font-size:18px;padding-right:0;" v-if="(!result && !image)">Pilih image :</label>
+            <input type="file" v-if="(!result && !image)" accept="image/*" class="file col-md-4" name="image" style="padding-left:0;font-size: 1.2em;widht:2px"  @change="uploadImg($event, 1)" value="upload">
+            
+            <!-- if the image cropped -->
+            <label style="font-size:20px;" v-if="(result)">Image hasil crop</label>
+            </div>            
+            
+            <!-- <div class="col-md-4">
+            </div>  -->
+        </div>  
+        
+        <div class="col-md-6">
+            <!-- if the image null -->
+            <!-- <button class="btn btn-fill btn-primary pull-right" @click="update" style="margin-right: 10px;" v-if="(!result && !image)">Close</button> -->
+            <button type="submit" v-if="(result)" class="btn btn-fill btn-primary pull-right" style="margin-bottom:25px;margin-left:5px" @click="update(true)" >Simpan</button>                          
+            <button class="btn btn-fill btn-primary pull-right" @click="finish('base64')" v-if="(!result && image)" style="margin-left:5px">Crop</button>
+            <button type="submit" v-if="(image)" class="btn btn-fill btn-primary pull-right" style="margin-bottom:25px;margin-left:30px" @click="result = '';image = ''">Edit</button>                          
 
-          <div class="modal-header">
-            <slot name="header">
-              <div class="test-button" style="margin-bottom: 10px">
-                  <label class="btn" for="uploads">upload</label>
-                  <input type="file" id="uploads" style="clip:rect(0 0 0 0);"
-                         accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
-                  <button @click="finish('base64')" type="button" class="btn">Crop</button>
-                  <button @click="changeScale(1)" class="btn">+</button>
-                  <button @click="changeScale(-1)" class="btn">-</button>
-                <button class="btn btn-fill btn-primary" type="button" @click="update">
-                  Close
-                </button>
-                </div>
-            </slot>
-          </div>
+            <button class="btn btn-fill btn-primary pull-right" @click="changeScale(1)" v-if="(!result && image)">+</button>
+            <button class="btn btn-fill btn-primary pull-right" @click="changeScale(-1)" v-if="(!result && image)" style="margin-right:10px">-</button>
+            
+            <!-- if the image cropped -->
+            <!-- <button type="submit" v-if="(image)" class="btn btn-fill btn-primary pull-right" style="margin-bottom:25px;margin-right:10px" @click="result = '';image = ''">Edit</button>                           -->
+        </div>
+        <div class="col-md-12" style="overflow-x: auto;overflow-y: hidden;">            
+            <!-- <el-button type="primary" icon="el-icon-upload" v-if="(!form.field.image)" @click="showModal=true;" name="image" v-validate="'required'"> Upload</el-button> -->
+            <!-- <input type="file" name="image" accept="image/*" style="font-size: 1.2em; padding: 10px 0;" @change="setImage" /> -->
+            <br/>
+            <div class="col-md-12" style="width:  100%; height: 500px; margin-bottom: 50px"  v-if="(!result && image)">
+            <vueCropper
+                ref="cropper"
+                :img="image"
+                :autoCrop="true"
+                :autoCropWidth="width"
+                :autoCropHeight="height"
+                :outputSize="option.size"
+                :outputType="option.outputType"
+                :info="true"
+                :full="option.full"
+                :canMove="option.canMove"
+                :canMoveBox="option.canMoveBox"
+                :fixedBox="option.fixedBox"
+                :original="option.original"
+                @realTime="realTime"
+              ></vueCropper>
+            </div><br/>
+            <label style="font-size:20px;margin-left: 500px;" v-if="(!result && !image)">Image kosong</label><br>
+            <img :src="imageDefault" v-if="(!result && !image)" style="margin-left: 410px;">
 
-          <div class="modal-body">
-            <slot name="body">
-              <div class="col-md-12" style="width:  100%; height: 500px; margin-bottom: 50px">
-
-                <vueCropper
-                  ref="cropper"
-                  :img="image"
-                  :autoCrop="true"
-                  :autoCropWidth="width"
-                  :autoCropHeight="height"
-                  :outputSize="option.size"
-                  :outputType="option.outputType"
-                  :info="true"
-                  :full="option.full"
-                  :canMove="option.canMove"
-                  :canMoveBox="option.canMoveBox"
-                  :fixedBox="option.fixedBox"
-                  :original="option.original"
-                  @realTime="realTime"
-                ></vueCropper>
-              </div>
-            </slot>
-          </div>
-
-          <div class="modal-footer">
-            <slot name="footer">
-
-            </slot>
-          </div>
+            <img :src="result" style="border: 1px solid gray" alt="Cropped Image" v-if="(result)"/><br/>
         </div>
       </div>
-    </div>
-  </div>
+    </el-dialog>
+</div>
 </template>
 <script>
   import VueCropper from 'vue-cropper';
+  import Vue from 'vue'
+  import {Dialog} from 'element-ui'
+  Vue.use(Dialog);
   export default {
     components:{
       VueCropper
     },
     props:{
-      showModal: Boolean,
+      statusModal: Boolean,
       width: Number,
-      height: Number
+      height: Number,
+      widthModal: String,
+    },
+    created() {
+      // console.log(this.statusModal);
+      // console.log('hallo ari');
     },
     data(){
       return {
+        // statusModal: true,
+        imageDefault: '/static/img/no-image.png',
         result: null,
         crap: false,
         image: null,
@@ -85,13 +102,21 @@
       }
     },
     methods:{
-      update(){
-        this.$emit('img', this.result);
-        this.$emit('close');
-        this.$sidebar.toggleMinimize();
-
+      beforeClose() {
+        this.update('');
+        this.clearDataDialog();
       },
-       changeScale(num) {
+      clearDataDialog() {
+        this.result = '';
+        this.image = '';
+      },
+      update(status){
+        // console.log(status);
+        this.$emit('img', (!status) ? status : this.result);
+        this.$emit('close');
+        this.clearDataDialog();
+      },
+      changeScale(num) {
         this.$refs.cropper.changeScale(num);
       },
       realTime(data) {
@@ -108,8 +133,8 @@
             this.result = data;
           })
         }
-
-        alert('Cropped!!!. you can close now');
+        // this.update();
+        // alert('Cropped!!!. you can close now');
       },
 
       down(type) {
@@ -137,7 +162,8 @@
         // this.option.img
         var file = e.target.files[0]
         if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
-          alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
+          alert('Upload file type image seperti jpg,jpeg dan png')
+          // alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
           return false
         }
         var reader = new FileReader()
