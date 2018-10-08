@@ -132,7 +132,7 @@
     },
     methods:{
       search(event) {
-        this.getFoods({'name': event.target.value});
+        this.getFoods({'field': 'name','search': event.target.value});
       },
       page(val) {
         this.getFoods({}, this.pagination[val]);

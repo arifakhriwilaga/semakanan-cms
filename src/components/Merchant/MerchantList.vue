@@ -197,7 +197,7 @@
         this.getMerchants({}, this.pagination[val]);
       },
       search(event) {
-        this.getMerchants({'name': event.target.value});
+        this.getMerchants({'field': 'name','search': event.target.value});
       },
       createMerchant() {
         this.$router.push({ name: 'merchant-create'})
