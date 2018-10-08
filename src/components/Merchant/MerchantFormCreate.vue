@@ -22,14 +22,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Gambar</label>
-                            <input type="file" v-if="(!form.field.image)" class="form-control" @change="onFileChanged" name="image" v-validate="'required'">
-                            <el-button v-if="(form.field.image)" type="info" class="pull-right" circle style="position: absolute;right: 5px;top: 27px;width:30px;height:30px" @click="form.field.image = ''"> <i class="el-icon-edit" style="left: 8px;top: 8px;position: absolute;"></i></el-button>
-                            <img :src="form.field.image" v-if="form.field.image!=''">
-                            <span class="msg-error">{{ errors.first('image') }}</span>
-                        </div>
-
-                        <div class="form-group">
                             <label for="">Nama Pemilik</label>
                             <input type="text" class="form-control" v-model="form.field.owner" v-validate="'required'"
                             name="owner"
@@ -45,6 +37,16 @@
                             <span class="msg-error">{{ errors.first('phone') }}</span>
                         </div>
 
+                        <div class="form-group">
+                            <label>Gambar</label><br>
+                            <input type="file" v-if="(!form.field.image)" class="form-control" @change="onFileChanged" name="image" v-validate="'required'">
+                            <el-button v-if="(form.field.image)" type="info" class="pull-right" circle style="position: absolute;right: 5px;top: 27px;width:30px;height:30px" @click="form.field.image = ''"> <i class="el-icon-edit" style="left: 8px;top: 8px;position: absolute;"></i></el-button>
+                            <img :src="form.field.image" v-if="form.field.image!=''">
+                            <span class="msg-error">{{ errors.first('image') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        
                         <div class="form-group">
                             <label for="">Waktu Buka</label>
                             <div class="form-group">
@@ -80,8 +82,7 @@
                                 <span class="msg-error">{{ errors.first('close_time') }}</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
+                        
                         <div class="form-group">
                             <label for="">Alamat</label>
                             <textarea cols="15" rows="5" class="form-control" v-model="form.field.address" name="address" v-validate="'required'"></textarea>
@@ -93,9 +94,13 @@
                                     v-model="form.field.description" name="description" v-validate="'required'"></textarea>
                             <span class="msg-error">{{ errors.first('description') }}</span>
                         </div>
+                        
+                    </div>
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <label for="">Lokasi</label>
-                            <div id="regularMap" class="map"></div>
+                            <input type="text" class="form-control" id="pac-input" placeholder="Ketik Alamat" style="width:600px!important;background:#fff"><br>
+                            <div id="map" class="map"></div>
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -126,6 +131,8 @@
     import ImageUpload from 'src/components/Base/ImageUpload';
 
     GoogleMapsLoader.KEY = API_KEY
+    GoogleMapsLoader.LIBRARIES = ['geometry', 'places'];
+    GoogleMapsLoader.LANGUAGE = 'id';
 
 
     export default {
@@ -192,6 +199,14 @@
                 this.getMerchant();
             }
         },
+        ready:function(){
+            getPositionTemp();
+        },
+        // watch: {
+        //     markers: function(newValue, oldValue) {
+        //         console.log(newValue)l
+        //     }
+        // },
         computed: {
           mode(){
             if (this.$router.currentRoute.params.id){
@@ -222,19 +237,20 @@
                     this.form.field.close_time = data.data.close_time;
 
                     // set map
-                    const myLatlng = new window.google.maps.LatLng(this.form.field.latitude, this.form.field.longitude)
-                    const mapOptions = {
-                        zoom: 15,
-                        center: myLatlng,
-                        scrollwheel: false // we disable de scroll over the map, it is a really annoing when you scroll through page
-                    }
+                    // const myLatlng = new window.google.maps.LatLng(this.form.field.latitude, this.form.field.longitude)
+                    this.createSearchBar(this.form.field.latitude, this.form.field.longitude);
+                    // const mapOptions = {
+                    //     zoom: 15,
+                    //     center: myLatlng,
+                    //     scrollwheel: false // we disable de scroll over the map, it is a really annoing when you scroll through page
+                    // }
 
-                    this.map = new window.google.maps.Map(document.getElementById('regularMap'), mapOptions)
-                    this.markers = new window.google.maps.Marker({position:myLatlng});
-                    this.markers.setMap(this.map);
-                    this.map.addListener('click', event => {
-                        this.addMarker(event.latLng)
-                    });
+                    // this.map = new window.google.maps.Map(document.getElementById('regularMap'), mapOptions)
+                    // this.markers = new window.google.maps.Marker({position:myLatlng});
+                    // this.markers.setMap(this.map);
+                    // this.map.addListener('click', event => {
+                    //     this.addMarker(event.latLng)
+                    // });
                     this.statusSpinner = false;
 
                 }).catch((err) => {this.statusSpinner = false; this.showModalError()});
@@ -363,6 +379,98 @@
             },
 
             // OTHERs > MAPS
+            createSearchBar(latitude, longitude) {
+                const myLatlng = new window.google.maps.LatLng(latitude, longitude);
+                const mapOptions = {
+                    zoom: 15,
+                    center: myLatlng,
+                    scrollwheel: false // we disable de scroll over the map, it is a really annoing when you scroll through page
+                }
+
+                this.map = new window.google.maps.Map(document.getElementById('map'), mapOptions);
+                this.markers = new window.google.maps.Marker({position:myLatlng});
+                this.markers.setMap(this.map);
+
+                var input = document.getElementById('pac-input');
+                var searchBox = new window.google.maps.places.SearchBox(input);
+                this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+                var tempMap = this.map
+
+                // Bias the SearchBox results towards current map's viewport.
+                this.map.addListener('bounds_changed', function() {
+                    searchBox.setBounds(tempMap.getBounds());
+                });
+
+                var markers = [];
+                var tempForm = this.form;
+                var originalMarker = this.markers;
+
+                // Listen for the event fired when the user selects a prediction and retrieve
+                // more details for that place.
+                searchBox.addListener('places_changed', function() {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers.forEach(function(marker) {
+                    marker.setMap(null);
+                });
+                markers = [];
+                // console.log(originalMarker);
+                if(originalMarker) {
+                    originalMarker.setMap(null);
+                    originalMarker = null;
+                }
+                // For each place, get the icon, name and location.
+                var bounds = new window.google.maps.LatLngBounds();
+
+                places.forEach(function(place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    
+                    // Create a marker for each place.
+                    markers.push(new window.google.maps.Marker({
+                        map: tempMap,
+                        // icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+                    tempForm.field.latitude = markers[0].getPosition().lat();
+                    tempForm.field.longitude = markers[0].getPosition().lng();
+                    
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                    tempMap.fitBounds(bounds);  
+                });
+                
+                this.map.addListener('click', event => {
+                    markers.forEach(function(marker) {
+                        marker.setMap(null);
+                    });
+                    markers = [];
+                    if (originalMarker) {
+                        originalMarker.setMap(null);
+                        originalMarker = null;
+                    } 
+                    originalMarker = new window.google.maps.Marker({
+                        position: event.latLng,
+                        map: tempMap
+                    })
+                    tempForm.latitude = originalMarker.getPosition().lat()
+                    tempForm.longitude = originalMarker.getPosition().lng()
+                });
+            },
             initRegularMap (google, location) {
                 // Regular Map
                 const myLatlng = new window.google.maps.LatLng(-6.914744, 107.609810);
@@ -381,12 +489,26 @@
                 this.form.field.longitude = this.markers.getPosition().lng()
 
                 this.map.addListener('click', event => {
-                    this.addMarker(event.latLng)
+                    // markers = [];
+                    console.log(markers)
+                    markers.forEach(function(marker) {
+                        marker.setMap(null);
+                    });
+                    // tempMarkers.setMap(null);
+                    markers = [];
+                    this.addMarker(event.latLng, markers)
                 });
             },
-            addMarker (location) {
+            addMarker (location, tempMarkers) {
+                // console.log(tempMarkers);
                 if (this.markers) {
                     this.deleteMarkers()
+                } else if(tempMarkers) {
+                    tempMarkers.forEach(function(marker) {
+                        marker.setMap(null);
+                    });
+                    // tempMarkers.setMap(null);
+                    tempMarkers = [];
                 }
                 this.markers = new window.google.maps.Marker({
                     position: location,
@@ -398,13 +520,20 @@
             deleteMarkers () {
                 this.markers.setMap(null)
                 this.markers = null;
+            },
+            getPositionTemp() {
+                var marker;
+                return  marker = this.markers;
             }
         },
         mounted () {
             GoogleMapsLoader.load((google) => {
-                this.initRegularMap(google)
+                // const myLatlng = new window.google.maps.LatLng(, );
+                this.createSearchBar(-6.914744, 107.609810);
+                // this.initRegularMap(google)
             })
-        }
+        },
+        
     }
 </script>
 
