@@ -3,6 +3,17 @@ import DropDown from './components/UIComponents/Dropdown.vue'
 import Checkbox from './components/UIComponents/Inputs/Checkbox.vue'
 import Radio from './components/UIComponents/Inputs/Radio.vue'
 import Spinner from './components/UIComponents/Spinner.vue'
+
+// kalendar
+// import PortalVue from 'portal-vue'
+// import format from 'date-fns/format';
+// import smoothscroll from 'smoothscroll-polyfill';
+import Kalendar from './components/UIComponents/Kalendar/kalendar-container';
+import KalendarCell from './components/UIComponents/Kalendar/kalendar-cell';
+import KalendarDay from './components/UIComponents/Kalendar/kalendar-day';
+import KalendarEventpopup from './components/UIComponents/Kalendar/kalendar-eventpopup';
+import KalendarWeekView from './components/UIComponents/Kalendar/kalendar-weekview';
+// import * from './components/UIComponents/Kalendar'
 // import Switch from './components/UIComponents/Switch.vue'
 /**
  * You can register global components here and use them as a plugin in your main Vue instance
@@ -17,6 +28,13 @@ const GlobalComponents = {
     Vue.component(Checkbox.name, Checkbox)
     Vue.component(Radio.name, Radio)
     Vue.component(Spinner.name, Spinner)
+
+    // Kalendar
+    Vue.component('kalendar', Kalendar);
+    Vue.component('kalendar-cell', KalendarCell);
+    Vue.component('kalendar-day', KalendarDay);
+    Vue.component('kalendar-eventpopup', KalendarEventpopup);
+    Vue.component('kalendar-week-view', KalendarWeekView);
     // Vue.component(Switch.name, Spinner)
   }
 }
