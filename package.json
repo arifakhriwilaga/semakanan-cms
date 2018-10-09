@@ -21,6 +21,7 @@
     "google-maps": "^3.2.1",
     "jquery": "^3.2.1",
     "jvectormap-next": "^3.0.0",
+    "kalendar-vue": "^0.2.5",
     "moment": "^2.22.2",
     "npm": "^6.1.0",
     "perfect-scrollbar": "0.7.1",
