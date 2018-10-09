@@ -14,12 +14,12 @@
                 <ul class="pagination">
                     <li class="page-item">
                         <button class="btn btn-default" v-on:click="changePage('first_page_url')"
-                                :disabled="pagination.first_page_url==null">First
+                                :disabled="(pagination.first_page_url == null || pagination.current_page == 1)">First
                         </button>
                     </li>
                     <li class="page-item">
                         <button class="btn btn-default" v-on:click="changePage('prev_page_url')"
-                                :disabled="pagination.prev_page_url==null">Prev
+                                :disabled="(pagination.prev_page_url == null)">Prev
                         </button>
                     </li>
                     <li class="page-item">
@@ -27,13 +27,13 @@
                     </li>
                     <li class="page-item">
                         <button class="btn btn-default" v-on:click="changePage('next_page_url')"
-                                :disabled="pagination.next_page_url==null"
+                                :disabled="(pagination.next_page_url == null)"
                         >Next
                         </button>
                     </li>
                     <li class="page-item">
                         <button class="btn btn-default" v-on:click="changePage('last_page_url')"
-                                :disabled="pagination.last_page_url==null"
+                                :disabled="(pagination.last_page_url == null || pagination.current_page == pagination.last_page)"
                         >Last
                         </button>
                     </li>
