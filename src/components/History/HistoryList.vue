@@ -63,13 +63,13 @@
               </template>
             </el-table-column>          
             <el-table-column
-              :min-width="45"
+              :min-width="25"
               fixed="right"
               label="Actions">
               <template slot-scope="props">
                 <!-- <p-checkbox v-model="props.row.info.is_open" @change="alert('hi')">Buka</p-checkbox> -->
                 <!-- <a class="btn btn-simple btn-xs btn-danger btn-icon remove"  @click="handleDelete(props.$index, props.row)"><i class="ti-close"></i></a> -->
-                <i style="padding-left:0px;padding-right:0px;font-size: 22px;margin-top: 1px;" class="el-icon-edit-outline btn btn-simple btn-lg btn-info btn-icon"  @click="handleShow(props.$index, props.row)"></i>
+                <i style="padding-left:0px;padding-right:0px;font-size: 22px;margin-top: 1px;" class="el-icon-info btn btn-simple btn-lg btn-info btn-icon"  @click="handleShow(props.$index, props.row)"></i>
               </template>
             </el-table-column>
           </el-table>

@@ -15,7 +15,7 @@
 
           <div class="pull-right">
             <label>
-              <input @keyup.enter="search" type="search" placeholder="Search records"
+              <input @keyup.enter="search" type="search" placeholder="Cari Nama Makanan"
                                               aria-controls="datatables" class="form-control input-sm">
             </label>
           </div>

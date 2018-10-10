@@ -4,7 +4,7 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li>
-                        showing {{pagination.from}} to {{pagination.to}} of {{pagination.total}}
+                        Menampilkan {{pagination.from}} ke {{pagination.to}} dari {{pagination.total}}
                     </li>
                 </ul>
             </nav>
@@ -14,27 +14,27 @@
                 <ul class="pagination">
                     <li class="page-item">
                         <button class="btn btn-default" v-on:click="changePage('first_page_url')"
-                                :disabled="(pagination.first_page_url == null || pagination.current_page == 1)">First
+                                :disabled="(pagination.first_page_url == null || pagination.current_page == 1)"><span class="el-icon-d-arrow-left"></span>
                         </button>
                     </li>
                     <li class="page-item">
                         <button class="btn btn-default" v-on:click="changePage('prev_page_url')"
-                                :disabled="(pagination.prev_page_url == null)">Prev
+                                :disabled="(pagination.prev_page_url == null)">Sebelumnya
                         </button>
                     </li>
                     <li class="page-item">
-                        Page {{pagination.current_page}} of {{pagination.last_page}}
+                        Halaman {{pagination.current_page}} dari {{pagination.last_page}}
                     </li>
                     <li class="page-item">
                         <button class="btn btn-default" v-on:click="changePage('next_page_url')"
                                 :disabled="(pagination.next_page_url == null)"
-                        >Next
+                        >Selanjutnya
                         </button>
                     </li>
                     <li class="page-item">
                         <button class="btn btn-default" v-on:click="changePage('last_page_url')"
                                 :disabled="(pagination.last_page_url == null || pagination.current_page == pagination.last_page)"
-                        >Last
+                        ><span class="el-icon-d-arrow-right"></span>
                         </button>
                     </li>
                 </ul>

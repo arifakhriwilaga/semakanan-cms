@@ -30,7 +30,7 @@
               </el-select>
           </div>
           <div class="pull-right" style="margin-right:5px;margin-bottom:15px">
-              <input @keyup.enter="search" type="search" placeholder="Search records" aria-controls="datatables" class="form-control input-sm">
+              <input @keyup.enter="search" type="search" placeholder="Cari Nama Merchant" aria-controls="datatables" class="form-control input-sm">
           </div>
         </div>
         <div class="col-sm-12">
