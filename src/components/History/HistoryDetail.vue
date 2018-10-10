@@ -2,237 +2,216 @@
   <div class="row">
     <div class="col-md-12">
       <h4 class="title pull-left">{{title}}</h4>
+      <button class="btn btn-primary pull-right" @click="toListHistory()" style="margin-bottom: 15px">List</button>
     </div>
+
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="category">Extended tables</div>
+        <h4><b>Order <span class="badge badge-secondary">{{history.status}}</span></b></h4>
       </div>
       <div class="card-content row">
-        <div class="col-sm-6">
-          <el-select
-            class="select-default"
-            v-model="pagination.perPage"
-            placeholder="Per page">
-            <el-option
-              class="select-default"
-              v-for="item in pagination.perPageOptions"
-              :key="item"
-              :label="item"
-              :value="item">
-            </el-option>
-          </el-select>
-        </div>
-        <div class="col-sm-6">
-          <div class="pull-right">
-            <label>
-              <input type="search" class="form-control input-sm" placeholder="Search records" v-model="searchQuery" aria-controls="datatables">
-            </label>
+        <div class="col-md-6">
+          <h5><b>Customer </b></h5>
+          <div class="form-group">
+            {{ (history.user) ? history.user.name : '-' }}
+          </div>
+          <h5><b>Driver </b></h5>
+          <div class="form-group">
+            {{ (history.driver) ? history.driver.name : '-' }}
           </div>
         </div>
-        <div class="col-sm-12">
-          <el-table class="table-striped"
-                    :data="queriedData"
-                    border
-                    style="width: 100%">
-            <el-table-column v-for="column in tableColumns"
-                             :key="column.label"
-                             :min-width="column.minWidth"
-                             :prop="column.prop"
-                             :label="column.label">
-            </el-table-column>
-            <!-- <el-table-column
-              :min-width="120"
-              fixed="right"
-              label="Actions">
-              <template slot-scope="props">
-                <a class="btn btn-simple btn-xs btn-info" @click="changeState(props.row)">Ubah Status</a>
-              </template>
-            </el-table-column> -->
-          </el-table>
+        <div class="col-md-6">
+          <div class="form-group">
+            <h6>Tanggal Order</h6>
+            {{history.created_at | moment("DD-MM-YYYY")}}
+          </div>
+          <div class="form-group">
+            <h6>Pembayaran</h6>
+            {{ formatPrice('id', history.cash) }}
+          </div>
+          <div class="form-group">
+            <h6>Total Pembayaran</h6>
+            {{ formatPrice('id', history.total_payment) }}
+          </div>
         </div>
-        <div class="col-sm-6 pagination-info">
-          <p class="category">Showing {{from + 1}} to {{to}} of {{total}} entries</p>
-        </div>
-        <div class="col-sm-6">
-          <p-pagination class="pull-right"
-                        v-model="pagination.currentPage"
-                        :per-page="pagination.perPage"
-                        :total="pagination.total">
-          </p-pagination>
+        <div class="col-md-12">        
+          <hr>
+          <div class="row" style="margin:0px">
+            <h5 class="pull-left">Daftar Merchant :</h5>
+            <div class="col-md-12" v-if="history.carts.length < 1" style="text-align:center"><br>Merchant tidak tersedia</div>
+            <!-- <el-button type="success" class="pull-right" :name="'process-all'" @click="processAllMerchant()">Process Semua</el-button> -->
+            <!-- <el-button type="danger" class="pull-right" :name="'cancel-all'" style="margin-right:5px" @click="cancelAllMerchant()" v-if="(history.status !== 'Done' && history.status !== 'Canceled' && history.carts.length > 1)">Cancel Semua</el-button> -->
+          </div>
+          <el-collapse class="panel-group" v-model="statusExpand">
+            <el-collapse-item v-for="(cart, index) in history.carts" :key="index" :title="cart.merchant.name" :name="index">
+              <div class="card-content">
+                <div class="row">
+                <!-- <div class="col-md-12" style="margin-bottom: 15px"> -->
+                  <!-- <el-button type="success" class="pull-right" :name="'process'+index" :id="'process'+index" @click="processMerchant(cart)" v-if="(cart.status !== 'Done' && cart.status !== 'Canceled')">Process</el-button> -->
+                  <!-- <el-button type="danger" class="pull-right" :name="'cancel'+index" :id="'process'+index" style="margin-right:5px" @click="cancelMerchant(cart)" v-if="(cart.status !== 'Done' && cart.status !== 'Canceled')">Cancel</el-button> -->
+                <!-- </div> -->
+                <div class="col-md-8 card">
+                  <div class="form-group">
+                    <h6>Tanggal Kirim</h6>
+                    {{cart.tanggal_kirim || '-'}}
+                  </div>
+                  <div class="form-group">
+                    <h6>Waktu Kirim</h6>
+                    {{ cart.waktu_kirim || '-' }}
+                  </div>
+                  <div class="form-group">
+                    <h6>Alamat User</h6>
+                    {{cart.user_address || '-'}}
+                  </div>
+                  <div class="form-group">
+                    <h6>Message</h6>
+                    {{cart.message || '-'}}
+                  </div>
+                </div>
+                
+                <div class="col-md-3 card pull-right">
+                  <div class="form-group">
+                    <h6>Status</h6>
+                    <span class="badge badge-secondary">{{cart.status}}</span>
+                  </div>
+                  <div class="form-group">
+                    <h6>Total M Harga</h6>
+                    {{ formatPrice('id', cart.total_m_price)}}
+                  </div>
+                  <div class="form-group">
+                    <h6>Total Harga</h6>
+                    {{ formatPrice('id', cart.total_price)}}
+                  </div>
+                </div>
+
+                <div class="col-md-12 card">
+                  <h5><b>Menu Makanan :</b></h5>
+                  <!-- <div class="col-md-12" v-if="chart.foods.length < 1" style="text-align:center"><br>Makanan tidak tersedia</div> -->
+                  <el-table :data="cart.foods" height="250" style="width: 100%">
+                    <el-table-column prop="name" label="Nama" width="280">
+                    </el-table-column>
+                    <el-table-column prop="qty" label="Quantity" width="90">
+                    </el-table-column>
+                    <el-table-column prop="m_price" label="M Harga" width="120">
+                    </el-table-column>
+                    <el-table-column prop="price" label="Harga" width="120">
+                    </el-table-column>
+                    <el-table-column prop="note" label="Catatan">
+                    </el-table-column>
+                  </el-table>
+                </div>
+                </div>
+              </div>
+            </el-collapse-item>
+          </el-collapse>
         </div>
       </div>
-    </div>
+   </div>
+
+    <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
   </div>
 </template>
 <script>
   import Vue from 'vue'
-  import {Table, TableColumn, Select, Option} from 'element-ui'
+  import {Table, TableColumn, Select, Option, Button} from 'element-ui'
   import PPagination from 'src/components/UIComponents/Pagination.vue'
   import users from 'src/api/users'
   import swal from 'sweetalert2'
   import axios from 'axios'
+  import * as moment from 'moment';
+  // import VueMoment from 'vue-moment'
+  // import moment from 'moment-timezone'
+
   Vue.use(Table)
   Vue.use(TableColumn)
   Vue.use(Select)
   Vue.use(Option)
+  Vue.use(Button);
+  // Vue.use(VueMoment)
+  Vue.use(require('vue-moment'));
+  Vue.use(moment);
   export default{
     components: {
       PPagination
     },
     created() {
-      this.getList()
-    },
-    computed: {
-      pagedData () {
-        return this.tableData.slice(this.from, this.to)
-      },
-      /***
-       * Searches through table data and returns a paginated array.
-       * Note that this should not be used for table with a lot of data as it might be slow!
-       * Do the search and the pagination on the server and display the data retrieved from server instead.
-       * @returns {computed.pagedData}
-       */
-      queriedData () {
-        if (this.tableData) {
-          this.pagination.currentPage = this.meta_pagination.current_page;
-          this.pagination.perPage = this.meta_pagination.per_page;
-          this.pagination.total = this.meta_pagination.total;
-          if (!this.searchQuery) {
-            this.pagination.total = this.tableData.length
-            return this.pagedData
-          }
-          let result = this.tableData
-            .filter((row) => {
-              let isIncluded = false
-              for (let key of this.propsToSearch) {
-                let rowValue = row[key].toString()
-                if (rowValue.includes && rowValue.includes(this.searchQuery)) {
-                  isIncluded = true
-                }
-              }
-              return isIncluded
-            })
-          this.pagination.total = result.length
-          return result.slice(this.from, this.to)
-        }
-      },
-      to () {
-        let highBound = this.from + this.pagination.perPage
-        if (this.total < highBound) {
-          highBound = this.total
-        }
-        return highBound
-      },
-      from () {
-        return this.pagination.perPage * (this.pagination.currentPage - 1)
-      },
-      total () {
-        if (this.tableData) {
-          this.pagination.total = this.tableData.length
-          return this.tableData.length
-        } else {
-          return 0
-        }
-      }
+      this.title = 'Detil Histori';
+      this.getHistory()
     },
     data () {
       return {
-        pagination: {
-          perPage: 0,
-          currentPage: 0,
-          perPageOptions: [5, 10, 25, 50],
-          total: 0
-        },
-        searchQuery: '',
-        propsToSearch: ['total_payment'],
-        tableColumns: [
-          {
-            prop: 'address.data.address',
-            label: 'Alamat',
-            minWidth: 250
-          },
-          {
-            prop: 'waktu_kirim',
-            label: 'Waktu Kirim',
-            minWidth: 100
-          },
-          {
-            prop: 'tanggal_kirim',
-            label: 'Tanggal Kirim',
-            minWidth: 100
-          },
-          {
-            prop: 'total_price',
-            label: 'Total Harga',
-            minWidth: 100
-          },
-          {
-            prop: 'total_m_price',
-            label: 'Total M Harga',
-            minWidth: 100
-          },
-          {
-            prop: 'status.data.status',
-            label: 'Status',
-            minWidth: 100
-          },
-          {
-            prop: 'rating',
-            label: 'Rating',
-            minWidth: 100
-          },
-          {
-            prop: 'message',
-            label: 'Pesan',
-            minWidth: 200
-          }
-        ],
-        tableData: [],
         title: '',
-        meta_pagination: ''
+        history: {
+          carts: []
+        },
+        moment: moment,
+        statusSpinner: false,
+        statusExpand: []
       }
     },
     methods: {
-      changeState(row) {
-        axios.put(`/api/transactions/${this.$router.currentRoute.params.id}/${row.id}`).then(res => {
-            this.$notify({
-                component: {
-                    template: `<span>${res.data.meta.message}</span>`
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'success'
-            })
-            this.getList()
+      // get related data
+      getHistory() {
+        this.statusSpinner = true;
+        axios.get(`/api/histories/${this.$router.currentRoute.params.id}`).then(res => {
+            this.statusSpinner = false;
+            this.history = res.data.data;
+            for (let index = 0; index < res.data.data.carts.length; index++) {
+              this.statusExpand.push(index);
+            }
+            
         }).catch(err => {
-            this.$notify({
-                component: {
-                    template: `<span>Terjadi kesalahan!</span>`,
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'danger'
-            })
+          this.$notify({
+              component: {
+                  template: `<span>Terjadi kesalahan!</span>`,
+              },
+              icon: 'ti-alert',
+              horizontalAlign: 'right',
+              verticalAlign: 'top',
+              type: 'danger'
+          })
         })
       },
-      getList() {
-          axios.get(`/api/histories/${this.$router.currentRoute.params.id}`).then(res => {
-              this.title = res.data.meta.message;
-              this.tableData = res.data.data;
-              this.meta_pagination = res.data.meta.pagination;
-          }).catch(err => {
-            this.$notify({
-                component: {
-                    template: `<span>Terjadi kesalahan!</span>`,
-                },
-                icon: 'ti-alert',
-                horizontalAlign: 'right',
-                verticalAlign: 'top',
-                type: 'danger'
-            })
-          })
+
+      // others
+      toListHistory() {
+        this.$router.push({name: 'history-list'})
+      },
+      formatPrice(type, value) {
+        var format = '';
+
+        switch(type) {
+          case 'id':
+              format = 'Rp. '
+              break;
+          case 'en':
+              format = '$ '
+              break;
+          default:
+              format = ''
+        }
+        let val = (value/1).toFixed(2).replace('.', ',')
+        return format + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      },
+
+      showModalError(){
+        swal({
+          title: 'Terjadi kesalahan',
+          text: 'Retry request',
+          type: 'error',
+          confirmButtonClass: 'btn btn-info btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          showCancelButton: true,
+          buttonsStyling: true,
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'Cancel',
+        }).then(() => {
+        
+          this.getHistory();
+        
+        }, function (dismiss) {
+          // this code dismiss condition
+        });
       }
     }
   }
