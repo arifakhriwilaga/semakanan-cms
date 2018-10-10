@@ -235,6 +235,7 @@
                     this.form.field.longitude = Number(data.data.longitude);
                     this.form.field.open_time = data.data.open_time;
                     this.form.field.close_time = data.data.close_time;
+                    this.form.field.description = data.data.info.description;
 
                     // set map
                     // const myLatlng = new window.google.maps.LatLng(this.form.field.latitude, this.form.field.longitude)
