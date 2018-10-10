@@ -23,9 +23,18 @@ export default [
     path: '/foods/list'
   },
   {
-    name: 'Driver',
+    name: 'Drivers',
     icon: 'ti-user',
-    path: '/drivers/list'
+    children: [
+      {
+        name: 'Driver',
+        path: '/drivers/list'
+      },
+      {
+        name: 'Driver Shift',
+        path: '/drivers/shift'
+      },
+    ]
   },
   {
     name: 'Helpdesks',
