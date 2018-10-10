@@ -86,6 +86,8 @@ import FoodForm from 'src/components/Food/FoodForm.vue';
 
 //Driver
 import DriverList from 'src/components/Driver/DriverList';
+import DriverForm from 'src/components/Driver/DriverForm';
+import DriverShift from 'src/components/Driver/DriverShift';
 
 //Helpdesk
 import HelpdeskMerchantList from 'src/components/Helpdesk/HelpdeskMerchantList';
@@ -456,11 +458,16 @@ const driverMenu = {
       name: 'driver-list',
       component: DriverList
     },
-    // {
-    //   path: 'create',
-    //   name: 'driver-create',
-    //   component: DriverForm
-    // },
+    {
+      path: 'edit',
+      name: 'driver-edit',
+      component: DriverForm
+    },
+    {
+      path: 'shift',
+      name: 'driver-shift',
+      component: DriverShift
+    },
     // {
     //   path: 'driver/:id',
     //   name: 'driver-edit',
