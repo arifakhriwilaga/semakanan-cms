@@ -42,52 +42,52 @@
             <!-- <el-button type="success" class="pull-right" :name="'process-all'" @click="processAllMerchant()">Process Semua</el-button> -->
             <el-button type="danger" class="pull-right" :name="'cancel-all'" style="margin-right:5px" @click="cancelAllMerchant()" v-if="(transaction.status !== 'Done' && transaction.status !== 'Canceled' && transaction.carts.length > 1)">Cancel Semua</el-button>
           </div>
-          <el-collapse class="panel-group">
-            <el-collapse-item v-for="(chart, index) in transaction.carts" :key="index" :title="chart.merchant.name" :name="index">
+          <el-collapse class="panel-group" v-model="statusExpand">
+            <el-collapse-item v-for="(cart, index) in transaction.carts" :key="index" :title="cart.merchant.name" :name="index">
               <div class="card-content">
                 <div class="row">
                 <div class="col-md-12" style="margin-bottom: 15px">
-                  <el-button type="success" class="pull-right" :name="'process'+index" :id="'process'+index" @click="processMerchant(chart)" v-if="(chart.status !== 'Done' && chart.status !== 'Canceled')">Process</el-button>
-                  <el-button type="danger" class="pull-right" :name="'cancel'+index" :id="'process'+index" style="margin-right:5px" @click="cancelMerchant(chart)" v-if="(chart.status !== 'Done' && chart.status !== 'Canceled')">Cancel</el-button>
+                  <el-button type="success" class="pull-right" :name="'process'+index" :id="'process'+index" @click="processMerchant(cart)" v-if="(cart.status !== 'Done' && cart.status !== 'Canceled')">Process</el-button>
+                  <el-button type="danger" class="pull-right" :name="'cancel'+index" :id="'process'+index" style="margin-right:5px" @click="cancelMerchant(cart)" v-if="(cart.status !== 'Done' && cart.status !== 'Canceled')">Cancel</el-button>
                 </div>
                 <div class="col-md-8 card">
                   <div class="form-group">
                     <h6>Tanggal Kirim</h6>
-                    {{chart.tanggal_kirim || '-'}}
+                    {{cart.tanggal_kirim || '-'}}
                   </div>
                   <div class="form-group">
                     <h6>Waktu Kirim</h6>
-                    {{ chart.waktu_kirim || '-' }}
+                    {{ cart.waktu_kirim || '-' }}
                   </div>
                   <div class="form-group">
                     <h6>Alamat User</h6>
-                    {{chart.user_address || '-'}}
+                    {{cart.user_address || '-'}}
                   </div>
                   <div class="form-group">
                     <h6>Message</h6>
-                    {{chart.message || '-'}}
+                    {{cart.message || '-'}}
                   </div>
                 </div>
                 
                 <div class="col-md-3 card pull-right">
                   <div class="form-group">
                     <h6>Status</h6>
-                    <span class="badge badge-secondary">{{chart.status}}</span>
+                    <span class="badge badge-secondary">{{cart.status}}</span>
                   </div>
                   <div class="form-group">
                     <h6>Total M Harga</h6>
-                    {{ formatPrice('id', chart.total_m_price)}}
+                    {{ formatPrice('id', cart.total_m_price)}}
                   </div>
                   <div class="form-group">
                     <h6>Total Harga</h6>
-                    {{ formatPrice('id', chart.total_price)}}
+                    {{ formatPrice('id', cart.total_price)}}
                   </div>
                 </div>
 
                 <div class="col-md-12 card">
                   <h5><b>Menu Makanan :</b></h5>
                   <!-- <div class="col-md-12" v-if="chart.foods.length < 1" style="text-align:center"><br>Makanan tidak tersedia</div> -->
-                  <el-table :data="chart.foods" height="250" style="width: 100%">
+                  <el-table :data="cart.foods" height="250" style="width: 100%">
                     <el-table-column prop="name" label="Nama" width="280">
                     </el-table-column>
                     <el-table-column prop="qty" label="Quantity" width="90">
@@ -145,7 +145,8 @@
           carts: []
         },
         moment: moment,
-        statusSpinner: false
+        statusSpinner: false,
+        statusExpand: []
       }
     },
     methods: {
@@ -155,8 +156,10 @@
         axios.get(`/api/transactions/${this.$router.currentRoute.params.id}`).then(res => {
             this.statusSpinner = false;
             this.transaction = res.data.data;
-
-            // this.meta_pagination = res.data.meta.pagination;
+            for (let index = 0; index < res.data.data.carts.length; index++) {
+              this.statusExpand.push(index);
+            }
+            
         }).catch(err => {
           this.$notify({
               component: {
@@ -256,7 +259,7 @@
           }).catch((err) => {this.statusSpinner = false; this.showModalError()});
         }); 
       },
-      cancelMerchant(chart) {
+      cancelMerchant(cart) {
         swal({
           title: 'Perhatian!',
           text: 'Anda ingin membatalkan merchant ini?',
@@ -269,11 +272,11 @@
           cancelButtonText: 'close',
         }).then(() => {
           this.statusSpinner = true;
-          axios.patch(`/api/transactions/${this.$router.currentRoute.params.id}/cart/${chart.id}/cancel`).then(res => {
+          axios.patch(`/api/transactions/${this.$router.currentRoute.params.id}/cart/${cart.id}/cancel`).then(res => {
             this.statusSpinner = false;
             this.$notify({
                 component: {
-                    template: `<span>Chart berhasil dibatalkan!</span>`,
+                    template: `<span>Cart berhasil dibatalkan!</span>`,
                 },
                 icon: 'ti-alert',
                 horizontalAlign: 'right',
