@@ -6,7 +6,7 @@
         </div>
 
         <!-- Form Input -->
-        <div class="col-md-6 card">
+        <div class="col-md-12 card">
             <div class="card-header">
                 <div class="card-title"><h4 style="margin-top:10px;">{{mode == 'Add' ? 'Tambah' : 'Ubah'}} Kost</h4></div>
                 <hr>
@@ -15,30 +15,34 @@
                 <div class="card-content">
                     <div class="row">
 
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Nama</label>
-                            <input type="text" class="form-control" v-model="kost.name" v-validate="'required'"
-                                name="nama">
-                            <span>{{ errors.first('nama') }}</span>
+                            <input type="text" class="form-control" v-model="form.field.name" v-validate="'required'"
+                                name="name">
+                            <span>{{ errors.first('name') }}</span>
                         </div>
                         <div class="form-group">
                             <label>Gambar</label>
-                            <input type="file" class="form-control" @change="onFileChanged"
-                            name="image"
-                            >
-                            <img :src="kost.image" v-if="kost.image!=''">
+                            <input type="file" v-if="(!form.field.image)" class="form-control" @change="onFileChanged" name="image" v-validate="'required'">
+                            <el-button v-if="(form.field.image)" type="info" class="pull-right" circle style="position: absolute;right: 5px;top: 27px;width:30px;height:30px" @click="form.field.image = ''"> <i class="el-icon-edit" style="left: 8px;top: 8px;position: absolute;"></i></el-button>
+                            <img :src="form.field.image" v-if="form.field.image!=''">
                             <span>{{ errors.first('image') }}</span>
                         </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="">Alamat</label>
                             <textarea id="" cols="15" rows="5" class="form-control"
-                                    v-model="kost.address" name="alamat" v-validate="'required'"></textarea>
-                            <span>{{ errors.first('alamat') }}</span>
+                                    v-model="form.field.address" name="address" v-validate="'required'"></textarea>
+                            <span>{{ errors.first('address') }}</span>
                         </div>
+                    </div>
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <label for="">Lokasi</label>
-                            <div id="regularMap" class="map"></div>
+                            <input type="text" class="form-control" id="pac-input" placeholder="Ketik Alamat" style="width:600px!important;background:#fff"><br>
+                            <div id="map" class="map"></div>
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -70,28 +74,45 @@
 
     export default {
         // props:{
-        //   merchant: Object
+        //   kost: Object
         // },
         components: {
             ImageUpload
         },
         data () {
           return {
-            kost: {
-              latitude: '',
-              longitude: '',
-              name: '',
-              address: ''
+            form: {
+                field: {
+                    latitude: '',
+                    longitude: '',
+                    name: '',
+                    address: '',
+                    image: ''
+                },
+                validation: {
+                    messages: {
+                        custom: {
+                            name: {
+                                required: 'Nama tidak boleh kosong'
+                            },
+                            address: {
+                                required: 'Alamat tidak boleh kosong'
+                            },
+                            image: {
+                                required: 'Image tidak boleh kosong'
+                            },
+                        }
+                    }
+                }
+            
             },
             isSubmitted: false
 
           }
         },
         created(){
-          let kost_id = this.$router.currentRoute.params.id;
-          console.log(kost_id);
-          if (typeof(kost_id) != "undefined"){
-                this.getMerchant(kost_id);
+          if (this.$router.currentRoute.params.id){
+                this.getKost();
           }
         },
         computed: {
@@ -105,23 +126,117 @@
         },
         methods: {
             onLoad(avatar) {
-              this.kost.image = avatar.src;
+              this.form.field.image = avatar.src;
             },
-            getMerchant(kost_id){
-              axios.get(`${SERVER}/api/helpdesk/kosts/${merchant_id}`).then(res => {
+            getKost(){
+              axios.get(`${SERVER}/api/helpdesk/kosts/${this.$router.currentRoute.params.id}`).then(res => {
                 const data = res.data;
 
-                this.kost.name = data.data.name;
-                this.kost.image = data.data.image;
-                this.kost.address = data.data.address;
-                this.kost.latitude = Number(data.data.latitude);
-                this.kost.longitude = Number(data.data.longitude);
+                this.form.field.name = data.data.name;
+                this.form.field.image = data.data.image;
+                this.form.field.address = data.data.address;
+                this.form.field.latitude = Number(data.data.latitude);
+                this.form.field.longitude = Number(data.data.longitude);
+                this.createSearchBar(this.form.field.latitude, this.form.field.longitude);
+
               }).catch( err => {
-//                this.$router.push({ name: 'merchant-list' })
+//                this.$router.push({ name: 'kost-list' })
               })
             },
             listKost() {
                 this.$router.push({ name: 'helpdesk-kost-list' })
+            },
+            createSearchBar(latitude, longitude) {
+                const myLatlng = new window.google.maps.LatLng(latitude, longitude);
+                const mapOptions = {
+                    zoom: 15,
+                    center: myLatlng,
+                    scrollwheel: false // we disable de scroll over the map, it is a really annoing when you scroll through page
+                }
+
+                this.map = new window.google.maps.Map(document.getElementById('map'), mapOptions);
+                this.markers = new window.google.maps.Marker({position:myLatlng});
+                this.markers.setMap(this.map);
+
+                var input = document.getElementById('pac-input');
+                var searchBox = new window.google.maps.places.SearchBox(input);
+                this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+                var tempMap = this.map
+
+                // Bias the SearchBox results towards current map's viewport.
+                this.map.addListener('bounds_changed', function() {
+                    searchBox.setBounds(tempMap.getBounds());
+                });
+
+                var markers = [];
+                var tempForm = this.form;
+                var originalMarker = this.markers;
+
+                // Listen for the event fired when the user selects a prediction and retrieve
+                // more details for that place.
+                searchBox.addListener('places_changed', function() {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers.forEach(function(marker) {
+                    marker.setMap(null);
+                });
+                markers = [];
+                // console.log(originalMarker);
+                if(originalMarker) {
+                    originalMarker.setMap(null);
+                    originalMarker = null;
+                }
+                // For each place, get the icon, name and location.
+                var bounds = new window.google.maps.LatLngBounds();
+
+                places.forEach(function(place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    
+                    // Create a marker for each place.
+                    markers.push(new window.google.maps.Marker({
+                        map: tempMap,
+                        // icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+                    tempForm.field.latitude = markers[0].getPosition().lat();
+                    tempForm.field.longitude = markers[0].getPosition().lng();
+                    
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                    tempMap.fitBounds(bounds);  
+                });
+                
+                this.map.addListener('click', event => {
+                    markers.forEach(function(marker) {
+                        marker.setMap(null);
+                    });
+                    markers = [];
+                    if (originalMarker) {
+                        originalMarker.setMap(null);
+                        originalMarker = null;
+                    } 
+                    originalMarker = new window.google.maps.Marker({
+                        position: event.latLng,
+                        map: tempMap
+                    })
+                    tempForm.latitude = originalMarker.getPosition().lat()
+                    tempForm.longitude = originalMarker.getPosition().lng()
+                });
             },
             initRegularMap (google) {
                 // Regular Map
@@ -146,8 +261,8 @@
                     position: location,
                     map: this.map
                 })
-                this.kost.latitude = this.markers.getPosition().lat()
-                this.kost.longitude = this.markers.getPosition().lng()
+                this.form.field.latitude = this.markers.getPosition().lat()
+                this.form.field.longitude = this.markers.getPosition().lng()
             },
             deleteMarkers () {
                 this.markers.setMap(null)
@@ -162,11 +277,11 @@
                   this.isSubmitted = true;
 
                   if (this.$router.currentRoute.params.id) {
-                    if (this.kost.image.slice(0, 10) != "data:image") {
+                    if (this.form.field.image.slice(0, 10) != "data:image") {
                       Vue.delete(this.kost, 'image');
                     };
                     // if (this.image.spli)
-                    axios.put('/api/helpdesk/' + this.$router.currentRoute.params.id, this.kost).then(res => {
+                    axios.put('/api/helpdesk/kosts' + this.$router.currentRoute.params.id, this.form.field).then(res => {
                       if (res.status == 200) {
                         console.log(res);
                         this.listKost();
@@ -195,7 +310,7 @@
                   } else {
                     console.log(this.kost);
 
-                    axios.post('/api/helpdesk', this.kost).then(res => {
+                    axios.post('/api/helpdesk/kosts', this.form.field).then(res => {
                       if (res.status == 201) {
                         this.listKost();
                         this.$notify({
@@ -238,13 +353,13 @@
                 const reader = new FileReader();
                 reader.readAsDataURL(image);
                 reader.onload = e =>{
-                    this.kost.image = e.target.result;
+                    this.form.field.image = e.target.result;
                 };
             }
         },
         mounted () {
             GoogleMapsLoader.load((google) => {
-                this.initRegularMap(google)
+                this.createSearchBar(-6.914744, 107.609810);
             })
         }
     }

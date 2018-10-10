@@ -12,6 +12,9 @@
         <div class="col-sm-12">
           <hr>
           <button class="btn btn-primary" @click="createKost()" style="margin-bottom:15px">Tambah</button>
+          <div class="pull-right" style="margin-right:5px;margin-bottom:15px">
+              <input @keyup.enter="search" type="search" placeholder="Cari Nama Kost" aria-controls="datatables" class="form-control input-sm">
+          </div>
         </div>
         
         <div class="col-sm-12">
@@ -26,12 +29,14 @@
                             :label="column.label">
             </el-table-column>
             <el-table-column
-              :min-width="80"
+              :min-width="45"
               fixed="right"
               label="Actions">
               <template slot-scope="props">
-                {{props.row.info.description}}
-                <p-checkbox v-model="props.row.info.is_open" disabled>Buka</p-checkbox>
+                <!-- {{props.row.info.description}} -->
+                <i style="padding-left: 10px;padding-right: 10px;font-size: 22px;margin-top: 1px;" class="el-icon-delete btn btn-simple btn-lg btn-danger btn-icon remove" @click="handleDelete(props.$index, props.row)"></i>
+                <i style="padding-left:0px;padding-right:0px;font-size: 22px;margin-top: 1px;" class="el-icon-edit-outline btn btn-simple btn-lg btn-info btn-icon"  @click="handleShow(props.$index, props.row)"></i>
+                <!-- <p-checkbox v-model="props.row.info.is_open" disabled>Buka</p-checkbox> -->
               </template>
             </el-table-column>
           </el-table>
@@ -93,26 +98,28 @@
           {
             prop: 'name',
             label: 'Nama',
-            minWidth: 200
+            minWidth: 100
           },
           {
             prop: 'address',
             label: 'Alamat',
-            minWidth: 200
+            minWidth: 300
           }
         ],
         tableData: []
       }
     },
     methods: {
-      changeState(event){
-        console.log(event);
+      handleShow(index, row) {
+        this.$router.push({name: 'helpdesk-kost-edit', params: {
+          id: row.id
+        }})
       },
       page(val) {
         this.getKost({}, this.pagination[val]);
       },
       search(event) {
-        this.getKost({'name': event.target.value});
+        this.getKost({'field': 'name','search': event.target.value});
       },
       createKost() {
         // alert('hallo guys')
@@ -120,7 +127,7 @@
       },
       getKost(params=null, path=null){
         if (path==null){
-          path='/api/kosts';
+          path='/api/helpdesk/kosts';
         }
         this.statusSpinner = true;
         this.tableData = [];
@@ -153,48 +160,36 @@
           cancelButtonClass: 'btn btn-danger btn-fill',
           buttonsStyling: false
         }).then(() => {
-          this.$store.dispatch('merchantDrop', row).then((res) => {
-          }).catch(er => console.log(er))
+          this.statusSpinner = true;
+          new Promise((resolve, reject) => {
+            axios.delete(`/api/helpdesk/kosts/${row.id}`).then((res) => {
+                this.statusSpinner = false;
+                swal({
+                title: 'Terhapus!',
+                text: 'Data berhasil terhapus.',
+                type: 'success',
+                confirmButtonClass: 'btn btn-success btn-fill',
+                buttonsStyling: false
+                })
+                this.getKost()
+                // resolve();
+            }).catch((err) => {
+              this.statusSpinner = false;
+              swal({
+                title: 'Terjadi kesalahan',
+                text: 'Menghapus data dibatalkan',
+                type: 'error',
+                confirmButtonClass: 'btn btn-info btn-fill',
+                buttonsStyling: false
+              })
+              reject();
+            })
+          })
         }, function (dismiss) {
-          
+          // this code dismiss condition
         })
       },
-      handleShow(index, row) {
-        this.$router.push({name: 'kost-edit', params: {
-          id: row.id
-        }})
-      },
-      confirm(row){
-        swal({
-          title: 'Apakah anda yakin?',
-          text: 'Toko akan buka / tutup',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonClass: 'btn btn-success btn-fill',
-          cancelButtonClass: 'btn btn-danger btn-fill',
-          confirmButtonText: 'Yes!',
-          buttonsStyling: false
-        }).then(function () {
-          // let service = orderService.changeState(row.id, {
-          //   'order_status': row.order_status
-          // });
-          // service.then(response => {
-          //   if (response.status == 200) {
-          //     swal({
-          //       title: 'Success!',
-          //       text: 'Status Order: ' + row.order_status,
-          //       type: 'success',
-          //       confirmButtonClass: 'btn btn-success btn-fill',
-          //       buttonsStyling: false
-          //     }, function () {
-          //       this.getOrders();
-          //     });
-          //   }
-          // });
-        }).catch(()=>{
-          // this.getOrders();
-        });
-      },
+      
       showModalError(){
         swal({
           title: 'Terjadi kesalahan',
