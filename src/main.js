@@ -11,7 +11,7 @@ import axios from 'axios'
 
 
 // Plugins
-import GlobalComponents from './gloablComponents'
+import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'
 import SideBar from './components/UIComponents/SidebarPlugin'
 
