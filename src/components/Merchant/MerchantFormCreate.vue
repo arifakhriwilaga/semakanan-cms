@@ -468,8 +468,9 @@
                         position: event.latLng,
                         map: tempMap
                     })
-                    tempForm.latitude = originalMarker.getPosition().lat()
-                    tempForm.longitude = originalMarker.getPosition().lng()
+                  
+                    tempForm.field.latitude = originalMarker.getPosition().lat()
+                    tempForm.field.longitude = originalMarker.getPosition().lng()
                 });
             },
             initRegularMap (google, location) {
@@ -501,14 +502,14 @@
                 });
             },
             addMarker (location, tempMarkers) {
-                // console.log(tempMarkers);
+                
                 if (this.markers) {
                     this.deleteMarkers()
                 } else if(tempMarkers) {
                     tempMarkers.forEach(function(marker) {
                         marker.setMap(null);
                     });
-                    // tempMarkers.setMap(null);
+                    
                     tempMarkers = [];
                 }
                 this.markers = new window.google.maps.Marker({
@@ -529,9 +530,7 @@
         },
         mounted () {
             GoogleMapsLoader.load((google) => {
-                // const myLatlng = new window.google.maps.LatLng(, );
                 this.createSearchBar(-6.914744, 107.609810);
-                // this.initRegularMap(google)
             })
         },
         

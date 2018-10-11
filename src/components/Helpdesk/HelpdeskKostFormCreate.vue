@@ -234,8 +234,8 @@
                         position: event.latLng,
                         map: tempMap
                     })
-                    tempForm.latitude = originalMarker.getPosition().lat()
-                    tempForm.longitude = originalMarker.getPosition().lng()
+                    tempForm.field.latitude = originalMarker.getPosition().lat()
+                    tempForm.field.longitude = originalMarker.getPosition().lng()
                 });
             },
             initRegularMap (google) {
