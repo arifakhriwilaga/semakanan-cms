@@ -3,6 +3,7 @@ import DropDown from './components/UIComponents/Dropdown.vue'
 import Checkbox from './components/UIComponents/Inputs/Checkbox.vue'
 import Radio from './components/UIComponents/Inputs/Radio.vue'
 import Spinner from './components/UIComponents/Spinner.vue'
+import ShowImage from './components/Base/ShowImage.vue'
 
 // kalendar
 // import PortalVue from 'portal-vue'
@@ -28,6 +29,7 @@ const GlobalComponents = {
     Vue.component(Checkbox.name, Checkbox)
     Vue.component(Radio.name, Radio)
     Vue.component(Spinner.name, Spinner)
+    Vue.component('show-image', ShowImage)
 
     // Kalendar
     Vue.component('kalendar', Kalendar);

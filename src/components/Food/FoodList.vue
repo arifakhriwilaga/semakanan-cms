@@ -57,7 +57,7 @@
             </el-table-column>
             <el-table-column :min-width="50">
               <template slot-scope="props">
-                <img :src="props.row.image">
+                <img :src="props.row.image" @click="showImageDetail(props.row.image)" class="image-table">
               </template>
             </el-table-column>
             <el-table-column
@@ -76,6 +76,7 @@
     </div>
 
     <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
+    <show-image :widthModal="'980px'" :statusModal="showModal" :dataImage="tempShowImage" @closeModal="getShowImageDetail($event)"></show-image>
   </div>
 </template>
 <script>
@@ -95,6 +96,8 @@
         statusSpinner: false,
         tableData: [],
         pagination: {},
+        tempShowImage: '',
+        showModal: false,
         tableColumns: [
           // {
           //   prop: 'id',
@@ -245,6 +248,17 @@
         let val = (value/1).toFixed(2).replace('.', ',')
         return format + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
       },
+
+      showImageDetail(image){
+        this.tempShowImage = image;
+        this.showModal = true;
+      },
+      
+      getShowImageDetail($event) {
+        this.showModal = false;
+        this.tempShowImage = '';
+      }
+
     }
   }
 </script>

@@ -38,7 +38,7 @@
               <el-table-column label="Image">
                 <template slot-scope="props">
                   <div class="img-container">
-                    <img :src="props.row.image" alt="Agenda" height="50">
+                    <img :src="props.row.image" alt="Agenda" height="50" @click="showImageDetail(props.row.image)" class="image-table">
                   </div>
                 </template>
               </el-table-column>
@@ -59,6 +59,8 @@
       </div>
     </div>
     <spinner :showSpinner="statusSpinner" :class="'spinner-dashboard'"></spinner>
+    <show-image :widthModal="'980px'" :statusModal="showModal" :dataImage="tempShowImage" @closeModal="getShowImageDetail($event)"></show-image>
+
   </div>
 </template>
 <script>
@@ -91,6 +93,8 @@
     data () {
       return {
         statusSpinner: false,
+        tempShowImage: '',
+        showModal: false,
         pagination: {
         },
         filterSlide: 'all',
@@ -225,6 +229,15 @@
           // this code dismiss condition
         });
         
+      },
+      showImageDetail(image){
+        this.tempShowImage = image;
+        this.showModal = true;
+      },
+      
+      getShowImageDetail($event) {
+        this.showModal = false;
+        this.tempShowImage = '';
       }
     }
   }
