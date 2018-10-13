@@ -1,7 +1,7 @@
 export default [
   {
     name: 'Merchants',
-    icon: 'ti-home',
+    icon: 'store',
     children: [
       {
         name: 'Merchant',
@@ -18,13 +18,13 @@ export default [
     ]
   },
   {
-    name: 'Food',
-    icon: 'ti-clipboard',
+    name: 'Makanan',
+    icon: 'utensils',
     path: '/foods/list'
   },
   {
-    name: 'Drivers',
-    icon: 'ti-user',
+    name: 'Driver',
+    icon: 'users',
     children: [
       {
         name: 'Driver',
@@ -38,7 +38,7 @@ export default [
   },
   {
     name: 'Helpdesks',
-    icon: 'el-icon-service',
+    icon: 'question-circle',
 
     children: [
       // {
@@ -47,14 +47,14 @@ export default [
       // },
       {
         name: 'Kost',
-        path: '/helpdesks/kosts'
+        path: '/helpdesks/kosts/list'
       }
     ]
   },
   {
     name: 'Slider',
-    icon: 'el-icon-picture',
-    path: '/slider/semakanan/list'
+    icon: 'images',
+    path: '/sliders/list'
     // children: [
     //   {
     //     name: 'Slider',
@@ -64,8 +64,8 @@ export default [
   },
   {
     name: 'Transaksi',
-    icon: 'el-icon-goods',
-    path: '/transaction/list'
+    icon: 'shopping-basket',
+    path: '/transactions/list'
     // children: [
     //   {
     //     name: 'Daftar Transaksi',
@@ -74,9 +74,9 @@ export default [
     // ]
   },
   {
-    name: 'History',
-    icon: 'ti-agenda',
-    path: '/history'
+    name: 'Histori',
+    icon: 'book',
+    path: '/histories'
     // children: [
     //   {
     //     name: 'Daftar History',

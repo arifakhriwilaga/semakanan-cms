@@ -68,7 +68,7 @@
       },
       logo: {
         type: String,
-        default: '/static/img/vue-logo.png'
+        default: '/static/img/apple-icon.png'
       },
       sidebarLinks: {
         type: Array,

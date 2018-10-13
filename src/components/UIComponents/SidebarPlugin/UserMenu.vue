@@ -6,7 +6,7 @@
     <div class="info">
       <a data-toggle="collapse" @click="toggleMenu" href="javascript:void(0)">
            <span>
-             Admin Ganteng
+             Admin Nissa
              <b class="caret"></b>
           </span>
       </a>

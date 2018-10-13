@@ -277,6 +277,7 @@ const merchantsMenu = {
   path: '/merchants',
   name: 'merchants',
   component: DashboardLayout,
+  redirect: { name: 'merchant-list' },
   children: [
     {
       path: 'list',
@@ -294,7 +295,7 @@ const merchantsMenu = {
       component: MerchantCreate
     },
     {
-      path: ':id',
+      path: 'edit/:id',
       name: 'merchant-edit',
       component: MerchantCreate
     },
@@ -335,10 +336,10 @@ const merchantsMenu = {
 const sliderMenu = {
   component: DashboardLayout,
   name: 'slider',
-  path: '/slider',
+  path: '/sliders',
   children: [
     {
-      path: 'semakanan/list',
+      path: 'list',
       name: 'slider-list-semakanan',
       component: SliderListSemakanan
     },
@@ -358,7 +359,7 @@ const sliderMenu = {
 const transactionMenu = {
   component: DashboardLayout,
   name: 'transaction',
-  path: '/transaction',
+  path: '/transactions',
   children: [
     {
       path: 'list',
@@ -381,7 +382,7 @@ const transactionMenu = {
 const historyMenu = {
   component: DashboardLayout,
   name: 'history',
-  path: '/history',
+  path: '/histories',
   children: [
     {
       path: '',
@@ -389,7 +390,7 @@ const historyMenu = {
       component: HistoryList
     },
     {
-      path: '/:id',
+      path: 'detail/:id',
       name: 'history-detail',
       component: HistoryDetail
     }
@@ -430,7 +431,7 @@ const helpdeskMenu = {
       component: HelpdeskMerchantList
     },
     {
-      path: 'kosts',
+      path: 'kosts/list',
       name: 'helpdesk-kost-list',
       component: HelpdeskKostList,
     },
@@ -440,7 +441,7 @@ const helpdeskMenu = {
       component: HelpdeskKostCreate
     },
     {
-      path: 'kosts/:id',
+      path: 'kosts/edit/:id',
       name: 'helpdesk-kost-edit',
       component: HelpdeskKostCreate
     }
@@ -459,7 +460,7 @@ const driverMenu = {
       component: DriverList
     },
     {
-      path: 'edit',
+      path: 'edit/:id',
       name: 'driver-edit',
       component: DriverForm
     },

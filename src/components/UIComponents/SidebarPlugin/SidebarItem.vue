@@ -7,7 +7,11 @@
        data-toggle="collapse"
        href="javascript:void(0)"
        @click="collapseMenu">
-      <i :class="link.icon"></i>
+      <i><v-icon :name="link.icon" scale="2"/></i>
+      <!-- <span>{{link.name}}
+        <b class="caret"></b>
+      </span> -->
+      <!-- <i :class="link.icon"></i> -->
       <p>{{link.name}}
         <b class="caret"></b>
       </p>
@@ -23,15 +27,15 @@
       <component
         :to="link.path"
         :is="elementType(link, false)"
-        :class="{active: link.active}"
+        :class="{active: (link.path == this.$router.currentRoute.path)}"
         :target="link.target"
         :href="link.path">
         <template v-if="addLink">
-          <span class="sidebar-mini">{{link.name.substring(0, 1)}}</span>
+          <span class="sidebar-mini"><i style="margin-bottom:15px"><v-icon name="minus" scale="0.5"/></i></span>
           <span class="sidebar-normal">{{link.name}}</span>
         </template>
         <template v-else>
-          <i :class="link.icon"></i>
+          <i><v-icon :name="link.icon" scale="1.5"/></i>
           <p>{{link.name}}</p>
         </template>
       </component>
