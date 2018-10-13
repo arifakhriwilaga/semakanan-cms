@@ -43,7 +43,7 @@
             <el-button type="danger" class="pull-right" :name="'cancel-all'" style="margin-right:5px" @click="cancelAllMerchant()" v-if="(transaction.status !== 'Done' && transaction.status !== 'Canceled' && transaction.carts.length > 1)">Cancel Semua</el-button>
           </div>
           <el-collapse class="panel-group" v-model="statusExpand">
-            <el-collapse-item v-for="(cart, index) in transaction.carts" :key="index" :title="cart.merchant.name" :name="index">
+            <el-collapse-item v-for="(cart, index) in transaction.carts" :key="index" :title="cart.merchant[0].name" :name="index">
               <div class="card-content">
                 <div class="row">
                 <div class="col-md-12" style="margin-bottom: 15px">

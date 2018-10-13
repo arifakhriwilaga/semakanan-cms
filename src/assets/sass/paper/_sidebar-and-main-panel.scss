@@ -462,3 +462,11 @@
     }
   }
 }
+
+.sidebar .sidebar-wrapper li.active > a:not([data-toggle="collapse"]):after {
+  border-right: 0px!important;
+}
+
+.sidebar .sidebar-wrapper li.active > a:not([data-toggle="collapse"]):before{
+  border-right: 0px!important;
+}

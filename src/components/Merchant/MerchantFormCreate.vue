@@ -98,6 +98,7 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="form-group">
+        <v-icon name="utensils" scale="1"/>
                             <label for="">Lokasi</label>
                             <input type="text" class="form-control" id="pac-input" placeholder="Ketik Alamat" style="width:600px!important;background:#fff"><br>
                             <div id="map" class="map"></div>

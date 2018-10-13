@@ -1,12 +1,12 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h4 class="title pull-left">History</h4>
+      <h4 class="title pull-left">Histori</h4>
       <!-- <p class="category"></p> -->
     </div>
     <div class="col-md-12 card">
       <div class="card-header">
-        <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar History</h4></div>
+        <div class="card-title"><h4 style="margin-top:10px;margin-bottom:-15px">Daftar Histori</h4></div>
       </div>
       <div class="card-content row">
         <!-- <div class="col-sm-12">

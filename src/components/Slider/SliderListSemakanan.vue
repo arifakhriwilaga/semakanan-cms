@@ -15,7 +15,7 @@
         <div class="col-md-12">
           <hr>
           <button class="btn btn-primary" @click="createSlider()" style="margin-bottom: 15px">Tambah Slider</button>
-          <div class="pull-right">
+          <!-- <div class="pull-right">
             Filter
             <el-select
               class="select-primary"
@@ -30,7 +30,7 @@
                 :value="item.value">
               </el-option>
             </el-select>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-12">
           <el-table class="table-striped" :data="tableData">
