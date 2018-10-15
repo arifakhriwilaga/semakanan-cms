@@ -136,7 +136,8 @@
     },
     created() {
       this.title = 'Detil Transaksi';
-      this.getTransaction()
+      this.getTransaction();
+
     },
     data () {
       return {
@@ -146,7 +147,8 @@
         },
         moment: moment,
         statusSpinner: false,
-        statusExpand: []
+        statusExpand: [],
+        tempTransactionClose: []
       }
     },
     methods: {
@@ -157,9 +159,11 @@
             this.statusSpinner = false;
             this.transaction = res.data.data;
             for (let index = 0; index < res.data.data.carts.length; index++) {
+              if (res.data.data.carts[index].status == 'Done' || res.data.data.carts[index].status == 'Canceled') {
+                this.tempTransactionClose.push(index);
+              }
               this.statusExpand.push(index);
             }
-            
         }).catch(err => {
           this.$notify({
               component: {
@@ -283,11 +287,12 @@
                 verticalAlign: 'top',
                 type: 'success'
             });
-            // this.$router.reload();
-            this.toListTransaction();
-
-              // this.transaction = res.data.data;
-              // this.meta_pagination = res.data.meta.pagination;
+            if ((this.tempTransactionClose.length + 1) === this.transaction.carts.length) {
+              this.toListTransaction();
+            } else {
+              this.getTransaction();              
+            }
+            
           }).catch((err) => {this.statusSpinner = false; this.showModalError()});
         });
       },
