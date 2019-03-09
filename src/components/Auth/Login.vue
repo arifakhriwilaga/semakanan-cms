@@ -81,8 +81,8 @@
         statusSpinner: false,
         form: {
           field: {
-            email: "",
-            password: "",
+            email: "admin@sekampus.id",
+            password: "sekampus",
           },
           validation: {
             messages : {
